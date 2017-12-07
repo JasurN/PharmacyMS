@@ -3,5 +3,5 @@ project(PharmacyMS)
 
 set(CMAKE_C_STANDARD 11)
 
-set(SOURCE_FILES main.c main.c)
+set(SOURCE_FILES src/main.c)
 add_executable(pharmacy ${SOURCE_FILES})
