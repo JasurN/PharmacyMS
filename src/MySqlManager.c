@@ -9,10 +9,10 @@ void mysqlConnect() {
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    char *server = "localhost";
+    char *server = "192.168.0.103";
     char *user = "jasur";
     char *password = "J@surbek1"; /* set me first */
-    char *database = "mysql";
+    char *database = "PharmacyDB";
 
     conn = mysql_init(NULL);
 
