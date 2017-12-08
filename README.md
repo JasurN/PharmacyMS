@@ -6,3 +6,6 @@ Pharmacy Management System provides effective connection between producer, selle
 1. **MySql (Database)** - `sudo apt-get install libmysqlclient-dev`
 1. **MySql (lamp server)** - `https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-ubuntu-16-04`
 1. **PhpMyAdmin for MySql Management** - `https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-16-04`
+
+## IDE
+1. We are working on **CLion IDE** 
