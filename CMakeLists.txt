@@ -1,8 +1,15 @@
 cmake_minimum_required(VERSION 3.8)
 project(PharmacyMS)
-
-set(CMAKE_C_STANDARD 11)
-set(SOURCE_FILES src/server_client/server.c src/dbManagement/MySqlManager.c src/dbManagement/MySqlManager.h src/server_client/client.c)
-add_executable(pharmacy ${SOURCE_FILES})
 include_directories(/usr/include/mysql)
-target_link_libraries(pharmacy mysqlclient)
+set(CMAKE_C_STANDARD 11)
+
+
+#Client build
+set(SOURCE_FILES_CLIENT src/server_client/client.c src/dbManagement/MySqlManager.c src/dbManagement/MySqlManager.h src/parser/cJSON.c)
+add_executable(serverRun ${SOURCE_FILES_CLIENT})
+target_link_libraries(serverRun mysqlclient)
+
+# Client build
+set(SOURCE_FILES_SERVER src/server_client/client.c src/dbManagement/MySqlManager.c src/dbManagement/MySqlManager.h src/parser/cJSON.c )
+add_executable(clientRun ${SOURCE_FILES_CLIENT})
+target_link_libraries(clientRun mysqlclient)
