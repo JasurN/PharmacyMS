@@ -1,10 +1,16 @@
+CREATE TABLE authorization(
+  id VARCHAR (10) not NULL,
+  password VARCHAR(20) not NULL,
+  type VARCHAR(1) check (type in ('C', 'S')),
+  PRIMARY KEY (id)
+);
 CREATE TABLE company (
   comp_id    VARCHAR(10) not NULL,
   comp_name VARCHAR(20) not NULL,
   comp_adress  VARCHAR(40),
   comp_contact VARCHAR(20),
-  comp_password  VARCHAR(20),
-  PRIMARY KEY (comp_id)
+  PRIMARY KEY (comp_id),
+  FOREIGN KEY (comp_id) REFERENCES authorization(id)
 );
 
 CREATE TABLE drugstore (
@@ -12,8 +18,8 @@ CREATE TABLE drugstore (
   store_name VARCHAR(20) not NULL,
   store_adress  VARCHAR(40),
   store_contact VARCHAR(20),
-  store_password  VARCHAR(20),
-  PRIMARY KEY (store_id)
+  PRIMARY KEY (store_id),
+  FOREIGN KEY (store_id) REFERENCES authorization(id)
 );
 
 CREATE TABLE medicine (
@@ -36,16 +42,11 @@ CREATE TABLE journal
   store_id VARCHAR(10) not NULL,
   med_id VARCHAR(10) not NULL,
   quantity NUMERIC(4),
-  PRIMARY KEY (med_id),
+  PRIMARY KEY (trans_id),
   FOREIGN KEY (comp_id) REFERENCES company(comp_id)
-    ON DELETE SET NULL,
+    ON DELETE CASCADE,
   FOREIGN KEY (store_id) REFERENCES drugstore(store_id)
-    ON DELETE SET NULL,
+    ON DELETE CASCADE,
   FOREIGN KEY (med_id) REFERENCES medicine(med_id)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
 );
-
-
-
-
-
