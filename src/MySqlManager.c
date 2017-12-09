@@ -4,15 +4,12 @@ void mysqlVersion() {
     printf("MySQL client version: %s\n", mysql_get_client_info());
 }
 
-void mysqlConnect() {
+void mysqlConnect(const char * server, const char * user,
+                  const char * password, const char * database,
+                  const char * query) {
     MYSQL *conn;
     MYSQL_RES *res;
     MYSQL_ROW row;
-
-    char *server = "192.168.0.103";
-    char *user = "jasur";
-    char *password = "J@surbek1"; /* set me first */
-    char *database = "PharmacyDB";
 
     conn = mysql_init(NULL);
 
@@ -24,7 +21,7 @@ void mysqlConnect() {
     }
 
     /* send SQL query */
-    if (mysql_query(conn, "show tables")) {
+    if (mysql_query(conn, query)) {
         fprintf(stderr, "%s\n", mysql_error(conn));
         exit(1);
     }
