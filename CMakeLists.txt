@@ -4,13 +4,12 @@ include_directories(/usr/include/mysql)
 set(CMAKE_C_STANDARD 11)
 
 
+#server build
+set(SOURCE_FILES_server src/server_client/server.c src/dbManagement/MySqlManager.c src/dbManagement/MySqlManager.h src/parser/cJSON.c)
+add_executable(server ${SOURCE_FILES_server})
+target_link_libraries(server mysqlclient)
 
-#Client build
-set(SOURCE_FILES_CLIENT src/server_client/client.c src/dbManagement/MySqlManager.c src/dbManagement/MySqlManager.h src/parser/cJSON.c)
-add_executable(serverRun ${SOURCE_FILES_CLIENT})
-target_link_libraries(clientRun mysqlclient)
-
-# Client build
-set(SOURCE_FILES_SERVER src/server_client/client.c src/dbManagement/MySqlManager.c src/dbManagement/MySqlManager.h src/parser/cJSON.c )
-add_executable(clientRun ${SOURCE_FILES_CLIENT})
-target_link_libraries(clientRun mysqlclient)
+# client build
+set(SOURCE_FILES_client src/server_client/client.c src/dbManagement/MySqlManager.c src/dbManagement/MySqlManager.h src/parser/cJSON.c )
+add_executable(client ${SOURCE_FILES_client})
+target_link_libraries(client mysqlclient)
