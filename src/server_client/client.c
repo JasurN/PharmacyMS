@@ -10,7 +10,7 @@
 #include <arpa/inet.h>
 #define TRUE 1
 #define FALSE 0
-#define PORT 8080
+#define PORT 5000
 #define MAX_SIZE 2048
 #define SERVER_ADDRESS "127.0.0.1"
 

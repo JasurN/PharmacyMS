@@ -6,7 +6,7 @@
 #include <arpa/inet.h>
 #include <sys/time.h>
 #include <pthread.h>
-#define PORT 8080
+#define PORT 5000
 #define TRUE 1
 #define FALSE 0
 #define MAX_CLIENT 100
