@@ -7,7 +7,7 @@ CREATE TABLE authorization(
 CREATE TABLE company (
   comp_id    VARCHAR(10) not NULL,
   comp_name VARCHAR(20) not NULL,
-  comp_adress  VARCHAR(40),
+  comp_address  VARCHAR(40),
   comp_contact VARCHAR(20),
   PRIMARY KEY (comp_id),
   FOREIGN KEY (comp_id) REFERENCES authorization(id)
@@ -16,7 +16,7 @@ CREATE TABLE company (
 CREATE TABLE drugstore (
   store_id    VARCHAR(10) not NULL,
   store_name VARCHAR(20) not NULL,
-  store_adress  VARCHAR(40),
+  store_address  VARCHAR(40),
   store_contact VARCHAR(20),
   PRIMARY KEY (store_id),
   FOREIGN KEY (store_id) REFERENCES authorization(id)
