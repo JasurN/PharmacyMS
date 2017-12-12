@@ -21,7 +21,7 @@
 void test1();
 void test2();
 
-struct reg_back {
+struct auth_back {
     int isExist;
     __uid_t user_type;
 };
@@ -30,13 +30,17 @@ struct search_back {
 
 };
 
-struct registering {
+struct purchase_back {
+
+};
+
+struct authorizing {
     char login[MAX_SIZE];
     char password[MAX_SIZE];
 };
 
 struct searching {
-    char * name;
+    char name[MAX_SIZE];
 };
 
 struct purchasing {
@@ -45,7 +49,7 @@ struct purchasing {
 };
 
 typedef struct {
-    struct registering registration;
+    struct authorizing authorization;
     struct searching search;
     struct purchasing purchase;
     __uid_t type;
@@ -55,8 +59,8 @@ toServer *client_message;
 
 int main() {
     client_message = (toServer *)malloc(sizeof(toServer));
-    strcpy(client_message->registration.login, "login");
-    strcpy(client_message->registration.password, "password");
+    strcpy(client_message->authorization.login, "login");
+    strcpy(client_message->authorization.password, "password");
     client_message->type = (__uid_t) 0;
     test2();
     //test1();
@@ -98,12 +102,45 @@ void test2() {
     cJSON *root;
     char *out;
     root = cJSON_CreateObject();
-    cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_message->type));
-    cJSON_AddItemToObject(root, "login", cJSON_CreateString(client_message->registration.login));
-    cJSON_AddItemToObject(root, "password", cJSON_CreateString(client_message->registration.password));
+    cJSON* authorization = cJSON_CreateObject();
+    cJSON* searching = cJSON_CreateObject();
+    cJSON* purchasing = cJSON_CreateObject();
 
+    switch (client_message->type) {
+        case 0:
+            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_message->type));
+            cJSON_AddItemToObject(root, "authorization", authorization);
+            cJSON_AddItemToObject(authorization, "login",
+                                  cJSON_CreateString(client_message->authorization.login));
+            cJSON_AddItemToObject(authorization, "password",
+                                  cJSON_CreateString(client_message->authorization.password));
+            break;
+        case 1:
+            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_message->type));
+            cJSON_AddItemToObject(root, "searching", searching);
+            cJSON_AddItemToObject(searching, "name",
+                                  cJSON_CreateString(client_message->search.name));
+            break;
 
+        case 2:
+            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_message->type));
+            break;
+
+        case 3:
+            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_message->type));
+            cJSON_AddItemToObject(root, "purchasing", purchasing);
+            cJSON_AddItemToObject(purchasing, "name",
+                                  cJSON_CreateString(client_message->purchase.name));
+            cJSON_AddItemToObject(purchasing, "quantity",
+                                  cJSON_CreateNumber(client_message->purchase.quantity));
+            break;
+
+        default:
+            perror("Please enter proper type!");
+            break;
+    }
     out = cJSON_Print(root);
     printf("%s\n", out);
+    cJSON_Delete(root);
 }
 
