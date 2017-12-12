@@ -1,3 +1,6 @@
+#include <printf.h>
+#include <wchar.h>
+#include <stdio.h>
 #include "MySqlManager.h"
 
 void mysqlVersion() {
@@ -9,10 +12,10 @@ void mysqlConnect() {
     MYSQL_RES *res;
     MYSQL_ROW row;
 
-    char *server = "localhost";
-    char *user = "jasur";
-    char *password = "J@surbek1"; /* set me first */
-    char *database = "mysql";
+    char *server = "192.168.0.103";
+    char *user = "admin";
+    char *password = "adminos"; /* set me first */
+    char *database = "PharmacyDB";
 
     conn = mysql_init(NULL);
 
@@ -21,6 +24,10 @@ void mysqlConnect() {
                             user, password, database, 0, NULL, 0)) {
         fprintf(stderr, "%s\n", mysql_error(conn));
         exit(1);
+    }
+    else
+    {
+        printf("Connection Established\n");
     }
 
     /* send SQL query */
@@ -40,3 +47,5 @@ void mysqlConnect() {
     mysql_free_result(res);
     mysql_close(conn);
 }
+
+

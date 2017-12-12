@@ -3,7 +3,7 @@
 int main(int argc, char **argv) {
 
     printf("%s", "Hello World!");
-    printf("MySQL client version: %s\n", mysql_get_client_info());
     mysqlConnect();
+    mysqlVersion();
     return 0;
 }
