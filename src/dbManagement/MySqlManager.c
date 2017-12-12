@@ -3,7 +3,6 @@
 void mysqlVersion() {
     printf("MySQL client version: %s\n", mysql_get_client_info());
 }
-
 void mysqlConnect(const char * server, const char * user,
                   const char * password, const char * database,
                   const char * query) {

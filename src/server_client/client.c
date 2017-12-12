@@ -14,6 +14,7 @@
 #define MAX_SIZE 2048
 #define SERVER_ADDRESS "127.0.0.1"
 
+
 int client();
 size_t str_length(const char*);
 

@@ -1,6 +1,6 @@
 #include<stdlib.h>
 #include<stdio.h>
-#include "user.h"
+#include "company.h"
 
 void insertNewMedicine(struct Medicine newMedicine)
 {
