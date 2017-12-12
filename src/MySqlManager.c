@@ -14,7 +14,7 @@ void mysqlConnect() {
 
     char *server = "192.168.0.103";
     char *user = "admin";
-    char *password = "adminos"; /* set me first */
+    char *password = "Azikinhatashkent"; /* set me first */
     char *database = "PharmacyDB";
 
     conn = mysql_init(NULL);
