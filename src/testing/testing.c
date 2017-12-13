@@ -425,7 +425,7 @@ fromClient* deserialization2(const char* message, fromClient* client_query) {
         cJSON_Delete(quantity_item);
         cJSON_Delete(purchase_item);
     }
-    
+
     server_answer->type = (uid_t) type_item->valueint;
     cJSON_Delete(type_item);
     cJSON_Delete(root);
