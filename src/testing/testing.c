@@ -38,12 +38,12 @@ struct search_back {
     char comp_id[MAX_SIZE];
 };
 
-struct search_back_inventory {
+struct search_back_inventory{
     char store_id[MAX_SIZE];
     char med_id[MAX_SIZE];
     char name[MAX_SIZE];
     int quantity;
-};
+} ;
 
 struct purchase_back {
     int success;
@@ -58,7 +58,7 @@ struct purchase_back {
 typedef struct {
     struct auth_back authorization;
     struct search_back search;
-    struct search_back_inventory search_inventory;
+    struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
     uid_t type;
 } toClient;
@@ -93,7 +93,7 @@ toServer *client_message;
 typedef struct {
     struct auth_back authorization;
     struct search_back search;
-    struct search_back_inventory search_inventory;
+    struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
     uid_t type;
 } fromServer;
@@ -232,7 +232,8 @@ char* serialization2(const toClient* server_message) {
     cJSON *root = cJSON_CreateObject();
     cJSON *authorization = cJSON_CreateObject();
     cJSON *searching = cJSON_CreateObject();
-    cJSON *searching_inventory = cJSON_CreateObject();
+    cJSON *searching_inventory = cJSON_CreateArray();
+    cJSON *medical = cJSON_CreateObject();
     cJSON *purchasing = cJSON_CreateObject();
     char *out;
 
@@ -274,14 +275,18 @@ char* serialization2(const toClient* server_message) {
             break;
         case 2:
             cJSON_AddItemToObject(root, "inventory", searching_inventory);
-            cJSON_AddItemToObject(searching_inventory, "store_id",
-                                  cJSON_CreateString(server_message->search_inventory.store_id));
-            cJSON_AddItemToObject(searching_inventory, "med_id",
-                                  cJSON_CreateString(server_message->search_inventory.med_id));
-            cJSON_AddItemToObject(searching_inventory, "name",
-                                  cJSON_CreateString(server_message->search_inventory.name));
-            cJSON_AddItemToObject(searching_inventory, "quantity",
-                                  cJSON_CreateNumber(server_message->search_inventory.quantity));
+            for (int i = 0; server_message->search_inventory; ++i) {
+                cJSON_AddItemToArray(searching_inventory, medical = cJSON_CreateObject());
+                cJSON_AddItemToObject(medical, "store_id",
+                                      cJSON_CreateString(server_message->search_inventory[i].store_id));
+                cJSON_AddItemToObject(medical, "med_id",
+                                      cJSON_CreateString(server_message->search_inventory[i].med_id));
+                cJSON_AddItemToObject(medical, "name",
+                                      cJSON_CreateString(server_message->search_inventory[i].name));
+                cJSON_AddItemToObject(medical, "quantity",
+                                      cJSON_CreateNumber(server_message->search_inventory[i].quantity));
+            }
+            
             break;
         case 3:
             cJSON_AddItemToObject(root, "purchase", purchasing);
@@ -310,6 +315,7 @@ char* serialization2(const toClient* server_message) {
     printf("%s\n", out);
     cJSON_Delete(authorization);
     cJSON_Delete(searching);
+    cJSON_Delete(medical);
     cJSON_Delete(searching_inventory);
     cJSON_Delete(purchasing);
     cJSON_Delete(root);
@@ -367,19 +373,28 @@ fromServer* deserialization1(const char* message, fromServer* server_answer) {
         cJSON_Delete(search_item);
     } else if (type_item->valueint == 2) {
         cJSON *inventory_item = cJSON_GetObjectItemCaseSensitive(root, "inventory");
-        cJSON *store_id_item = cJSON_GetObjectItemCaseSensitive(inventory_item, "store_id");
-        cJSON *med_id_item = cJSON_GetObjectItemCaseSensitive(inventory_item, "med_id");
-        cJSON *name_item = cJSON_GetObjectItemCaseSensitive(inventory_item, "name");
-        cJSON *quantity_item = cJSON_GetObjectItemCaseSensitive(inventory_item, "quantity");
-        strcpy(server_answer->search_inventory.store_id, store_id_item->valuestring);
-        strcpy(server_answer->search_inventory.med_id, med_id_item->valuestring);
-        strcpy(server_answer->search_inventory.name, name_item->valuestring);
-        server_answer->search_inventory.quantity = quantity_item->valueint;
+        cJSON *medical;
+        cJSON *store_id_item;
+        cJSON *med_id_item;
+        cJSON *name_item;
+        cJSON *quantity_item;
+        for (int i = 0; i < cJSON_GetArraySize(inventory_item); ++i) {
+            medical = cJSON_GetArrayItem(inventory_item, i);
+            store_id_item = cJSON_GetObjectItemCaseSensitive(inventory_item, "store_id");
+            med_id_item = cJSON_GetObjectItemCaseSensitive(inventory_item, "med_id");
+            name_item = cJSON_GetObjectItemCaseSensitive(inventory_item, "name");
+            quantity_item = cJSON_GetObjectItemCaseSensitive(inventory_item, "quantity");
+            strcpy(server_answer->search_inventory[i].store_id, store_id_item->valuestring);
+            strcpy(server_answer->search_inventory[i].med_id, med_id_item->valuestring);
+            strcpy(server_answer->search_inventory[i].name, name_item->valuestring);
+            server_answer->search_inventory[i].quantity = quantity_item->valueint;
+        }
         cJSON_Delete(store_id_item);
         cJSON_Delete(med_id_item);
         cJSON_Delete(name_item);
         cJSON_Delete(quantity_item);
         cJSON_Delete(inventory_item);
+        cJSON_Delete(medical);
     } else if (type_item->valueint == 3) {
         cJSON *purchase_item = cJSON_GetObjectItemCaseSensitive(root, "purchase");
         cJSON *success_item = cJSON_GetObjectItemCaseSensitive(purchase_item, "success");
