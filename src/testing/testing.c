@@ -39,7 +39,10 @@ struct search_back {
 };
 
 struct search_back_inventory {
-
+    char store_id[MAX_SIZE];
+    char med_id[MAX_SIZE];
+    char name[MAX_SIZE];
+    int quantity;
 };
 
 struct purchase_back {
@@ -114,7 +117,7 @@ fromServer* deserialization1(const char*, fromServer*);
 fromClient* deserialization2(const char*, fromClient*);
 
 int main() {
-    client_message = (toServer *)malloc(sizeof(toServer));
+    /*client_message = (toServer *)malloc(sizeof(toServer));
     strcpy(client_message->authorization.login, "login");
     strcpy(client_message->authorization.password, "password");
     client_message->type = (uid_t) 0;
@@ -127,14 +130,15 @@ int main() {
      // Here should be some assigning values to the struct
 
     free(server_message);
-    */
+
 
     //server_answer = (fromServer *)malloc(sizeof(fromServer));
     client_query = (fromClient *)malloc(sizeof(fromClient));
     client_query = deserialization2(serialization1(client_message), client_query);
 
 
-    free(client_message);
+    free(client_message);*/
+    test1();
     return 0;
 }
 /*
@@ -149,13 +153,13 @@ void test1() {
             "        \"width\":      1920,\n"
             "        \"height\":     1080,\n"
             "        \"interlace\":  false,\n"
-            "        \"frame rate\": 35\n"
+            "        \"frame_rate\": 35\n"
             "    }\n"
             "}";
     cJSON * root = cJSON_Parse(my_json_string);
     cJSON *format = cJSON_GetObjectItemCaseSensitive(root, "format");
     cJSON *type_item = cJSON_GetObjectItemCaseSensitive(format, "type");
-    cJSON *framerate_item = cJSON_GetObjectItemCaseSensitive(format, "frame rate");
+    cJSON *framerate_item = cJSON_GetObjectItemCaseSensitive(format, "frame_rate");
     char type[MAX_SIZE];
     int framerate = 0;
     //cJSON_SetNumberValue(framerate_item, 140);
@@ -232,9 +236,9 @@ char* serialization2(const toClient* server_message) {
     cJSON *purchasing = cJSON_CreateObject();
     char *out;
 
+    cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(server_message->type));
     switch (server_message->type) {
         case 0:
-            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(server_message->type));
             cJSON_AddItemToObject(root, "authorization", authorization);
             cJSON_AddItemToObject(authorization, "isExist",
                                   cJSON_CreateNumber(server_message->authorization.isExist));
@@ -252,7 +256,6 @@ char* serialization2(const toClient* server_message) {
             }
             break;
         case 1:
-            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(server_message->type));
             cJSON_AddItemToObject(root, "search", searching);
             cJSON_AddItemToObject(searching, "isExist",
                                   cJSON_CreateNumber(server_message->search.isExist));
@@ -270,10 +273,17 @@ char* serialization2(const toClient* server_message) {
             }
             break;
         case 2:
-
+            cJSON_AddItemToObject(root, "inventory", searching_inventory);
+            cJSON_AddItemToObject(searching_inventory, "store_id",
+                                  cJSON_CreateString(server_message->search_inventory.store_id));
+            cJSON_AddItemToObject(searching_inventory, "med_id",
+                                  cJSON_CreateString(server_message->search_inventory.med_id));
+            cJSON_AddItemToObject(searching_inventory, "name",
+                                  cJSON_CreateString(server_message->search_inventory.name));
+            cJSON_AddItemToObject(searching_inventory, "quantity",
+                                  cJSON_CreateNumber(server_message->search_inventory.quantity));
             break;
         case 3:
-            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(server_message->type));
             cJSON_AddItemToObject(root, "purchase", purchasing);
             cJSON_AddItemToObject(searching, "success",
                                   cJSON_CreateNumber(server_message->purchase.success));
@@ -356,7 +366,20 @@ fromServer* deserialization1(const char* message, fromServer* server_answer) {
         cJSON_Delete(isExist_item);
         cJSON_Delete(search_item);
     } else if (type_item->valueint == 2) {
-
+        cJSON *inventory_item = cJSON_GetObjectItemCaseSensitive(root, "inventory");
+        cJSON *store_id_item = cJSON_GetObjectItemCaseSensitive(inventory_item, "store_id");
+        cJSON *med_id_item = cJSON_GetObjectItemCaseSensitive(inventory_item, "med_id");
+        cJSON *name_item = cJSON_GetObjectItemCaseSensitive(inventory_item, "name");
+        cJSON *quantity_item = cJSON_GetObjectItemCaseSensitive(inventory_item, "quantity");
+        strcpy(server_answer->search_inventory.store_id, store_id_item->valuestring);
+        strcpy(server_answer->search_inventory.med_id, med_id_item->valuestring);
+        strcpy(server_answer->search_inventory.name, name_item->valuestring);
+        server_answer->search_inventory.quantity = quantity_item->valueint;
+        cJSON_Delete(store_id_item);
+        cJSON_Delete(med_id_item);
+        cJSON_Delete(name_item);
+        cJSON_Delete(quantity_item);
+        cJSON_Delete(inventory_item);
     } else if (type_item->valueint == 3) {
         cJSON *purchase_item = cJSON_GetObjectItemCaseSensitive(root, "purchase");
         cJSON *success_item = cJSON_GetObjectItemCaseSensitive(purchase_item, "success");

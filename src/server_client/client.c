@@ -59,7 +59,7 @@ int client() {
     // Send hello message to the sever
     send(server_fd, hello, str_length(hello), 0);
 
-    printf("HELLO MESSAGE SENT!!!");
+    //printf("HELLO MESSAGE SENT!!!");
 
     valread = (int) recv(server_fd, buf, MAX_SIZE, 0);
 
