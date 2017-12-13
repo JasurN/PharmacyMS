@@ -101,7 +101,7 @@ void *connection_handler(void* sock_desc) {
     // Get the socket descriptor to server_fd
     client_t *cli = (client_t*) sock_desc;
     int valRead = 0;
-    //char buf[MAX_SIZE] = {0};
+    char buf[MAX_SIZE] = {0};
 
     const char* my_json_string = "{\n"
             "    \"name\": \"Jack (\\\"Bee\\\") Nimble\",\n"
@@ -114,7 +114,7 @@ void *connection_handler(void* sock_desc) {
             "    }\n"
             "}";
 
-    //valRead = (int) recv(cli->connfd, buf, MAX_SIZE, 0);
+    valRead = (int) recv(cli->connfd, buf, MAX_SIZE, 0);
 
     //printf("%s\n", buf);
 
@@ -138,8 +138,9 @@ void *connection_handler(void* sock_desc) {
     }
     // Close the socket
     close(cli->connfd);
-    // Free the socket descriptor
+    // Free the socket descriptor and buffer string
     free(sock_desc);
+    free(buf);
     return 0;
 }
 
