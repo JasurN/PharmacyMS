@@ -99,8 +99,6 @@ void *connection_handler(void* sock_desc) {
 
     valRead = (int) recv(cli->connfd, buf, MAX_SIZE, 0);
 
-
-
     send(cli->connfd, my_json_string, str_length(my_json_string), 0);
 
 /*

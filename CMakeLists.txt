@@ -6,7 +6,7 @@ set (CMAKE_C_FLAGS "-pthread")
 
 #server build
 set(SOURCE_FILES_server src/server_client/server.c src/dbManagement/MySqlManager.c
-        src/dbManagement/MySqlManager.h src/parser/cJSON.c src/server_client/server.h src/server_client/server_hander.c
+        src/dbManagement/MySqlManager.h src/parser/cJSON.c src/server_client/server.h src/server_client/serverStarter.c
         src/server_client/serviceHandler.c
         src/dbManagement/database.c)
 add_executable(server ${SOURCE_FILES_server})
