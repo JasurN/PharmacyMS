@@ -19,7 +19,7 @@
 #define MAX_SIZE 30
 #define MAX_TEXT 50
 
-/* These structs are used by client (Company) */
+/* These structs are used by clientOn (Company) */
 struct auth_back {
     int isExist;
     char id[MAX_SIZE];
@@ -65,7 +65,7 @@ typedef struct {
 
 toClient *server_message;
 
-/* These structs are used by client (Drugstore) */
+/* These structs are used by clientOn (Drugstore) */
 struct authorizing {
     char login[MAX_SIZE];
     char password[MAX_SIZE];
@@ -89,7 +89,7 @@ typedef struct {
 
 toServer *client_message;
 
-/* This struct is used when got answer from server by client (Drugstore) */
+/* This struct is used when got answer from server by clientOn (Drugstore) */
 typedef struct {
     struct auth_back authorization;
     struct search_back search;
@@ -100,7 +100,7 @@ typedef struct {
 
 fromServer *server_answer;
 
-/* This struct is used when got query from client (Company) */
+/* This struct is used when got query from clientOn (Company) */
 typedef struct {
     struct authorizing authorization;
     struct searching search;
@@ -176,7 +176,7 @@ void test1() {
 }
 /*
  *  This function converts queries to be
- *  sent to the server from client (Drug Stores)
+ *  sent to the server from clientOn (Drug Stores)
  *
  * */
 char* serialization1(const toServer* client_message) {

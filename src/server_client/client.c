@@ -1,32 +1,29 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+
 #define TRUE 1
 #define FALSE 0
 #define PORT 5000
 #define MAX_SIZE 2048
 #define SERVER_ADDRESS "127.0.0.1"
 
-int client();
+int clientOn();
 size_t str_length(const char*);
 
 int main() {
-    client();
+    clientOn();
     return 0;
 }
 
-int client() {
+int clientOn() {
     // Structure to connect to the server
     struct sockaddr_in server;
     int server_fd = 0, valread;
-    char *hello = "Hello from client!";
+    char *hello = "Hello from clientOn!";
     char buf[MAX_SIZE] = {0};
 
     printf("CREATING CLIENT SOCKET...\n");

@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/socket.h>
-#include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-#include <sys/time.h>
+#include "server.h"
 #include <pthread.h>
 #define PORT 5000
 #define TRUE 1
@@ -14,23 +13,7 @@
 
 static int id_counter = 10;
 
-typedef struct {
-    struct sockaddr_in addr;    // Client remote address
-    int connfd;                 // Connection file descriptor
-    int uid;                    // Client unique identifier
-} client_t;
-
-void queue_add(client_t *);
-void server();
-void *connection_handler(void*);
-size_t str_length(const char*);
-
 client_t* clients[MAX_CLIENT];
-
-int main() {
-    server();
-    return 0;
-}
 
 void server() {
     int server_fd, new_socket, addrlen;
@@ -72,16 +55,16 @@ void server() {
     while ((new_socket = accept(server_fd, (struct sockaddr *) &client, (socklen_t *) &addrlen))) {
         printf("CONNECTION ACCEPTED!!!\n");
 
-        // Creating thread for a new client (*cli)
+        // Creating thread for a new clientOn (*cli)
         client_t *cli = (client_t *)malloc(sizeof(client_t));
         cli->addr = client;
         cli->connfd = new_socket;
         cli->uid = id_counter++;
 
-        // Adding client to the queue
+        // Adding clientOn to the queue
         queue_add(cli);
 
-        // Handling the new client (new_sock)
+        // Handling the new clientOn (new_sock)
         if(pthread_create(&client_thread, NULL, connection_handler, (void *) cli) < 0) {
             perror("could not create thread");
             exit(EXIT_FAILURE);
@@ -116,7 +99,7 @@ void *connection_handler(void* sock_desc) {
 
     valRead = (int) recv(cli->connfd, buf, MAX_SIZE, 0);
 
-    //printf("%s\n", buf);
+
 
     send(cli->connfd, my_json_string, str_length(my_json_string), 0);
 
