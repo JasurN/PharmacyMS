@@ -1,0 +1,12 @@
+#ifndef PHARMACYMS_DEFINE_H
+#define PHARMACYMS_DEFINE_H
+
+#define  TRUE 1
+#define  FALSE 0
+
+#define AUTHORIZATION 0
+#define SEARCH 1
+#define INVENTORY 2
+#define PURCHASE 3
+
+#endif //PHARMACYMS_DEFINE_H

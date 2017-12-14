@@ -14,8 +14,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../parser/cJSON.h"
-#define TRUE 1
-#define FALSE 0
+#include "../define/define.h"
+
 #define MAX_SIZE 30
 #define MAX_TEXT 50
 
@@ -187,7 +187,7 @@ char* serialization1(const toServer* client_message) {
     char *out;
 
     switch (client_message->type) {
-        case 0:
+        case AUTHORIZATION:
             cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_message->type));
             cJSON_AddItemToObject(root, "authorization", authorization);
             cJSON_AddItemToObject(authorization, "login",
@@ -195,18 +195,18 @@ char* serialization1(const toServer* client_message) {
             cJSON_AddItemToObject(authorization, "password",
                                   cJSON_CreateString(client_message->authorization.password));
             break;
-        case 1:
+        case SEARCH:
             cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_message->type));
             cJSON_AddItemToObject(root, "search", searching);
             cJSON_AddItemToObject(searching, "name",
                                   cJSON_CreateString(client_message->search.name));
             break;
 
-        case 2:
+        case INVENTORY:
             cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_message->type));
             break;
 
-        case 3:
+        case PURCHASE:
             cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_message->type));
             cJSON_AddItemToObject(root, "purchase", purchasing);
             cJSON_AddItemToObject(purchasing, "name",
@@ -239,7 +239,7 @@ char* serialization2(const toClient* server_message) {
 
     cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(server_message->type));
     switch (server_message->type) {
-        case 0:
+        case AUTHORIZATION:
             cJSON_AddItemToObject(root, "authorization", authorization);
             cJSON_AddItemToObject(authorization, "isExist",
                                   cJSON_CreateNumber(server_message->authorization.isExist));
@@ -256,7 +256,7 @@ char* serialization2(const toClient* server_message) {
                                       cJSON_CreateNumber(server_message->authorization.user_type));
             }
             break;
-        case 1:
+        case SEARCH:
             cJSON_AddItemToObject(root, "search", searching);
             cJSON_AddItemToObject(searching, "isExist",
                                   cJSON_CreateNumber(server_message->search.isExist));
@@ -273,7 +273,7 @@ char* serialization2(const toClient* server_message) {
                                       cJSON_CreateString(server_message->search.comp_id));
             }
             break;
-        case 2:
+        case INVENTORY:
             cJSON_AddItemToObject(root, "inventory", searching_inventory);
             for (int i = 0; server_message->search_inventory; ++i) {
                 cJSON_AddItemToArray(searching_inventory, medical = cJSON_CreateObject());
@@ -288,7 +288,7 @@ char* serialization2(const toClient* server_message) {
             }
             
             break;
-        case 3:
+        case PURCHASE:
             cJSON_AddItemToObject(root, "purchase", purchasing);
             cJSON_AddItemToObject(searching, "success",
                                   cJSON_CreateNumber(server_message->purchase.success));
