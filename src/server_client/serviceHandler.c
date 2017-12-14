@@ -116,8 +116,8 @@ char* serialization2(const toClient*);
 fromServer* deserialization1(const char*, fromServer*);
 fromClient* deserialization2(const char*, fromClient*);
 
-int main() {
-    /*client_message = (toServer *)malloc(sizeof(toServer));
+/*int main() {
+    *//*client_message = (toServer *)malloc(sizeof(toServer));
     strcpy(client_message->authorization.login, "login");
     strcpy(client_message->authorization.password, "password");
     client_message->type = (uid_t) 0;
@@ -137,10 +137,10 @@ int main() {
     client_query = deserialization2(serialization1(client_message), client_query);
 
 
-    free(client_message);*/
+    free(client_message);*//*
     test1();
     return 0;
-}
+}*/
 /*
  *  Just testing function
  *
