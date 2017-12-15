@@ -1,15 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/socket.h>
-#include <unistd.h>
-#include <arpa/inet.h>
 #include "server.h"
-#include <pthread.h>
-#define PORT 5000
-#define TRUE 1
-#define FALSE 0
-#define MAX_CLIENT 100
-#define MAX_SIZE 2048
+#include "request_parser.h"
 
 static int id_counter = 10;
 
@@ -99,6 +89,8 @@ void *connection_handler(void* sock_desc) {
 
     valRead = (int) recv(cli->connfd, buf, MAX_SIZE, 0);
 
+    jsonParser(buf);
+
     send(cli->connfd, my_json_string, str_length(my_json_string), 0);
 
 /*
@@ -139,4 +131,16 @@ size_t str_length(const char* buf) {
     size_t i;
     for (i = 0; buf[i] != '\0'; ++i);
     return i;
+}
+void jsonParser(const char * jsonStr) {
+    fromClient *fromClientObj = (fromClient *)malloc(sizeof(fromClient));
+    clientStrToStruct(jsonStr, fromClientObj);
+    requestHander(fromClientObj);
+    free(fromClientObj);
+}
+void requestHander(const fromClient * fromClientObj) {
+    if(fromClientObj->type == AUTHORIZATION) {
+
+    }//todo: to discuss with abdurakhmon
+
 }

@@ -1,11 +1,4 @@
-
-#include </usr/include/mysql/mysql.h>
-#include "stdio.h"
-#include "stdlib.h"
-#include "stdbool.h"
-#define int bool
-#define TRUE 1
-#define FALSE 0
+#include "database.h"
 
 void finish_with_error(MYSQL *con)
 {
@@ -14,8 +7,9 @@ void finish_with_error(MYSQL *con)
   exit(1);        
 }
 
-bool authorization(char* login_id, char* login_password, MYSQL *con)
+bool authorization(char* login_id, char* login_password)
 {
+    MYSQL *con = connectToDB();
     char query[1024];
     sprintf(query, "SELECT * FROM authorization WHERE id = '%s' AND password = '%s'",login_id,login_password);
     if (mysql_query(con, query))
@@ -54,17 +48,33 @@ void addUser(char *user_id, char *user_name, char *user_adress, char * user_cont
   {
       finish_with_error(con);
   }
+    //todo: refactor with define
   if(type==1)
       if (mysql_query(con, "INSERT INTO company VALUES(user_id,user_name, user_adress, user_contact)")) {
           finish_with_error(con);
       }
+    //todo: refactor with define
   if(type==2)
       if (mysql_query(con, "INSERT INTO drugstore VALUES(user_id,user_name, user_adress, user_contact)")) {
           finish_with_error(con);
       }
 }
+MYSQL * connectToDB() {
+    MYSQL *con = mysql_init(NULL);
 
-
+    if (con == NULL)
+    {
+        fprintf(stderr, "mysql_init() failed\n");
+        exit(1);
+    }
+    if (mysql_real_connect(con, serverAddr, dbUser, dbPassword,
+                           dbName, 0, NULL, 0) == NULL)
+    {
+        finish_with_error(con);
+    }
+    return  con;
+}
+/*
 int main(int argc, char **argv)
 {      
   MYSQL *con = mysql_init(NULL);
@@ -91,4 +101,6 @@ int main(int argc, char **argv)
   mysql_close(con);
   
   exit(0);
-}
+}*/
+
+
