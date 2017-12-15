@@ -9,112 +9,7 @@
  *  this function controls Client's Socket
  *
  */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "../parser/cJSON.h"
-#include "../define/define.h"
-
-#define MAX_SIZE 30
-#define MAX_TEXT 50
-
-/* These structs are used by clientOn (Company) */
-struct auth_back {
-    int isExist;
-    char id[MAX_SIZE];
-    char name[MAX_TEXT];
-    char address[MAX_TEXT];
-    char contact[MAX_TEXT];
-    uid_t user_type;
-};
-
-struct search_back {
-    int isExist;
-    char med_id[MAX_SIZE];
-    char name[MAX_SIZE];
-    char description[MAX_TEXT];
-    float price;
-    char comp_id[MAX_SIZE];
-};
-
-struct search_back_inventory{
-    char store_id[MAX_SIZE];
-    char med_id[MAX_SIZE];
-    char name[MAX_SIZE];
-    int quantity;
-} ;
-
-struct purchase_back {
-    int success;
-    char trans_id[MAX_SIZE];
-    char trans_date[MAX_SIZE];
-    char comp_id[MAX_SIZE];
-    char store_id[MAX_SIZE];
-    char med_id[MAX_SIZE];
-    int quantity;
-};
-
-typedef struct {
-    struct auth_back authorization;
-    struct search_back search;
-    struct search_back_inventory* search_inventory;
-    struct purchase_back purchase;
-    uid_t type;
-} toClient;
-
-toClient *server_message;
-
-/* These structs are used by clientOn (Drugstore) */
-struct authorizing {
-    char login[MAX_SIZE];
-    char password[MAX_SIZE];
-};
-
-struct searching {
-    char name[MAX_SIZE];
-};
-
-struct purchasing {
-    char name[MAX_SIZE];
-    int quantity;
-};
-
-typedef struct {
-    struct authorizing authorization;
-    struct searching search;
-    struct purchasing purchase;
-    uid_t type;
-} toServer;
-
-toServer *client_message;
-
-/* This struct is used when got answer from server by clientOn (Drugstore) */
-typedef struct {
-    struct auth_back authorization;
-    struct search_back search;
-    struct search_back_inventory* search_inventory;
-    struct purchase_back purchase;
-    uid_t type;
-} fromServer;
-
-fromServer *server_answer;
-
-/* This struct is used when got query from clientOn (Company) */
-typedef struct {
-    struct authorizing authorization;
-    struct searching search;
-    struct purchasing purchase;
-    uid_t type;
-} fromClient;
-
-fromClient *client_query;
-
-void test1();
-char* serialization1(const toServer*);
-char* serialization2(const toClient*);
-fromServer* deserialization1(const char*, fromServer*);
-fromClient* deserialization2(const char*, fromClient*);
+#include "request_parser.h"
 
 /*int main() {
     *//*client_message = (toServer *)malloc(sizeof(toServer));
@@ -179,7 +74,7 @@ void test1() {
  *  sent to the server from clientOn (Drug Stores)
  *
  * */
-char* serialization1(const toServer* client_message) {
+char* clientStructToStr(const toServer *client_message) {
     cJSON *root = cJSON_CreateObject();
     cJSON *authorization = cJSON_CreateObject();
     cJSON *searching = cJSON_CreateObject();
@@ -322,7 +217,7 @@ char* serialization2(const toClient* server_message) {
     return out;
 }
 
-fromServer* deserialization1(const char* message, fromServer* server_answer) {
+void serverStrToStruct(const char *message, fromServer *server_answer) {
     cJSON *root = cJSON_Parse(message);
     cJSON *type_item = cJSON_GetObjectItemCaseSensitive(root, "type");
     if (type_item->valueint == 0) {
@@ -426,10 +321,9 @@ fromServer* deserialization1(const char* message, fromServer* server_answer) {
     server_answer->type = (uid_t) type_item->valueint;
     cJSON_Delete(type_item);
     cJSON_Delete(root);
-    return server_answer;
 }
 
-fromClient* deserialization2(const char* message, fromClient* client_query) {
+void clientStrToStruct(const char *message, fromClient *client_query) {
     cJSON *root = cJSON_Parse(message);
     cJSON *type_item = cJSON_GetObjectItemCaseSensitive(root, "type");
 
@@ -467,6 +361,4 @@ fromClient* deserialization2(const char* message, fromClient* client_query) {
     server_answer->type = (uid_t) type_item->valueint;
     cJSON_Delete(type_item);
     cJSON_Delete(root);
-
-    return client_query;
 }
