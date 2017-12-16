@@ -4,7 +4,6 @@
 #include "stdio.h"
 
 #include "stdbool.h"
-#define int bool
 #define TRUE 1
 #define FALSE 0
 #define serverAddr "localhost"

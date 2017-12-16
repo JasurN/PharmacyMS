@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(PharmacyMS)
 include_directories(/usr/include/mysql)
 set(CMAKE_C_STANDARD 11)
-set (CMAKE_C_FLAGS "-pthread")
+set (CMAKE_C_FLAGS "-Wall -pthread")
 
 #server build
 set(SOURCE_FILES_server src/server_client/server.c

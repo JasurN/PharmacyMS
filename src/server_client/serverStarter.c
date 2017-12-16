@@ -1,5 +1,5 @@
 #include "server.h"
 
 int main() {
-    server();
+    startServer();
 }

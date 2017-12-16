@@ -1,11 +1,10 @@
 #include "server.h"
-#include "request_parser.h"
 
 static int id_counter = 10;
 
 client_t* clients[MAX_CLIENT];
 
-void server() {
+void startServer() {
     int server_fd, new_socket, addrlen;
     struct sockaddr_in server, client;
     pthread_t client_thread;
@@ -74,20 +73,9 @@ void *connection_handler(void* sock_desc) {
     // Get the socket descriptor to server_fd
     client_t *cli = (client_t*) sock_desc;
     int valRead = 0;
-    char buf[MAX_SIZE] = {0};
+    char buf[MAX_SIZE_BUFF] = {0};
 
-    const char* my_json_string = "{\n"
-            "    \"name\": \"Jack (\\\"Bee\\\") Nimble\",\n"
-            "    \"format\": {\n"
-            "        \"type\":       \"rect\",\n"
-            "        \"width\":      1920,\n"
-            "        \"height\":     1080,\n"
-            "        \"interlace\":  false,\n"
-            "        \"frame rate\": 24\n"
-            "    }\n"
-            "}";
-
-    valRead = (int) recv(cli->connfd, buf, MAX_SIZE, 0);
+    valRead = (int) recv(cli->connfd, buf, MAX_SIZE_BUFF, 0);
 
     char * serverMessage = jsonParser(buf);
 
@@ -113,7 +101,6 @@ void *connection_handler(void* sock_desc) {
     close(cli->connfd);
     // Free the socket descriptor and buffer string
     free(sock_desc);
-    free(buf);
     return 0;
 }
 

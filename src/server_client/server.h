@@ -15,7 +15,7 @@
 #define TRUE 1
 #define FALSE 0
 #define MAX_CLIENT 100
-#define MAX_SIZE 2048
+#define MAX_SIZE_BUFF 2048
 
 typedef struct {
     struct sockaddr_in addr;    // Client remote address
@@ -24,7 +24,7 @@ typedef struct {
 } client_t;
 
 void queue_add(client_t *);
-void server();
+void startServer();
 void *connection_handler(void*);
 size_t str_length(const char*);
 char * jsonParser(const char *);

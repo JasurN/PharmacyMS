@@ -23,7 +23,7 @@ bool authorization(char *login_id, char *login_password) {
     } else {
         int num_fields = mysql_num_fields(result);
         MYSQL_ROW row;
-        MYSQL_FIELD *field;
+        //MYSQL_FIELD *field;
         while ((row = mysql_fetch_row(result))) {
             for (int i = 0; i < num_fields; i++) {
                 printf("%s ", row[i] ? row[i] : "NULL");

@@ -20,7 +20,7 @@
     //test1();
     //free(client_message);
 
-    /*server_message = (toClient *)malloc(sizeof(toClient));
+    server_message = (toClient *)malloc(sizeof(toClient));
 
      // Here should be some assigning values to the struct
 

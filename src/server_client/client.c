@@ -8,7 +8,7 @@
 #define TRUE 1
 #define FALSE 0
 #define PORT 5000
-#define MAX_SIZE 2048
+#define MAX_SIZE_BUF 2048
 #define SERVER_ADDRESS "127.0.0.1"
 
 int clientOn();
@@ -24,7 +24,7 @@ int clientOn() {
     struct sockaddr_in server;
     int server_fd = 0, valread;
     char *hello = "Hello from clientOn!";
-    char buf[MAX_SIZE] = {0};
+    char buf[MAX_SIZE_BUF] = {0};
 
     printf("CREATING CLIENT SOCKET...\n");
 
@@ -58,7 +58,7 @@ int clientOn() {
 
     //printf("HELLO MESSAGE SENT!!!");
 
-    valread = (int) recv(server_fd, buf, MAX_SIZE, 0);
+    valread = (int) recv(server_fd, buf, MAX_SIZE_BUF, 0);
 
     printf("%s\n", buf);
 
