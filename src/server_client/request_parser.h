@@ -45,14 +45,6 @@ struct purchase_back {
     int quantity;
 };
 
-typedef struct {
-    struct auth_back authorization;
-    struct search_back search;
-    struct search_back_inventory* search_inventory;
-    struct purchase_back purchase;
-    uid_t type;
-} toClient;
-
 /* These structs are used by clientOn (Drugstore) */
 struct authorizing {
     char login[MAX_SIZE];
@@ -67,6 +59,14 @@ struct purchasing {
     char name[MAX_SIZE];
     int quantity;
 };
+
+typedef struct {
+    struct auth_back authorization;
+    struct search_back search;
+    struct search_back_inventory* search_inventory;
+    struct purchase_back purchase;
+    uid_t type;
+} toClient;
 
 typedef struct {
     struct authorizing authorization;
@@ -94,7 +94,7 @@ typedef struct {
 
 void test1();
 char* clientStructToStr(const toServer *);
-char* ServerStructToStr(const toClient*);
+char* serverStructToStr(const toClient*);
 void serverStrToStruct(const char *, fromServer *);
 void clientStrToStruct(const char *, fromClient *);
 #endif //PHARMACYMS_REQUEST_PARSER_H

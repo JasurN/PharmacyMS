@@ -89,9 +89,9 @@ void *connection_handler(void* sock_desc) {
 
     valRead = (int) recv(cli->connfd, buf, MAX_SIZE, 0);
 
-    jsonParser(buf);
+    char * serverMessage = jsonParser(buf);
 
-    send(cli->connfd, my_json_string, str_length(my_json_string), 0);
+    send(cli->connfd, serverMessage, str_length(serverMessage), 0);
 
 /*
  *  while(1) {
@@ -132,15 +132,46 @@ size_t str_length(const char* buf) {
     for (i = 0; buf[i] != '\0'; ++i);
     return i;
 }
-void jsonParser(const char * jsonStr) {
+
+char* jsonParser(const char * jsonStr) {
     fromClient *fromClientObj = (fromClient *)malloc(sizeof(fromClient));
+
     clientStrToStruct(jsonStr, fromClientObj);
-    requestHander(fromClientObj);
+
+    toClient *toClientObj = requestHander(fromClientObj);
+    char * serverMessageToClient = serverStructToStr(toClientObj);
+
+
+    free(toClientObj);
     free(fromClientObj);
+    return serverMessageToClient;
 }
-void requestHander(const fromClient * fromClientObj) {
+
+toClient* requestHander( fromClient * fromClientObj) {
+    toClient *toClientObj = (toClient *)malloc(sizeof(toClient));
     if(fromClientObj->type == AUTHORIZATION) {
 
+    toClientObj = autorizationReq(fromClientObj);
     }//todo: to discuss with abdurakhmon
 
+    return toClientObj;
+}
+toClient* autorizationReq( fromClient* fromClientObj) { //todo: ask Malika to get exact user values
+    int auth_result = authorization(fromClientObj->authorization.login,
+                                    fromClientObj->authorization.password);
+    toClient *toClientObj = (toClient *)malloc(sizeof(toClient));
+
+    if(auth_result == TRUE) {
+
+
+        toClientObj->type = AUTHORIZATION;
+        toClientObj->authorization.isExist = TRUE;
+
+    }
+    else {
+
+        toClientObj->type = AUTHORIZATION;
+        toClientObj->authorization.isExist = FALSE;
+    }
+    return toClientObj;
 }

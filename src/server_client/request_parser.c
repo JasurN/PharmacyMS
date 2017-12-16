@@ -123,7 +123,7 @@ char* clientStructToStr(const toServer *client_message) {
     return out;
 }
 
-char* serialization2(const toClient* server_message) {
+char* serverStructToStr(const toClient* server_message) {
     cJSON *root = cJSON_CreateObject();
     cJSON *authorization = cJSON_CreateObject();
     cJSON *searching = cJSON_CreateObject();
@@ -358,7 +358,7 @@ void clientStrToStruct(const char *message, fromClient *client_query) {
         cJSON_Delete(purchase_item);
     }
 
-    server_answer->type = (uid_t) type_item->valueint;
+    client_query->type = (uid_t) type_item->valueint;
     cJSON_Delete(type_item);
     cJSON_Delete(root);
 }

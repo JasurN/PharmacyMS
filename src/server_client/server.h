@@ -9,7 +9,7 @@
 #include <pthread.h>
 #include "request_parser.h"
 #include "../define/define.h"
-#include "../dbManagement"
+#include "../dbManagement/dbManagement.h"
 
 #define PORT 5000
 #define TRUE 1
@@ -27,7 +27,7 @@ void queue_add(client_t *);
 void server();
 void *connection_handler(void*);
 size_t str_length(const char*);
-void jsonParser(const char *);
-void requestHander(const fromClient *);
-
+char * jsonParser(const char *);
+toClient* requestHander(fromClient *);
+toClient*  autorizationReq (fromClient*);
 #endif //PHARMACYMS_SERVER_H
