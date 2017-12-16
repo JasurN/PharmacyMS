@@ -1,7 +1,7 @@
 CREATE TABLE authorization(
   id VARCHAR (10) not NULL,
   password VARCHAR(20) not NULL,
-  type VARCHAR(1) check (type in ('C', 'S')),
+  type NUMERIC(1) check (type in (0, 1, 2)),
   PRIMARY KEY (id)
 );
 CREATE TABLE company (
@@ -33,6 +33,17 @@ CREATE TABLE medicine (
   ON DELETE CASCADE
 );
 
+CREATE TABLE inventory(
+store_id VARCHAR(10) not null,
+med_id VARCHAR(10) not null,
+med_name VARCHAR(20) not null,
+med_quantity NUMERIC(4),
+PRIMARY KEY (store_id, med_id),
+FOREIGN KEY (store_id) REFERENCES drugstore(store_id)
+ON DELETE CASCADE,
+FOREIGN KEY (med_id) REFERENCES medicine(med_id)
+on DELETE CASCADE
+);
 
 CREATE TABLE journal
  (

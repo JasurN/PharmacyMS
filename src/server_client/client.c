@@ -11,7 +11,12 @@
 #define MAX_SIZE_BUF 2048
 #define SERVER_ADDRESS "127.0.0.1"
 
+<<<<<<< HEAD
 int clientOn();
+=======
+
+int client();
+>>>>>>> master
 size_t str_length(const char*);
 
 int main() {
