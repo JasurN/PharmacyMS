@@ -125,7 +125,7 @@ char* jsonParser(const char * jsonStr) {
 
     clientStrToStruct(jsonStr, fromClientObj);
 
-    toClient *toClientObj = requestHander(fromClientObj);
+    toClient *toClientObj = requestHandler(fromClientObj);
     char * serverMessageToClient = serverStructToStr(toClientObj);
 
 
@@ -134,16 +134,16 @@ char* jsonParser(const char * jsonStr) {
     return serverMessageToClient;
 }
 
-toClient* requestHander( fromClient * fromClientObj) {
+toClient* requestHandler(fromClient *fromClientObj) {
     toClient *toClientObj = (toClient *)malloc(sizeof(toClient));
     if(fromClientObj->type == AUTHORIZATION) {
 
-    toClientObj = autorizationReq(fromClientObj);
+    toClientObj = authorizationReq(fromClientObj);
     }//todo: to discuss with abdurakhmon
 
     return toClientObj;
 }
-toClient* autorizationReq( fromClient* fromClientObj) { //todo: ask Malika to get exact user values
+toClient* authorizationReq(fromClient *fromClientObj) { //todo: ask Malika to get exact user values
     int auth_result = authorization(fromClientObj->authorization.login,
                                     fromClientObj->authorization.password);
     toClient *toClientObj = (toClient *)malloc(sizeof(toClient));

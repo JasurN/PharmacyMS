@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#include "request_parser.h"
+#include "../parser/request_parser.h"
 #include "../define/define.h"
 #include "../dbManagement/dbManagement.h"
 
@@ -28,6 +28,6 @@ void startServer();
 void *connection_handler(void*);
 size_t str_length(const char*);
 char * jsonParser(const char *);
-toClient* requestHander(fromClient *);
-toClient*  autorizationReq (fromClient*);
+toClient* requestHandler(fromClient *);
+toClient*  authorizationReq(fromClient *);
 #endif //PHARMACYMS_SERVER_H

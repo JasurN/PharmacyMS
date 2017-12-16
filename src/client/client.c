@@ -1,30 +1,6 @@
-#include <stdio.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <stdlib.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+#include "client.h"
 
-#define TRUE 1
-#define FALSE 0
-#define PORT 5000
-#define MAX_SIZE_BUF 2048
-#define SERVER_ADDRESS "127.0.0.1"
-
-<<<<<<< HEAD
-int clientOn();
-=======
-
-int client();
->>>>>>> master
-size_t str_length(const char*);
-
-int main() {
-    clientOn();
-    return 0;
-}
-
-int clientOn() {
+int clientStart() {
     // Structure to connect to the server
     struct sockaddr_in server;
     int server_fd = 0, valread;

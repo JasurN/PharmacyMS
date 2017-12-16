@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../parser/cJSON.h"
+#include "cJSON.h"
 #include "../define/define.h"
 
 #define MAX_SIZE 30
