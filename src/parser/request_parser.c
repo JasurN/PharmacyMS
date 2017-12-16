@@ -74,40 +74,40 @@ void test1() {
  *  sent to the server from clientOn (Drug Stores)
  *
  * */
-char* clientStructToStr(const toServer *client_message) {
+char* clientStructToStr(const toServer *client_struct) {
     cJSON *root = cJSON_CreateObject();
     cJSON *authorization = cJSON_CreateObject();
     cJSON *searching = cJSON_CreateObject();
     cJSON *purchasing = cJSON_CreateObject();
     char *out;
 
-    switch (client_message->type) {
+    switch (client_struct->type) {
         case AUTHORIZATION:
-            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_message->type));
+            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_struct->type));
             cJSON_AddItemToObject(root, "authorization", authorization);
             cJSON_AddItemToObject(authorization, "login",
-                                  cJSON_CreateString(client_message->authorization.login));
+                                  cJSON_CreateString(client_struct->authorization.login));
             cJSON_AddItemToObject(authorization, "password",
-                                  cJSON_CreateString(client_message->authorization.password));
+                                  cJSON_CreateString(client_struct->authorization.password));
             break;
         case SEARCH:
-            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_message->type));
+            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_struct->type));
             cJSON_AddItemToObject(root, "search", searching);
             cJSON_AddItemToObject(searching, "name",
-                                  cJSON_CreateString(client_message->search.name));
+                                  cJSON_CreateString(client_struct->search.name));
             break;
 
         case INVENTORY:
-            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_message->type));
+            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_struct->type));
             break;
 
         case PURCHASE:
-            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_message->type));
+            cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_struct->type));
             cJSON_AddItemToObject(root, "purchase", purchasing);
             cJSON_AddItemToObject(purchasing, "name",
-                                  cJSON_CreateString(client_message->purchase.name));
+                                  cJSON_CreateString(client_struct->purchase.name));
             cJSON_AddItemToObject(purchasing, "quantity",
-                                  cJSON_CreateNumber(client_message->purchase.quantity));
+                                  cJSON_CreateNumber(client_struct->purchase.quantity));
             break;
 
         default:

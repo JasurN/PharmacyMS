@@ -1,6 +1,6 @@
 #include "client.h"
 
-int clientStart() {
+int clientStart(char * clientStr) {
     // Structure to connect to the server
     struct sockaddr_in server;
     int server_fd = 0, valread;
@@ -35,7 +35,7 @@ int clientStart() {
     }
 
     // Send hello message to the sever
-    send(server_fd, hello, str_length(hello), 0);
+    send(server_fd, clientStr, str_length(clientStr), 0);
 
     //printf("HELLO MESSAGE SENT!!!");
 
