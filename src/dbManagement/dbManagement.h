@@ -1,5 +1,6 @@
 #ifndef PHARMACYMS_DATABASE_H
 #define PHARMACYMS_DATABASE_H
+
 #include </usr/include/mysql/mysql.h>
 #include "stdio.h"
 
