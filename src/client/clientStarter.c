@@ -1,6 +1,6 @@
 #include "client.h"
 
 int main() {
-    authorizationClient("admin", "ss");
+    fromServer* fromServerobj = authorizationClient("admin", "admin");
     return 0;
 }

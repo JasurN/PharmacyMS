@@ -1,15 +1,15 @@
 #include "client.h"
 
-char* clientStart(char * clientStr) {
+int clientStart() {
     // Structure to connect to the server
     struct sockaddr_in server;
-    int server_fd = 0, valread;
+    int server_info = 0, valread;
     char *hello = "Hello from clientOn!";
     char buf[MAX_SIZE_BUF] = {0};
 
     printf("CREATING CLIENT SOCKET...\n");
 
-    if((server_fd = socket(AF_INET, SOCK_STREAM, 0)), 0) {
+    if((server_info = socket(AF_INET, SOCK_STREAM, 0)), 0) {
         printf("\tsocket creation failed!!!");
         exit(EXIT_FAILURE);
     }
@@ -29,21 +29,25 @@ char* clientStart(char * clientStr) {
     }
 
     printf("CLIENT CONNECTING ON PORT 8080 TO COMMUNICATE WITH SERVER...\n");
-    if(connect(server_fd, (struct sockaddr *) &server, sizeof(server)) < 0) {
+    if(connect(server_info, (struct sockaddr *) &server, sizeof(server)) < 0) {
         printf("\nConnection Failed\n");
         return -1;
     }
+    return server_info;
 
+}
+char* sendStrToServer(int server_info, char* messageToServer) {
     // Send hello message to the sever
-    send(server_fd, clientStr, str_length(clientStr), 0);
+    send(server_info, messageToServer, str_length(messageToServer), 0);
 
-    valread = (int) recv(server_fd, buf, MAX_SIZE_BUF, 0);
+    recv(server_info, messageToServer, MAX_SIZE_BUF, 0);
 
-    //printf("message from server: %s\n", buf);
-    char* returnToClient = (char *)malloc(sizeof(buf));
-    strcpy(returnToClient, buf);
+
+    char* returnToClient = (char *)malloc(sizeof(messageToServer));
+    strcpy(returnToClient, messageToServer);
     return returnToClient;
 }
+
 
 size_t str_length(const char* buf) {
     size_t i;
@@ -58,8 +62,11 @@ fromServer* authorizationClient(char * login, char * password) {
 
     char* strToServer = clientStructToStr(toServerObj);
 
-    char * strFromServer = clientStart(strToServer);
+    int server_info = clientStart();
+
+    char* strFromServer = sendStrToServer(server_info, strToServer);
 //struct from server with autorization
+
     fromServer *fromServerObj =  (fromServer *)malloc(sizeof(fromServer));
     printf("Client side: %s\n", strFromServer);
     serverStrToStruct(strFromServer, fromServerObj);
