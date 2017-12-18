@@ -6,6 +6,7 @@ client_t* clients[MAX_CLIENT];
 
 void startServer() {
     int server_fd, new_socket, addrlen;
+    int opt = 1;
     struct sockaddr_in server, client;
     pthread_t client_thread;
 
@@ -17,7 +18,12 @@ void startServer() {
         exit(EXIT_FAILURE);
     }
     printf("\tDONE!!!\n");
-
+// Forcefully attaching socket to the port 8080
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
+    {
+        perror("setsockopt failed");
+        exit(EXIT_FAILURE);
+    }
     // assigning types of the socket created using 'struct sockaddr_in'
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -100,6 +106,7 @@ void *connection_handler(void* sock_desc) {
     // Close the socket
     close(cli->connfd);
     // Free the socket descriptor and buffer string
+    free(serverMessage);
     free(sock_desc);
     return 0;
 }
@@ -147,7 +154,7 @@ toClient* authorizationReq(fromClient *fromClientObj) { //todo: ask Malika to ge
     int auth_result = authorization(fromClientObj->authorization.login,
                                     fromClientObj->authorization.password);
     toClient *toClientObj = (toClient *)malloc(sizeof(toClient));
-
+    memset(toClientObj, '0', sizeof(toClient));
     if(auth_result == TRUE) {
 
 
