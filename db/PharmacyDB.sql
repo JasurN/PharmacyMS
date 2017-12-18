@@ -53,6 +53,7 @@ CREATE TABLE journal
   store_id VARCHAR(10) not NULL,
   med_id VARCHAR(10) not NULL,
   quantity NUMERIC(4),
+  status NUMERIC(1) check (status in (0,1));
   PRIMARY KEY (trans_id),
   FOREIGN KEY (comp_id) REFERENCES company(comp_id)
     ON DELETE CASCADE,
