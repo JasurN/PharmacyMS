@@ -75,51 +75,58 @@ void test1() {
  *
  * */
 char* clientStructToStr(const toServer *client_struct) {
+    printf("login : %s\npassword of my %s\ntype: %d", client_struct->authorization.login, client_struct->authorization.password, client_struct->type);
     cJSON *root = cJSON_CreateObject();
-    cJSON *authorization = cJSON_CreateObject();
-    cJSON *searching = cJSON_CreateObject();
-    cJSON *purchasing = cJSON_CreateObject();
+    cJSON *authorization;
+    cJSON *searching;
+    cJSON *purchasing;
     char *out;
 
     switch (client_struct->type) {
         case AUTHORIZATION:
             cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_struct->type));
-            cJSON_AddItemToObject(root, "authorization", authorization);
+            cJSON_AddItemToObject(root, "authorization", authorization = cJSON_CreateObject());
             cJSON_AddItemToObject(authorization, "login",
                                   cJSON_CreateString(client_struct->authorization.login));
             cJSON_AddItemToObject(authorization, "password",
                                   cJSON_CreateString(client_struct->authorization.password));
+            out = cJSON_Print(root);
+            cJSON_Delete(root);
             break;
         case SEARCH:
             cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_struct->type));
-            cJSON_AddItemToObject(root, "search", searching);
+            cJSON_AddItemToObject(root, "search", searching = cJSON_CreateObject());
             cJSON_AddItemToObject(searching, "name",
                                   cJSON_CreateString(client_struct->search.name));
+            out = cJSON_Print(root);
+            cJSON_Delete(root);
             break;
 
         case INVENTORY:
             cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_struct->type));
+            cJSON_Delete(root);
             break;
 
         case PURCHASE:
             cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_struct->type));
-            cJSON_AddItemToObject(root, "purchase", purchasing);
+            cJSON_AddItemToObject(root, "purchase", purchasing = cJSON_CreateObject());
             cJSON_AddItemToObject(purchasing, "name",
                                   cJSON_CreateString(client_struct->purchase.name));
             cJSON_AddItemToObject(purchasing, "quantity",
                                   cJSON_CreateNumber(client_struct->purchase.quantity));
+            out = cJSON_Print(root);
+            cJSON_Delete(root);
             break;
 
         default:
             perror("Please enter proper type!");
             break;
     }
-    //out = cJSON_Print(root);
+    //out = (char *)malloc(sizeof(char ) * strlen( cJSON_Print(root)));
+
     printf("%s\n", out);
-    cJSON_Delete(authorization);
-    cJSON_Delete(searching);
-    cJSON_Delete(purchasing);
-    cJSON_Delete(root);
+
+
     return out;
 }
 

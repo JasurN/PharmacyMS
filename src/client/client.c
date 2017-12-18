@@ -41,7 +41,7 @@ int clientStart(char * clientStr) {
 
     valread = (int) recv(server_fd, buf, MAX_SIZE_BUF, 0);
 
-    printf("%s\n", buf);
+    printf("message from server: %s\n", buf);
 
 /*
  *  while(1) {

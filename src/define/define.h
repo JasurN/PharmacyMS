@@ -15,4 +15,6 @@
 #define ADMIN 0
 #define COMPANY 1
 #define DRUGSTORE 2
+
+#define  MAX_SIZE_BUF 2048
 #endif //PHARMACYMS_DEFINE_H
