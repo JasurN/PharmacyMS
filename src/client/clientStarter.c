@@ -9,7 +9,7 @@ int main() {
     toServer *toServerObj = (toServer *)malloc(sizeof(toServer));
     toServerObj->type = AUTHORIZATION;
     strcpy(toServerObj->authorization.password, "admin");
-    strcpy(toServerObj->authorization.login, "admin");
+    strcpy(toServerObj->authorization.login, "malika");
     //memset(&toServerObj->authorization.password, '0', sizeof(char));
     printf("main: %s\npassword %s\ntype: %d", toServerObj->authorization.login, toServerObj->authorization.password, toServerObj->type);
 

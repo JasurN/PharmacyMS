@@ -12,10 +12,10 @@
 /* These structs are used by clientOn (Company) */
 struct auth_back {
     int isExist;
-    char id[MAX_SIZE];
-    char name[MAX_TEXT];
-    char address[MAX_TEXT];
-    char contact[MAX_TEXT];
+    char *id;
+    char *name;
+    char *address;
+    char *contact;
     uid_t user_type;
 };
 

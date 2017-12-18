@@ -12,6 +12,7 @@ void *object_parser(char *tablename, MYSQL_RES *result);
 void *medicine_parser(MYSQL_RES *result);
 void *inventory_parser(MYSQL_RES *result);
 void *journal_parser(MYSQL_RES *result);
+void *drugstore_parser(MYSQL_RES *result);
 
 
 #endif //PHARMACYMS_OBJECT_H

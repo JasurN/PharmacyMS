@@ -13,8 +13,30 @@ void *object_parser(char *tablename, MYSQL_RES *result)
         return inventory_parser(result);
     if (strcmp(tablename, "journal") == 0)
         return journal_parser(result);
+    if (strcmp(tablename, "company") == 0)
+        return drugstore_parser(result);
 }
 
+void *drugstore_parser(MYSQL_RES *result) {
+    MYSQL_ROW row;
+    //int num_fields = mysql_num_fields(result);
+    my_ulonglong num_rows = mysql_num_rows(result);
+    struct auth_back **stores;
+    stores = (struct auth_back **) malloc(sizeof(struct auth_back *) * num_rows);
+    struct auth_back *store;
+    int i = 0;
+    while ((row = mysql_fetch_row(result))) {
+        store = malloc(sizeof(struct auth_back *));
+        store->id = row[0];
+        store->name = row[1];
+        store->address = row[2];
+        store->contact = row[3];
+
+        stores[i] = store;
+        i++;
+    }
+    return stores;
+}
 void *medicine_parser(MYSQL_RES *result)
 {
     MYSQL_ROW row;
@@ -36,6 +58,7 @@ void *medicine_parser(MYSQL_RES *result)
         medicines[i] = medicine;
         i++;
     }
+    return medicines;
 }
 void *inventory_parser(MYSQL_RES *result)
 {
@@ -55,6 +78,7 @@ void *inventory_parser(MYSQL_RES *result)
         medicines[i] = medicine;
         i++;
     }
+    return medicines;
 }
 void *journal_parser(MYSQL_RES *result)
 {
@@ -76,7 +100,9 @@ void *journal_parser(MYSQL_RES *result)
         medicines[i] = medicine;
         i++;
     }
+    return medicines;
 }
+
 
 //struct search_back {
 //    int isExist;

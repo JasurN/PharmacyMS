@@ -15,7 +15,7 @@ target_link_libraries(server mysqlclient)
 # client build
 set(SOURCE_FILES_client src/client/client.c
         src/parser/cJSON.c src/define/define.h
-        src/client/client.h src/dbManagement/dbManagement.c src/client/clientStarter.c src/parser/request_parser.c)
+        src/client/client.h src/dbManagement/dbManagement.c src/client/clientStarter.c src/parser/request_parser.c src/parser/object.c)
 add_executable(client ${SOURCE_FILES_client})
 target_link_libraries(client mysqlclient)
 
