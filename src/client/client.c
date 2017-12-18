@@ -50,5 +50,24 @@ size_t str_length(const char* buf) {
     for (i = 0; buf[i] != '\0'; ++i);
     return i;
 }
+fromServer* authorizationClient(char * login, char * password) {
+    toServer *toServerObj = (toServer *)malloc(sizeof(toServer));
+    toServerObj->type = AUTHORIZATION;
+    strcpy(toServerObj->authorization.password, login);
+    strcpy(toServerObj->authorization.login, password);
+
+    char* strToServer = clientStructToStr(toServerObj);
+
+    char * strFromServer = clientStart(strToServer);
+//struct from server with autorization
+    fromServer *fromServerObj =  (fromServer *)malloc(sizeof(fromServer));
+    printf("Client side: %s\n", strFromServer);
+    serverStrToStruct(strFromServer, fromServerObj);
+//there your can use it.
+
+    free(strFromServer);
+    free(toServerObj);
+    return fromServerObj;
+}
 
 
