@@ -1,7 +1,6 @@
 #include "server.h"
 
 static int id_counter = 10;
-
 client_t* clients[MAX_CLIENT];
 
 void startServer() {
