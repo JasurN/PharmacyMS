@@ -1,6 +1,9 @@
 #include "client.h"
+#include "../parser/request_parser.h"
 
 int main() {
-    authorizationClient("admin", "ss");
+    fromServer* fromServerObj = authorizationClient("admin", "lol");
+
+    free(fromServerObj);
     return 0;
 }

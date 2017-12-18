@@ -4,7 +4,6 @@ char* clientStart(char * clientStr) {
     // Structure to connect to the server
     struct sockaddr_in server;
     int server_fd = 0, valread;
-    char *hello = "Hello from clientOn!";
     char buf[MAX_SIZE_BUF] = {0};
 
     printf("CREATING CLIENT SOCKET...\n");
@@ -63,7 +62,7 @@ fromServer* authorizationClient(char * login, char * password) {
     fromServer *fromServerObj =  (fromServer *)malloc(sizeof(fromServer));
     printf("Client side: %s\n", strFromServer);
     serverStrToStruct(strFromServer, fromServerObj);
-//there your can use it.
+//there your can use struct.
 
     free(strFromServer);
     free(toServerObj);
