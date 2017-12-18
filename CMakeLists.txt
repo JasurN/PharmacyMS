@@ -8,14 +8,17 @@ set (CMAKE_C_FLAGS "-Wall -pthread")
 set(SOURCE_FILES_server src/server/server.c
         src/parser/cJSON.c src/server/server.h src/server/serverStarter.c
         src/parser/request_parser.c
-        src/dbManagement/dbManagement.c src/parser/request_parser.h src/dbManagement/dbManagement.h src/parser/object.c src/parser/object.h)
+        src/dbManagement/dbManagement.c src/parser/request_parser.h
+        src/dbManagement/dbManagement.h src/parser/object.c src/parser/object.h)
 add_executable(server ${SOURCE_FILES_server})
 target_link_libraries(server mysqlclient)
 
 # client build
 set(SOURCE_FILES_client src/client/client.c
         src/parser/cJSON.c src/define/define.h
-        src/client/client.h src/dbManagement/dbManagement.c src/client/clientStarter.c src/parser/request_parser.c)
+        src/client/client.h src/dbManagement/dbManagement.c
+        src/client/clientStarter.c src/parser/request_parser.c
+        src/parser/object.c src/parser/object.h)
 add_executable(client ${SOURCE_FILES_client})
 target_link_libraries(client mysqlclient)
 

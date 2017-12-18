@@ -1,6 +1,6 @@
 #include "client.h"
 
 int main() {
-    authorizationClient("login", "password");
+    authorizationClient("admin", "ss");
     return 0;
 }
