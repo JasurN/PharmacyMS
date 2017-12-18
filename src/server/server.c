@@ -154,7 +154,7 @@ toClient* authorizationReq(fromClient *fromClientObj) { //todo: ask Malika to ge
     int auth_result = authorization(fromClientObj->authorization.login,
                                     fromClientObj->authorization.password);
     toClient *toClientObj = (toClient *)malloc(sizeof(toClient));
-    memset(toClientObj, '0', sizeof(toClient));
+
     if(auth_result == TRUE) {
 
 
