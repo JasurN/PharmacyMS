@@ -10,13 +10,13 @@
 #define dbUser "root"
 #define dbPassword "malika"
 #define dbName "pharmacy"
-
+MYSQL* connectToDB();
 void finish_with_error(MYSQL * con);
 bool authorization(char* login_id, char* login_password);
 void addUser(char *user_id, char *user_password, char *user_name, char *user_adress, char * user_contact,
              int type);
 bool isExistAlready(char *user_id, char *tablename,char *field);
-MYSQL* connectToDB();
+void *searchUser(char *user_id, char *user_password);
 void addNewMedicine(char *med_id, char *med_name, char *description, float price, char *comp_id);
 void *searchFromTable(char *id, char *tablename, char *colname);
 void *viewStore(char *id);

@@ -48,8 +48,8 @@ struct purchase_back {
 
 /* These structs are used by clientOn (Drugstore) */
 struct authorizing {
-    char login[MAX_SIZE];
-    char password[MAX_SIZE];
+    char *login;
+    char *password;
     uid_t type;
 };
 

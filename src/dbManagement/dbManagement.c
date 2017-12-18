@@ -48,6 +48,13 @@ bool authorization(char *login_id, char *login_password) {
     }
     return TRUE;
 }
+void *searchUser(char *user_id, char *user_password){
+    if(authorization(user_id, user_password)){
+        return searchFromTable(user_id, "authorization", "id");
+    }
+
+
+}
 bool isExistAlready(char *user_id, char *tablename,char *field){
 
     MYSQL *con = connectToDB();
