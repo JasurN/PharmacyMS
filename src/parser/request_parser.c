@@ -40,35 +40,7 @@
  *  Just testing function
  *
  * */
-void test1() {
-    const char* my_json_string = "{\n"
-            "    \"name\": \"Jack (\\\"Bee\\\") Nimble\",\n"
-            "    \"format\": {\n"
-            "        \"type\":       \"rect\",\n"
-            "        \"width\":      1920,\n"
-            "        \"height\":     1080,\n"
-            "        \"interlace\":  false,\n"
-            "        \"frame_rate\": 35\n"
-            "    }\n"
-            "}";
-    cJSON * root = cJSON_Parse(my_json_string);
-    cJSON *format = cJSON_GetObjectItemCaseSensitive(root, "format");
-    cJSON *type_item = cJSON_GetObjectItemCaseSensitive(format, "type");
-    cJSON *framerate_item = cJSON_GetObjectItemCaseSensitive(format, "frame_rate");
-    char type[MAX_SIZE];
-    int framerate = 0;
-    //cJSON_SetNumberValue(framerate_item, 140);
-    if (cJSON_IsString(type_item)) {
-        strcpy(type, type_item->valuestring);
-    }
-    if (cJSON_IsNumber(framerate_item)) {
-        framerate = framerate_item->valueint;
-    }
-    printf("value of framerate; %d\n", framerate);
-    printf("value of type; %s", type);
 
-    cJSON_Delete(root);
-}
 /*
  *  This function converts queries to be
  *  sent to the server from clientOn (Drug Stores)
