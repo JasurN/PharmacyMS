@@ -187,11 +187,6 @@ char* serverStructToStr(const toClient* server_message) {
     }
     out = cJSON_Print(root);
     printf("%s\n", out);
-    cJSON_Delete(authorization);
-    cJSON_Delete(searching);
-    cJSON_Delete(medical);
-    cJSON_Delete(searching_inventory);
-    cJSON_Delete(purchasing);
     cJSON_Delete(root);
     return out;
 }
@@ -312,15 +307,12 @@ void clientStrToStruct(const char *message, fromClient *client_query) {
         cJSON *password_item = cJSON_GetObjectItemCaseSensitive(authorization_item, "password");
         strcpy(client_query->authorization.login, login_item->valuestring);
         strcpy(client_query->authorization.password, password_item->valuestring);
-        cJSON_Delete(login_item);
-        cJSON_Delete(password_item);
-        cJSON_Delete(authorization_item);
+
     } else if (type_item->valueint == 1) {
         cJSON *search_item = cJSON_GetObjectItemCaseSensitive(root, "search");
         cJSON *name_item = cJSON_GetObjectItemCaseSensitive(search_item, "name");
         strcpy(client_query->search.name, name_item->valuestring);
-        cJSON_Delete(name_item);
-        cJSON_Delete(search_item);
+
     } else if (type_item->valueint == 2) {
         /*  In this condition do nothing as there is no
          *  additional information but type
@@ -332,12 +324,8 @@ void clientStrToStruct(const char *message, fromClient *client_query) {
         cJSON *quantity_item = cJSON_GetObjectItemCaseSensitive(purchase_item, "quantity");
         strcpy(client_query->purchase.name, name_item->valuestring);
         client_query->purchase.quantity = quantity_item->valueint;
-        cJSON_Delete(name_item);
-        cJSON_Delete(quantity_item);
-        cJSON_Delete(purchase_item);
     }
 
     client_query->type = (uid_t) type_item->valueint;
-    cJSON_Delete(type_item);
     cJSON_Delete(root);
 }
