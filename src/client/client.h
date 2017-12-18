@@ -14,6 +14,6 @@
 #define MAX_SIZE_BUF 2048
 #define SERVER_ADDRESS "127.0.0.1"
 
-int clientStart(char *string);
+char* clientStart(char *string);
 size_t str_length(const char* clientStr);
 #endif //PHARMACYMS_CLIENT_H

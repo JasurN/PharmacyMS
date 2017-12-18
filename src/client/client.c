@@ -1,6 +1,6 @@
 #include "client.h"
 
-int clientStart(char * clientStr) {
+char* clientStart(char * clientStr) {
     // Structure to connect to the server
     struct sockaddr_in server;
     int server_fd = 0, valread;
@@ -37,28 +37,12 @@ int clientStart(char * clientStr) {
     // Send hello message to the sever
     send(server_fd, clientStr, str_length(clientStr), 0);
 
-    //printf("HELLO MESSAGE SENT!!!");
-
     valread = (int) recv(server_fd, buf, MAX_SIZE_BUF, 0);
 
-    printf("message from server: %s\n", buf);
-
-/*
- *  while(1) {
- *  memset(buffer, 0, sizeof(buffer));
- *  memset(cchat, 0, sizeof(cchat));
- *  printf("CLIENT : ");
- *  fgets (cchat, sizeof(cchat), stdin);
- *  send(sock , cchat , strlen(cchat) , 0 );
- *  valread = read( sock , buffer, 1024);
- *  printf("%s\n",buffer );
- *  cchat[strlen(cchat)] = '\0';
- *  if(strncmp(cchat, bye, strlen(bye))==0)
- *      break;
- *
- *
- *  }
- * */
+    //printf("message from server: %s\n", buf);
+    char* returnToClient = (char *)malloc(sizeof(buf));
+    strcpy(returnToClient, buf);
+    return returnToClient;
 }
 
 size_t str_length(const char* buf) {

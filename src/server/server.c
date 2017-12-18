@@ -1,4 +1,5 @@
 #include "server.h"
+#include "../parser/request_parser.h"
 
 static int id_counter = 10;
 
@@ -156,11 +157,12 @@ toClient* authorizationReq(fromClient *fromClientObj) { //todo: ask Malika to ge
     toClient *toClientObj = (toClient *)malloc(sizeof(toClient));
 
     if(auth_result == TRUE) {
-
-
         toClientObj->type = AUTHORIZATION;
         toClientObj->authorization.isExist = TRUE;
-
+        strcpy(toClientObj->authorization.name, "Jasurbek");
+        strcpy(toClientObj->authorization.contact, "998979997507");
+        strcpy(toClientObj->authorization.id, "u1510326");
+        strcpy(toClientObj->authorization.address, "Sebzor");
     }
     else {
 
