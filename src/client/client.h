@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include "../parser/request_parser.h"
 
 #define TRUE 1
 #define FALSE 0

@@ -1,17 +1,16 @@
 #include "client.h"
-#include "../parser/request_parser.h"
 
 int main() {
-    char login[10],password[10];
+   /* char login[10],password[10];
     printf("Please enter login: ");
     scanf("%s", login);
     printf("Please enter password: ");
-    scanf("%s", password);
+    scanf("%s", password);*/
     toServer *toServerObj = (toServer *)malloc(sizeof(toServerObj));
 
     toServerObj->type = AUTHORIZATION;
-    strcpy(toServerObj->authorization.login, login);
-    strcpy(toServerObj->authorization.password, password);
+    strcpy(toServerObj->authorization.login, "admin");
+    strcpy(toServerObj->authorization.password, "admin");
 
     char * strToServer = clientStructToStr(toServerObj);
 

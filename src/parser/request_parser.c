@@ -114,7 +114,7 @@ char* clientStructToStr(const toServer *client_struct) {
             perror("Please enter proper type!");
             break;
     }
-    out = cJSON_Print(root);
+    //out = cJSON_Print(root);
     printf("%s\n", out);
     cJSON_Delete(authorization);
     cJSON_Delete(searching);
