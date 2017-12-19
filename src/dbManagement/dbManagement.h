@@ -1,5 +1,6 @@
 #ifndef PHARMACYMS_DATABASE_H
 #define PHARMACYMS_DATABASE_H
+
 #include </usr/include/mysql/mysql.h>
 #include "stdio.h"
 
@@ -22,6 +23,10 @@ void *searchFromTable(char *id, char *tablename, char *colname);
 void *searchByName(char*);
 void *viewStoreInventory(char*);
 void *viewOrders(char*);
-void *orderRegister(char*, char*, char*, int);
-
+void orderRegister(char*, char*, char*, int);
+void medDelivered(char *trans_id);
+void delete(char *id, char *tname, char *cname);
+void deleteMedicine(char *id);
+void deleteStore(char *id);
+void deleteCompany(char *id);
 #endif //PHARMACYMS_DATABASE_H

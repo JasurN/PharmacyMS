@@ -1,4 +1,5 @@
 #include "client.h"
+#include "../parser/request_parser.h"
 
 char* clientStart(char * clientStr) {
     // Structure to connect to the server
@@ -81,6 +82,23 @@ fromServer* searchCompanyInventory(const char* searchString) {
 
     fromServer *fromServerObj = (fromServer *) malloc(sizeof(fromServer));
     //printf("Message from server: %s\n", strFromServer);
+    serverStrToStruct(strFromServer, fromServerObj);
+
+    free(toServerObj);
+    free(strFromServer);
+    return fromServerObj;
+}
+
+fromServer* searchStoreInventory(char* searchString) {
+    toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
+    toServerObj->type = INVENTORY;
+    strcpy(toServerObj->authorization.login, searchString);
+
+    char *strToServer = clientStructToStr(toServerObj);
+    char *strFromServer = clientStart(strToServer);
+
+    fromServer *fromServerObj = (fromServer *) malloc(sizeof(fromServer));
+    printf("Message from server: %s\n", strFromServer);
     serverStrToStruct(strFromServer, fromServerObj);
 
     free(toServerObj);
