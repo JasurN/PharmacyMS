@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../parser/cJSON.h"
+#include "cJSON.h"
 #include "../define/define.h"
 
 #define MAX_SIZE 30
@@ -13,9 +13,9 @@
 struct auth_back {
     int isExist;
     char id[MAX_SIZE];
-    char name[MAX_TEXT];
+    char name[MAX_SIZE];
     char address[MAX_TEXT];
-    char contact[MAX_TEXT];
+    char contact[MAX_SIZE];
     uid_t user_type;
 };
 
@@ -24,7 +24,7 @@ struct search_back {
     char med_id[MAX_SIZE];
     char name[MAX_SIZE];
     char description[MAX_TEXT];
-    float price;
+    double price;
     char comp_id[MAX_SIZE];
 };
 
@@ -43,12 +43,23 @@ struct purchase_back {
     char store_id[MAX_SIZE];
     char med_id[MAX_SIZE];
     int quantity;
+    int status;
+};
+
+struct journal_back {
+    char trans_id[MAX_SIZE];
+    char trans_date[MAX_SIZE];
+    char comp_id[MAX_SIZE];
+    char store_id[MAX_SIZE];
+    char med_id[MAX_SIZE];
+    int quantity;
 };
 
 /* These structs are used by clientOn (Drugstore) */
 struct authorizing {
     char login[MAX_SIZE];
     char password[MAX_SIZE];
+    uid_t type;
 };
 
 struct searching {
@@ -65,6 +76,8 @@ typedef struct {
     struct search_back search;
     struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
+    struct journal_back* journal;
+
     uid_t type;
 } toClient;
 
@@ -81,6 +94,7 @@ typedef struct {
     struct search_back search;
     struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
+    struct journal_back journal[MAX_TEXT];
     uid_t type;
 } fromServer;
 
@@ -92,9 +106,31 @@ typedef struct {
     uid_t type;
 } fromClient;
 
+/* This struct is used by admin */
+
+struct usersToAdmin {
+    char id[MAX_SIZE];
+    char name[MAX_SIZE];
+    char address[MAX_TEXT];
+    char contact[MAX_SIZE];
+};
+
+typedef struct {
+    struct usersToAdmin* users;
+    uid_t user_type;
+} toAdmin;
+
+typedef struct {
+    uid_t user_type;
+} fromAdmin;
+
 void test1();
 char* clientStructToStr(const toServer *);
 char* serverStructToStr(const toClient*);
 void serverStrToStruct(const char *, fromServer *);
 void clientStrToStruct(const char *, fromClient *);
+char* adminClientStructToStr(const toAdmin *admin_struct);
+char* adminServerToStr(const toAdmin *admin_struct);
+void adminServerToStruct(const char *message, toAdmin *admin_answer);
+void adminClientToStruct(const char *message, fromAdmin *admin_query);
 #endif //PHARMACYMS_REQUEST_PARSER_H

@@ -10,9 +10,11 @@
 #define SEARCH 1
 #define INVENTORY 2
 #define PURCHASE 3
-
+#define JOURNAL 4
 //User types
 #define ADMIN 0
 #define COMPANY 1
 #define DRUGSTORE 2
+
+#define  MAX_SIZE_BUF 2048
 #endif //PHARMACYMS_DEFINE_H
