@@ -49,11 +49,13 @@ size_t str_length(const char* buf) {
     return i;
 }
 
-fromServer* authorizationClient(char * login, char * password) {
+fromServer* authorizationClient(const char * login, const char * password) {
     toServer *toServerObj = (toServer *)malloc(sizeof(toServer));
     toServerObj->type = AUTHORIZATION;
-    strcpy(toServerObj->authorization.password, login);
-    strcpy(toServerObj->authorization.login, password);
+
+    strcpy(toServerObj->authorization.login, login);
+    strcpy(toServerObj->authorization.password, password);
+
 
     char* strToServer = clientStructToStr(toServerObj);
 
@@ -70,15 +72,15 @@ fromServer* authorizationClient(char * login, char * password) {
 }
 
 fromServer* searchCompanyInventory(char* searchString) {
-    toServer *toServerObj = (toServer *)malloc(sizeof(toServer));
+    toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
     toServerObj->type = SEARCH;
     strcpy(toServerObj->search.name, searchString);
 
-    char* strToServer = clientStructToStr(toServerObj);
-    char* strFromServer = clientStart(strToServer);
+    char *strToServer = clientStructToStr(toServerObj);
+    char *strFromServer = clientStart(strToServer);
 
-    fromServer *fromServerObj =  (fromServer *)malloc(sizeof(fromServer));
-    printf("Client side: %s\n", strFromServer);
+    fromServer *fromServerObj = (fromServer *) malloc(sizeof(fromServer));
+    printf("Message from server: %s\n", strFromServer);
     serverStrToStruct(strFromServer, fromServerObj);
 
     free(toServerObj);
