@@ -19,7 +19,7 @@ void startServer() {
         exit(EXIT_FAILURE);
     }
     printf("\tDONE!!!\n");
-// Forcefully attaching socket to the port 8080
+// Forcefully attaching socket to the port 5000
     if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
         perror("setsockopt failed");
         exit(EXIT_FAILURE);
@@ -29,8 +29,8 @@ void startServer() {
     server.sin_addr.s_addr = htonl(INADDR_ANY);
     server.sin_port = htons(PORT);
 
-    printf("BINDING SERVER SOCKET TO PORT 8080...");
-    // binding socket to the port 8080 using bind()
+    printf("BINDING SERVER SOCKET TO PORT %d...", PORT);
+    // binding socket to the port 5000 using bind()
     if (bind(server_fd, (struct sockaddr *) &server, sizeof(server)) < 0) {
         perror("bind failed");
         exit(EXIT_FAILURE);
@@ -149,6 +149,10 @@ toClient *requestHandler(fromClient *fromClientObj) {
         toClientObj = searchInDbServer(fromClientObj);
     } else if (fromClientObj->type == INVENTORY) {
 
+    } else if (fromClientObj->type == PURCHASE) {
+
+    } else if (fromClientObj->type == JOURNAL) {
+
     }
 
     return toClientObj;
@@ -159,18 +163,16 @@ toClient *authorizationServer(fromClient *fromClientObj) { //todo: assign value 
                                     fromClientObj->authorization.password);
     toClient *toClientObj = (toClient *) malloc(sizeof(toClient));
 
+    toClientObj->type = AUTHORIZATION;
     if (auth_result == TRUE) {
-        toClientObj->type = AUTHORIZATION;
         toClientObj->authorization.isExist = TRUE;
         strcpy(toClientObj->authorization.name, "Jasurbek");
         strcpy(toClientObj->authorization.contact, "998979997507");
         strcpy(toClientObj->authorization.id, "u1510326");
         strcpy(toClientObj->authorization.address, "Sebzor");
-    } else {
-
-        toClientObj->type = AUTHORIZATION;
-        toClientObj->authorization.isExist = FALSE;
+        return toClientObj;
     }
+        toClientObj->authorization.isExist = FALSE;
     return toClientObj;
 }
 

@@ -21,36 +21,43 @@ struct auth_back {
 
 struct search_back {
     int isExist;
-    char *med_id;
-    char *name;
-    char *description;
-    double price;
-    char *comp_id;
+    char med_id[MAX_SIZE];
+    char name[MAX_SIZE];
+    char description[MAX_TEXT];
+    float price;
+    char comp_id[MAX_SIZE];
 };
 
 struct search_back_inventory{
-    char *store_id;
-    char *med_id;
-    char *name;
+    char store_id[MAX_SIZE];
+    char med_id[MAX_SIZE];
+    char name[MAX_SIZE];
     int quantity;
 } ;
 
 struct purchase_back {
     int success;
-    char *trans_id;
-    char *trans_date;
-    char *comp_id;
-    char *store_id;
-    char *med_id;
+    char trans_id[MAX_SIZE];
+    char trans_date[MAX_SIZE];
+    char comp_id[MAX_SIZE];
+    char store_id[MAX_SIZE];
+    char med_id[MAX_SIZE];
     int quantity;
-    int status;
+};
+
+struct journal_back {
+    char trans_id[MAX_SIZE];
+    char trans_date[MAX_SIZE];
+    char comp_id[MAX_SIZE];
+    char store_id[MAX_SIZE];
+    char med_id[MAX_SIZE];
+    int quantity;
 };
 
 /* These structs are used by clientOn (Drugstore) */
 struct authorizing {
     char login[MAX_SIZE];
     char password[MAX_SIZE];
-    uid_t type;
 };
 
 struct searching {
@@ -67,6 +74,7 @@ typedef struct {
     struct search_back search;
     struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
+    struct journal_back journal[MAX_TEXT];
     uid_t type;
 } toClient;
 
@@ -83,6 +91,7 @@ typedef struct {
     struct search_back search;
     struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
+    struct journal_back journal[MAX_TEXT];
     uid_t type;
 } fromServer;
 

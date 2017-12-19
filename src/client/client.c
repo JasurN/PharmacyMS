@@ -27,10 +27,10 @@ char* clientStart(char * clientStr) {
         return -1;
     }
 
-    printf("CLIENT CONNECTING ON PORT 8080 TO COMMUNICATE WITH SERVER...\n");
+    printf("CLIENT CONNECTING ON PORT %d TO COMMUNICATE WITH SERVER...\n", PORT);
     if(connect(server_fd, (struct sockaddr *) &server, sizeof(server)) < 0) {
         printf("\nConnection Failed\n");
-        return -1;
+        return NULL;
     }
 
     // Send hello message to the sever

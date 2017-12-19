@@ -26,11 +26,11 @@ void *medicine_parser(MYSQL_RES *result)
     medicine = malloc(sizeof(struct search_back*));
     int i=0;
     while ((row = mysql_fetch_row(result))) {
-        medicine->med_id = row[0];
-        medicine->name = row[1];
-        medicine->description = row[2];
-        medicine->price = atof(row[3]);
-        medicine->comp_id = row[4];
+//        medicine->med_id = row[0];
+//        medicine->name = row[1];
+//        medicine->description = row[2];
+//        medicine->price = atof(row[3]);
+//        medicine->comp_id = row[4];
 
 
         medicines[i] = medicine;
@@ -47,10 +47,10 @@ void *inventory_parser(MYSQL_RES *result)
     medicine = malloc(sizeof(struct search_back_inventory*));
     int i=0;
     while ((row = mysql_fetch_row(result))) {
-        medicine->store_id = row[0];
-        medicine->med_id = row[1];
-        medicine->name = row[2];
-        medicine->quantity = atoi(row[3]);
+//        medicine->store_id = row[0];
+//        medicine->med_id = row[1];
+//        medicine->name = row[2];
+//        medicine->quantity = atoi(row[3]);
 
         medicines[i] = medicine;
         i++;
@@ -66,12 +66,12 @@ void *journal_parser(MYSQL_RES *result)
     medicine = malloc(sizeof(struct purchase_back*));
     int i=0;
     while ((row = mysql_fetch_row(result))) {
-        medicine->trans_id = row[0];
+/*        medicine->trans_id = row[0];
         medicine->trans_date = row[1];
         medicine->comp_id = row[2];
         medicine->store_id = row[3];
         medicine->med_id=row[4];
-        medicine->quantity=atoi(row[5]);
+        medicine->quantity=atoi(row[5]);*/
 
         medicines[i] = medicine;
         i++;
