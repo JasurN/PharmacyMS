@@ -26,7 +26,7 @@ set(SOURCE_FILES_client src/client/client.c
         src/client/client.h src/dbManagement/dbManagement.c
          src/parser/request_parser.c
         src/parser/object.c src/parser/object.h
-        src/gui/main.c)
+        src/gui/guiStarter.c)
 add_executable(client ${SOURCE_FILES_client})
 target_link_libraries(client mysqlclient ${GTK_LIBRARY_DIRS})
 

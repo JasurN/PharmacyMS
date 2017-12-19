@@ -39,7 +39,7 @@ int authorization(char *login_id, char *login_password) {
     return type;
 }
 toClient *searchUser(char *user_id, char *user_password){
-    if(authorization(user_id, user_password)==1){
+    if(authorization(user_id, user_password)== COMPANY){
         MYSQL *con =connectToDB();
         char query[1024];
         sprintf(query,"SELECT * FROM authorization natural join company WHERE id='%s'", user_id);
@@ -49,7 +49,7 @@ toClient *searchUser(char *user_id, char *user_password){
         MYSQL_RES *result = mysql_store_result(con);
         return object_parser("auth+comp", result);
     }
-    else if(authorization(user_id, user_password)==2){
+    else if(authorization(user_id, user_password) == DRUGSTORE){
         MYSQL *con =connectToDB();
         char query[1024];
         sprintf(query,"SELECT * FROM authorization natural join drugstore WHERE id='%s'", user_id);

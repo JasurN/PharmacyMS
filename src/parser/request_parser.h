@@ -131,4 +131,6 @@ void serverStrToStruct(const char *, fromServer *);
 void clientStrToStruct(const char *, fromClient *);
 char* adminClientStructToStr(const toAdmin *admin_struct);
 char* adminServerToStr(const toAdmin *admin_struct);
+void adminServerToStruct(const char *message, toAdmin *admin_answer);
+void adminClientToStruct(const char *message, fromAdmin *admin_query);
 #endif //PHARMACYMS_REQUEST_PARSER_H
