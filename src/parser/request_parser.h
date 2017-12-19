@@ -46,6 +46,15 @@ struct purchase_back {
     int status;
 };
 
+struct journal_back {
+    char trans_id[MAX_SIZE];
+    char trans_date[MAX_SIZE];
+    char comp_id[MAX_SIZE];
+    char store_id[MAX_SIZE];
+    char med_id[MAX_SIZE];
+    int quantity;
+};
+
 /* These structs are used by clientOn (Drugstore) */
 struct authorizing {
     char login[MAX_SIZE];
@@ -67,6 +76,8 @@ typedef struct {
     struct search_back search;
     struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
+    struct journal_back journal[MAX_TEXT];
+
     uid_t type;
 } toClient;
 
@@ -83,6 +94,7 @@ typedef struct {
     struct search_back search;
     struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
+    struct journal_back journal[MAX_TEXT];
     uid_t type;
 } fromServer;
 
