@@ -4,6 +4,7 @@
 int main() {
     fromServer* fromServerObj = authorizationClient("admin", "lol");
 
-    free(fromServerObj);
+    printf("name %s", fromServerObj->authorization.name);
+
     return 0;
 }
