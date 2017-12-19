@@ -2,8 +2,8 @@
 #define PHARMACYMS_DEFINE_H
 
 //Boolean operators
-#define  TRUE 1
 #define  FALSE 0
+#define  TRUE 1
 
 // Types of request
 #define AUTHORIZATION 0
