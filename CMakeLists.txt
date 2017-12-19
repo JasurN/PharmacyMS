@@ -4,6 +4,20 @@ include_directories(/usr/include/mysql)
 set(CMAKE_C_STANDARD 11)
 set (CMAKE_C_FLAGS "-Wall -pthread")
 
+
+
+FIND_PACKAGE(PkgConfig REQUIRED)
+
+INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIRS})
+LINK_DIRECTORIES(${GTK_LIBRARY_DIRS})
+
+PKG_CHECK_MODULES(GTK REQUIRED gtk+-3.0)
+
+ADD_DEFINITIONS(${GTK_CFLAGS_OTHER})
+
+add_definitions(${GTK_CFLAGS_OTHER})
+
+
 #server build
 set(SOURCE_FILES_server src/server/server.c
         src/parser/cJSON.c src/server/server.h src/server/serverStarter.c
@@ -24,6 +38,7 @@ target_link_libraries(client mysqlclient)
 
 # testing build
 set(SOURCE_FILES_testing src/parser/request_parser.c
+        main.c
         src/parser/cJSON.c
         src/dbManagement/dbManagement.c src/parser/request_parser.h src/dbManagement/dbManagement.h)
 add_executable(testing ${SOURCE_FILES_testing})
