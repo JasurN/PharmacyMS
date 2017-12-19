@@ -40,42 +40,13 @@
  *  Just testing function
  *
  * */
-void test1() {
-    const char* my_json_string = "{\n"
-            "    \"name\": \"Jack (\\\"Bee\\\") Nimble\",\n"
-            "    \"format\": {\n"
-            "        \"type\":       \"rect\",\n"
-            "        \"width\":      1920,\n"
-            "        \"height\":     1080,\n"
-            "        \"interlace\":  false,\n"
-            "        \"frame_rate\": 35\n"
-            "    }\n"
-            "}";
-    cJSON * root = cJSON_Parse(my_json_string);
-    cJSON *format = cJSON_GetObjectItemCaseSensitive(root, "format");
-    cJSON *type_item = cJSON_GetObjectItemCaseSensitive(format, "type");
-    cJSON *framerate_item = cJSON_GetObjectItemCaseSensitive(format, "frame_rate");
-    char type[MAX_SIZE];
-    int framerate = 0;
-    //cJSON_SetNumberValue(framerate_item, 140);
-    if (cJSON_IsString(type_item)) {
-        strcpy(type, type_item->valuestring);
-    }
-    if (cJSON_IsNumber(framerate_item)) {
-        framerate = framerate_item->valueint;
-    }
-    printf("value of framerate; %d\n", framerate);
-    printf("value of type; %s", type);
 
-    cJSON_Delete(root);
-}
 /*
  *  This function converts queries to be
  *  sent to the server from clientOn (Drug Stores)
  *
  * */
 char* clientStructToStr(const toServer *client_struct) {
-    printf("login : %s\npassword of my %s\ntype: %d", client_struct->authorization.login, client_struct->authorization.password, client_struct->type);
     cJSON *root = cJSON_CreateObject();
     cJSON *authorization;
     cJSON *searching;
@@ -123,10 +94,6 @@ char* clientStructToStr(const toServer *client_struct) {
             break;
     }
     //out = (char *)malloc(sizeof(char ) * strlen( cJSON_Print(root)));
-
-    printf("%s\n", out);
-
-
     return out;
 }
 
@@ -214,12 +181,6 @@ char* serverStructToStr(const toClient* server_message) {
             break;
     }
     out = cJSON_Print(root);
-    printf("%s\n", out);
-    cJSON_Delete(authorization);
-    cJSON_Delete(searching);
-    cJSON_Delete(medical);
-    cJSON_Delete(searching_inventory);
-    cJSON_Delete(purchasing);
     cJSON_Delete(root);
     return out;
 }
@@ -230,7 +191,7 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
     if (type_item->valueint == 0) {
         cJSON *authorization_item = cJSON_GetObjectItemCaseSensitive(root, "authorization");
         cJSON *isExist_item = cJSON_GetObjectItemCaseSensitive(authorization_item, "isExist");
-        if (isExist_item->valueint == TRUE) {
+        if (isExist_item->valueint == 1) {
             cJSON *id_item = cJSON_GetObjectItemCaseSensitive(authorization_item, "id");
             cJSON *name_item = cJSON_GetObjectItemCaseSensitive(authorization_item, "name");
             cJSON *address_item = cJSON_GetObjectItemCaseSensitive(authorization_item, "address");
@@ -241,15 +202,8 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
             strcpy(server_answer->authorization.address, address_item->valuestring);
             strcpy(server_answer->authorization.contact, contact_item->valuestring);
             server_answer->authorization.user_type = (uid_t) user_type_item->valueint;
-            cJSON_Delete(id_item);
-            cJSON_Delete(name_item);
-            cJSON_Delete(address_item);
-            cJSON_Delete(contact_item);
-            cJSON_Delete(user_type_item);
         }
         server_answer->authorization.isExist = (uid_t) isExist_item->valueint;
-        cJSON_Delete(isExist_item);
-        cJSON_Delete(authorization_item);
     } else if (type_item->valueint == 1) {
         cJSON *search_item = cJSON_GetObjectItemCaseSensitive(root, "search");
         cJSON *isExist_item = cJSON_GetObjectItemCaseSensitive(search_item, "isExist");
@@ -264,11 +218,6 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
             strcpy(server_answer->search.description, description_item->valuestring);
             server_answer->search.price = price_item->valueint;
             strcpy(server_answer->search.comp_id, comp_id_item->valuestring);
-            cJSON_Delete(med_id_item);
-            cJSON_Delete(name_item);
-            cJSON_Delete(description_item);
-            cJSON_Delete(price_item);
-            cJSON_Delete(comp_id_item);
         }
         server_answer->search.isExist = (uid_t) isExist_item->valueint;
         cJSON_Delete(isExist_item);
@@ -291,12 +240,6 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
             strcpy(server_answer->search_inventory[i].name, name_item->valuestring);
             server_answer->search_inventory[i].quantity = quantity_item->valueint;
         }
-        cJSON_Delete(store_id_item);
-        cJSON_Delete(med_id_item);
-        cJSON_Delete(name_item);
-        cJSON_Delete(quantity_item);
-        cJSON_Delete(inventory_item);
-        cJSON_Delete(medical);
     } else if (type_item->valueint == 3) {
         cJSON *purchase_item = cJSON_GetObjectItemCaseSensitive(root, "purchase");
         cJSON *success_item = cJSON_GetObjectItemCaseSensitive(purchase_item, "success");
@@ -313,20 +256,11 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
             strcpy(server_answer->purchase.store_id, store_id_item->valuestring);
             strcpy(server_answer->purchase.med_id, med_id_item->valuestring);
             server_answer->purchase.quantity = quantity_item->valueint;
-            cJSON_Delete(trans_id_item);
-            cJSON_Delete(trans_date_item);
-            cJSON_Delete(comp_id_item);
-            cJSON_Delete(store_id_item);
-            cJSON_Delete(med_id_item);
-            cJSON_Delete(quantity_item);
         }
         server_answer->purchase.success = success_item->valueint;
-        cJSON_Delete(success_item);
-        cJSON_Delete(purchase_item);
     }
 
     server_answer->type = (uid_t) type_item->valueint;
-    cJSON_Delete(type_item);
     cJSON_Delete(root);
 }
 
@@ -340,15 +274,12 @@ void clientStrToStruct(const char *message, fromClient *client_query) {
         cJSON *password_item = cJSON_GetObjectItemCaseSensitive(authorization_item, "password");
         strcpy(client_query->authorization.login, login_item->valuestring);
         strcpy(client_query->authorization.password, password_item->valuestring);
-        cJSON_Delete(login_item);
-        cJSON_Delete(password_item);
-        cJSON_Delete(authorization_item);
+
     } else if (type_item->valueint == 1) {
         cJSON *search_item = cJSON_GetObjectItemCaseSensitive(root, "search");
         cJSON *name_item = cJSON_GetObjectItemCaseSensitive(search_item, "name");
         strcpy(client_query->search.name, name_item->valuestring);
-        cJSON_Delete(name_item);
-        cJSON_Delete(search_item);
+
     } else if (type_item->valueint == 2) {
         /*  In this condition do nothing as there is no
          *  additional information but type
@@ -360,12 +291,8 @@ void clientStrToStruct(const char *message, fromClient *client_query) {
         cJSON *quantity_item = cJSON_GetObjectItemCaseSensitive(purchase_item, "quantity");
         strcpy(client_query->purchase.name, name_item->valuestring);
         client_query->purchase.quantity = quantity_item->valueint;
-        cJSON_Delete(name_item);
-        cJSON_Delete(quantity_item);
-        cJSON_Delete(purchase_item);
     }
 
     client_query->type = (uid_t) type_item->valueint;
-    cJSON_Delete(type_item);
     cJSON_Delete(root);
 }

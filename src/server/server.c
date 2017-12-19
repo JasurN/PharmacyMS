@@ -1,4 +1,5 @@
 #include "server.h"
+#include "../parser/request_parser.h"
 
 static int id_counter = 10;
 
@@ -6,6 +7,7 @@ client_t* clients[MAX_CLIENT];
 
 void startServer() {
     int server_fd, new_socket, addrlen;
+    int opt = 1;
     struct sockaddr_in server, client;
     pthread_t client_thread;
 
@@ -17,7 +19,12 @@ void startServer() {
         exit(EXIT_FAILURE);
     }
     printf("\tDONE!!!\n");
-
+// Forcefully attaching socket to the port 8080
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt)))
+    {
+        perror("setsockopt failed");
+        exit(EXIT_FAILURE);
+    }
     // assigning types of the socket created using 'struct sockaddr_in'
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -100,6 +107,7 @@ void *connection_handler(void* sock_desc) {
     // Close the socket
     close(cli->connfd);
     // Free the socket descriptor and buffer string
+    free(serverMessage);
     free(sock_desc);
     return 0;
 }
@@ -149,11 +157,12 @@ toClient* authorizationReq(fromClient *fromClientObj) { //todo: ask Malika to ge
     toClient *toClientObj = (toClient *)malloc(sizeof(toClient));
 
     if(auth_result == TRUE) {
-
-
         toClientObj->type = AUTHORIZATION;
         toClientObj->authorization.isExist = TRUE;
-
+        strcpy(toClientObj->authorization.name, "Jasurbek");
+        strcpy(toClientObj->authorization.contact, "998979997507");
+        strcpy(toClientObj->authorization.id, "u1510326");
+        strcpy(toClientObj->authorization.address, "Sebzor");
     }
     else {
 
