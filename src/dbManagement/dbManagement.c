@@ -46,11 +46,11 @@ toClient *searchUser(char *user_id, char *user_password){
     }
     else if(authorization(user_id, user_password) == DRUGSTORE){
         sprintf(query,"SELECT * FROM authorization natural join drugstore WHERE id='%s'", user_id);
+    } else {
+        sprintf(query,"SELECT * FROM authorization WHERE id='%s'", user_id);
     }
     if (mysql_query(con, query)) {
         finish_with_error(con);
-    } else {
-        sprintf(query,"SELECT * FROM authorization WHERE id='%s'", user_id);
     }
     MYSQL_RES *result = mysql_store_result(con);
     return object_parser("auth+comp", result);
