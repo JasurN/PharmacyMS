@@ -9,7 +9,7 @@
 #define serverAddr "localhost"
 #define dbUser "root"
 #define dbPassword "Azikinhatashkent"
-#define dbName "pharmacydb"
+#define dbName "PharmacyDB"
 
 void finish_with_error(MYSQL * con);
 bool authorization(char* login_id, char* login_password);

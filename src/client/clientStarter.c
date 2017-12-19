@@ -1,3 +1,4 @@
+/*
 #include "client.h"
 #include "../parser/request_parser.h"
 
@@ -7,3 +8,4 @@ printf("name :%s\n", fromServerObj->authorization.name);
     free(fromServerObj);
     return 0;
 }
+*/

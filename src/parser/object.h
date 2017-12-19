@@ -11,8 +11,8 @@
 void *object_parser(char *tablename, MYSQL_RES *result);
 void *medicine_parser(MYSQL_RES *result);
 void *inventory_parser(MYSQL_RES *result);
-void *journal_parser(MYSQL_RES *result);
 void *drugstore_parser(MYSQL_RES *result);
+void *journal_parser(MYSQL_RES *result);
 void *user_parser(MYSQL_RES *result);
 void *company_parser(MYSQL_RES *result);
 
