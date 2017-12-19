@@ -303,12 +303,12 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
             store_id_item = cJSON_GetObjectItemCaseSensitive(purchase_item, "store_id");
             med_id_item = cJSON_GetObjectItemCaseSensitive(purchase_item, "med_id");
             quantity_item = cJSON_GetObjectItemCaseSensitive(purchase_item, "quantity");
-            strcpy(trans_id_item->valuestring, server_answer->journal[i].trans_id);
-            strcpy(trans_date_item->valuestring, server_answer->journal[i].trans_date);
-            strcpy(comp_id_item->valuestring, server_answer->journal[i].comp_id);
-            strcpy(store_id_item->valuestring, server_answer->journal[i].store_id);
-            strcpy(med_id_item->valuestring, server_answer->journal[i].comp_id);
-            strcpy(comp_id_item->valuestring, server_answer->journal[i].med_id);
+            strcpy(server_answer->journal[i].trans_id,trans_id_item->valuestring);
+            strcpy(server_answer->journal[i].trans_date, trans_date_item->valuestring);
+            strcpy(server_answer->journal[i].comp_id, comp_id_item->valuestring);
+            strcpy(server_answer->journal[i].store_id, store_id_item->valuestring);
+            strcpy(server_answer->journal[i].comp_id, med_id_item->valuestring);
+            strcpy(server_answer->journal[i].med_id, comp_id_item->valuestring);
             server_answer->journal[i].quantity = quantity_item->valueint;
         }
     }

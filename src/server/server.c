@@ -142,6 +142,7 @@ toClient *requestHandler(fromClient *fromClientObj) {
 
     } else if (fromClientObj->type == INVENTORY) {
 
+        toClientObj = showInventoryServer(fromClientObj);
 
     } else if (fromClientObj->type == PURCHASE) {
 

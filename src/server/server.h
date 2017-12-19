@@ -35,4 +35,5 @@ toClient* searchInDbServer(fromClient *);
 toClient* searchCompanyInventory(fromClient *);
 toClient* showInventoryDrugStore(fromClient *);
 toClient* showCompanyOrders(fromClient *);
+toClient* showInventoryServer(fromClient *);
 #endif //PHARMACYMS_SERVER_H
