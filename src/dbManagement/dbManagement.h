@@ -7,14 +7,14 @@
 #define TRUE 1
 #define FALSE 0
 #define serverAddr "localhost"
-#define dbUser "root"
-#define dbPassword "malika"
-#define dbName "pharmacy"
+#define dbUser "admin"
+#define dbPassword "adminos"
+#define dbName "PharmacyDB"
 
 void finish_with_error(MYSQL * con);
 bool authorization(char* login_id, char* login_password);
-void addUser(char *user_id, char *user_name, char *user_adress, char * user_contact,
-             int type, MYSQL *con);
+void addUser(char *user_id, char *user_password, char *user_name, char *user_adress, char * user_contact,
+             int type);
 MYSQL* connectToDB();
 
 #endif //PHARMACYMS_DATABASE_H

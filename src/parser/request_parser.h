@@ -21,34 +21,36 @@ struct auth_back {
 
 struct search_back {
     int isExist;
-    char med_id[MAX_SIZE];
-    char name[MAX_SIZE];
-    char description[MAX_TEXT];
-    float price;
-    char comp_id[MAX_SIZE];
+    char *med_id;
+    char *name;
+    char *description;
+    double price;
+    char *comp_id;
 };
 
 struct search_back_inventory{
-    char store_id[MAX_SIZE];
-    char med_id[MAX_SIZE];
-    char name[MAX_SIZE];
+    char *store_id;
+    char *med_id;
+    char *name;
     int quantity;
 } ;
 
 struct purchase_back {
     int success;
-    char trans_id[MAX_SIZE];
-    char trans_date[MAX_SIZE];
-    char comp_id[MAX_SIZE];
-    char store_id[MAX_SIZE];
-    char med_id[MAX_SIZE];
+    char *trans_id;
+    char *trans_date;
+    char *comp_id;
+    char *store_id;
+    char *med_id;
     int quantity;
+    int status;
 };
 
 /* These structs are used by clientOn (Drugstore) */
 struct authorizing {
     char login[MAX_SIZE];
     char password[MAX_SIZE];
+    uid_t type;
 };
 
 struct searching {

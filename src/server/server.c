@@ -15,7 +15,7 @@ void startServer() {
         perror("\tsocket creation failed!!!");
         exit(EXIT_FAILURE);
     }
-    printf("\tDONE!!!\n");
+    printf("\tDONE!!!\n");          
 
     // assigning types of the socket created using 'struct sockaddr_in'
     server.sin_family = AF_INET;
