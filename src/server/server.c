@@ -1,4 +1,5 @@
 #include "server.h"
+#include "../parser/request_parser.h"
 
 static int id_counter = 10;
 
@@ -137,7 +138,7 @@ toClient *requestHandler(fromClient *fromClientObj) {
 
     } else if (fromClientObj->type == SEARCH) {
 
-        toClientObj = searchCompanyInvertory(fromClientObj);
+        toClientObj = searchCompanyInventory(fromClientObj);
 
     } else if (fromClientObj->type == INVENTORY) {
 
@@ -162,15 +163,33 @@ toClient *authorizationServer(fromClient *fromClientObj) { //todo: assign value 
     return toClientObj;
 }
 
-toClient* searchCompanyInvertory(fromClient *fromClientObj) {
-
+toClient* searchCompanyInventory(fromClient *fromClientObj) {
+    toClient *toClientObj;
+    toClientObj = searchByName(fromClientObj->search.name);
+    toClientObj->type = SEARCH;
+    return toClientObj;
 }
 
-toClient* showInvertoryServer(fromClient * fromClientObj) {
-
+toClient* showInventoryServer(fromClient * fromClientObj) {
+    toClient *toClientObj;
+    toClientObj = viewStoreInventory(fromClientObj->authorization.login);
+    toClientObj->type = INVENTORY;
+    return toClientObj;
 }
 
-toClient* showComanyOrders(fromClient * fromClientObj) {
-
+toClient* ordermedicine(fromClient * fromClientObj) {
+    toClient *toClientObj;
+    toClientObj = viewOrders(fromClientObj->authorization.login);
+    toClientObj->type = PURCHASE;
+    return toClientObj;
 }
+
+toClient* showCompanyOrders(fromClient * fromClientObj) {
+    toClient *toClientObj;
+    toClientObj = viewOrders(fromClientObj->authorization.login);
+    toClientObj->type = JOURNAL;
+    return toClientObj;
+}
+
+
 

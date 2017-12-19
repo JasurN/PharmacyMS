@@ -32,7 +32,7 @@ toClient* requestHandler(fromClient *);
 toClient* authorizationServer(fromClient *);
 
 toClient* searchInDbServer(fromClient *);
-toClient* searchCompanyInvertory(fromClient *);
-toClient* showInvertoryDrugStore(fromClient *);
-toClient* showComanyOrders(fromClient *);
+toClient* searchCompanyInventory(fromClient *);
+toClient* showInventoryDrugStore(fromClient *);
+toClient* showCompanyOrders(fromClient *);
 #endif //PHARMACYMS_SERVER_H

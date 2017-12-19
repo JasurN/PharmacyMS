@@ -15,7 +15,9 @@ char* clientStructToStr(const toServer *client_struct) {
     cJSON *root = cJSON_CreateObject();
     cJSON *authorization;
     cJSON *searching;
+    cJSON *inventory;
     cJSON *purchasing;
+    cJSON *journal;
     char *out;
 
     cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_struct->type));
@@ -34,11 +36,16 @@ char* clientStructToStr(const toServer *client_struct) {
             break;
 
         case INVENTORY:
+            cJSON_AddItemToObject(root, "inventory", inventory = cJSON_CreateObject());
+            cJSON_AddItemToObject(inventory, "id",
+                                  cJSON_CreateString(client_struct->authorization.login));
             cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_struct->type));
             break;
 
         case PURCHASE:
             cJSON_AddItemToObject(root, "purchase", purchasing = cJSON_CreateObject());
+            cJSON_AddItemToObject(purchasing, "id",
+                                  cJSON_CreateString(client_struct->authorization.login));
             cJSON_AddItemToObject(purchasing, "name",
                                   cJSON_CreateString(client_struct->purchase.name));
             cJSON_AddItemToObject(purchasing, "quantity",
@@ -46,13 +53,9 @@ char* clientStructToStr(const toServer *client_struct) {
             break;
 
         case JOURNAL:
-            /*
-             *  In this condition do nothing as there is no
-             *  additional information but type
-             *
-             *  This case is to identified by Company client
-             *  to make query to the server to see its purchase Journal
-             * */
+            cJSON_AddItemToObject(root, "journal", journal = cJSON_CreateObject());
+            cJSON_AddItemToObject(journal, "id",
+                                  cJSON_CreateString(client_struct->authorization.login));
         default:
             perror("Please enter proper type!");
             break;
@@ -329,27 +332,22 @@ void clientStrToStruct(const char *message, fromClient *client_query) {
         cJSON *name_item = cJSON_GetObjectItemCaseSensitive(search_item, "name");
         strcpy(client_query->search.name, name_item->valuestring);
     } else if (type_item->valueint == INVENTORY) {
-        /*
-         *  In this condition do nothing as there is no
-         *  additional information but type
-         *
-         *  This condition is used by Drugstore client
-         *  to see its inventory
-         * */
+        cJSON *inventory_item = cJSON_GetObjectItemCaseSensitive(root, "inventory");
+        cJSON *id_item = cJSON_GetObjectItemCaseSensitive(inventory_item, "id");
+        strcpy(client_query->authorization.login, id_item->valuestring);
 
     } else if (type_item->valueint == PURCHASE) {
         cJSON *purchase_item = cJSON_GetObjectItemCaseSensitive(root, "purchase");
+        cJSON *id_item = cJSON_GetObjectItemCaseSensitive(purchase_item, "id");
         cJSON *name_item = cJSON_GetObjectItemCaseSensitive(purchase_item, "name");
         cJSON *quantity_item = cJSON_GetObjectItemCaseSensitive(purchase_item, "quantity");
+        strcpy(client_query->authorization.login, id_item->valuestring);
         strcpy(client_query->purchase.name, name_item->valuestring);
         client_query->purchase.quantity = quantity_item->valueint;
     } else if(type_item->valueint == JOURNAL) {
-        /*
-         *  In this condition do nothing as there is no
-         *  additional information but type
-         *
-         *  This condition is used by Company client
-         *  to see its journal (purchase from Drugstore)*/
+        cJSON *journal_item = cJSON_GetObjectItemCaseSensitive(root, "journal");
+        cJSON *id_item = cJSON_GetObjectItemCaseSensitive(journal_item, "id");
+        strcpy(client_query->authorization.login, id_item->valuestring);
     }
 
     client_query->type = (uid_t) type_item->valueint;
