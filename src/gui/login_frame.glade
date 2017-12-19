@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.1 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkWindow" id="adminWindow">
@@ -528,6 +528,9 @@
         </child>
       </object>
     </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkWindow" id="companyWindow">
     <property name="can_focus">False</property>
@@ -1011,6 +1014,9 @@
         </child>
       </object>
     </child>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkListStore" id="liststore1"/>
   <object class="GtkListStore" id="liststore2"/>
@@ -1339,6 +1345,7 @@ Please log in to access the application!</property>
                 <property name="receives_default">True</property>
                 <property name="halign">start</property>
                 <property name="valign">center</property>
+                <signal name="clicked" handler="search_but_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">2</property>

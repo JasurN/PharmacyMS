@@ -16,7 +16,7 @@ GtkTextBuffer *buffer1, *buffer2, *buffer3, *buffer4, *buffer5, *buffer6, *buffe
 GtkTextIter start, end;
 GtkTextIter *iter;
 
-void filltable1(char *, char *, char *, char *);
+void filltable1(char *id, char *name, char *price, char *desc);
 
 int main(int argc, char **argv) {
 
@@ -99,13 +99,18 @@ void on_enter_but_clicked() {
 }
 
 
-void search_but_clicked() {
+void search_but_clicked() {//todo: make double price. Important
+    printf("it is here");
     const char *searchedtext;
     GtkEntry *searchfield = (GtkEntry *) gtk_builder_get_object(builder, "search_entry");
     searchedtext = gtk_entry_get_text(searchfield);
     if (strcmp(searchedtext, "") != 0) {
-        if (strcmp(searchedtext, target) == 0) {
-            filltable1("123", "Trimol", "5000", "Headache, Painkiller");
+        fromServer* fromServerObj = searchCompanyInventory(searchedtext);
+        if(fromServerObj->search.isExist == TRUE ){
+
+            printf("double value:  %s", 48 + fromServerObj->search.price);
+            filltable1(fromServerObj->search.med_id, fromServerObj->search.name,
+                       fromServerObj->search.med_id, fromServerObj->search.description);
         }
     }
 }

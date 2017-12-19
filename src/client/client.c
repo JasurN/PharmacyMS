@@ -6,15 +6,15 @@ char* clientStart(char * clientStr) {
     int server_fd = 0;
     char buf[MAX_SIZE_BUF] = {0};
 
-    printf("CREATING CLIENT SOCKET...\n");
+   // printf("CREATING CLIENT SOCKET...\n");
 
     if((server_fd = socket(AF_INET, SOCK_STREAM, 0)), 0) {
         printf("\tsocket creation failed!!!");
         exit(EXIT_FAILURE);
     }
-    printf("\tDONE!!!\n");
+  //  printf("\tDONE!!!\n");
 
-    printf("DEFINING CLIENT SOCKET FAMILY, ADDRESS & PORT...\n");
+  //  printf("DEFINING CLIENT SOCKET FAMILY, ADDRESS & PORT...\n");
     // assigning types of the socket created using 'struct sockaddr_in'
     memset(&server, '0', sizeof(server));
     server.sin_family = AF_INET;
@@ -27,7 +27,7 @@ char* clientStart(char * clientStr) {
         return NULL;
     }
 
-    printf("CLIENT CONNECTING ON PORT %d TO COMMUNICATE WITH SERVER...\n", PORT);
+   // printf("CLIENT CONNECTING ON PORT %d TO COMMUNICATE WITH SERVER...\n", PORT);
     if(connect(server_fd, (struct sockaddr *) &server, sizeof(server)) < 0) {
         printf("\nConnection Failed\n");
         return NULL;
@@ -71,7 +71,7 @@ fromServer* authorizationClient(const char * login, const char * password) {
     return fromServerObj;
 }
 
-fromServer* searchCompanyInventory(char* searchString) {
+fromServer* searchCompanyInventory(const char* searchString) {
     toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
     toServerObj->type = SEARCH;
     strcpy(toServerObj->search.name, searchString);
@@ -80,7 +80,7 @@ fromServer* searchCompanyInventory(char* searchString) {
     char *strFromServer = clientStart(strToServer);
 
     fromServer *fromServerObj = (fromServer *) malloc(sizeof(fromServer));
-    printf("Message from server: %s\n", strFromServer);
+    //printf("Message from server: %s\n", strFromServer);
     serverStrToStruct(strFromServer, fromServerObj);
 
     free(toServerObj);

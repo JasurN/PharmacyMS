@@ -17,6 +17,6 @@
 char* clientStart(char *string);
 size_t str_length(const char* clientStr);
 fromServer* authorizationClient(const char * login,const char * password);
-fromServer* searchCompanyInventory(char* searchString);
+fromServer* searchCompanyInventory(const char* searchString);
 fromServer* adminAddUser();
 #endif //PHARMACYMS_CLIENT_H
