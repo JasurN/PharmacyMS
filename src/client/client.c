@@ -1,9 +1,10 @@
 #include "client.h"
+#include "../parser/request_parser.h"
 
 char* clientStart(char * clientStr) {
     // Structure to connect to the server
     struct sockaddr_in server;
-    int server_fd = 0, valread;
+    int server_fd = 0;
     char buf[MAX_SIZE_BUF] = {0};
 
     printf("CREATING CLIENT SOCKET...\n");
@@ -24,7 +25,7 @@ char* clientStart(char * clientStr) {
     // Convert IPv4 and IPv6 addresses from text to binary form
     if(inet_pton(AF_INET, SERVER_ADDRESS, &server.sin_addr) <= 0) {
         printf("\nInvalid address/ Address not supported \n");
-        return -1;
+        return NULL;
     }
 
     printf("CLIENT CONNECTING ON PORT %d TO COMMUNICATE WITH SERVER...\n", PORT);
@@ -36,9 +37,8 @@ char* clientStart(char * clientStr) {
     // Send hello message to the sever
     send(server_fd, clientStr, str_length(clientStr), 0);
 
-    valread = (int) recv(server_fd, buf, MAX_SIZE_BUF, 0);
+    recv(server_fd, buf, MAX_SIZE_BUF, 0);
 
-    //printf("message from server: %s\n", buf);
     char* returnToClient = (char *)malloc(sizeof(buf));
     strcpy(returnToClient, buf);
     return returnToClient;
@@ -49,6 +49,7 @@ size_t str_length(const char* buf) {
     for (i = 0; buf[i] != '\0'; ++i);
     return i;
 }
+
 fromServer* authorizationClient(char * login, char * password) {
     toServer *toServerObj = (toServer *)malloc(sizeof(toServer));
     toServerObj->type = AUTHORIZATION;
@@ -69,4 +70,15 @@ fromServer* authorizationClient(char * login, char * password) {
     return fromServerObj;
 }
 
+fromServer* searchCompanyInventory(char* searchString) {
+    toServer *toServerObj = (toServer *)malloc(sizeof(toServer));
+    toServerObj->type = SEARCH;
+    strcpy(toServerObj->search.name, searchString);
 
+    char* strToServer = clientStructToStr(toServerObj);
+    char* strFromServer = clientStart(strToServer);
+
+
+    free(toServerObj);
+    free(strFromServer);
+}

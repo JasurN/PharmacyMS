@@ -4,8 +4,6 @@ include_directories(/usr/include/mysql)
 set(CMAKE_C_STANDARD 11)
 set (CMAKE_C_FLAGS "-Wall -g  -pthread -rdynamic")
 
-
-
 #server build
 set(SOURCE_FILES_server src/server/server.c
         src/parser/cJSON.c src/server/server.h src/server/serverStarter.c
@@ -15,7 +13,7 @@ set(SOURCE_FILES_server src/server/server.c
 add_executable(server ${SOURCE_FILES_server})
 target_link_libraries(server mysqlclient)
 
-
+# client build
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK REQUIRED "gtk+-3.0")
 
@@ -23,11 +21,10 @@ pkg_check_modules(GTK REQUIRED "gtk+-3.0")
 include_directories(${GTK_INCLUDE_DIRS})
 link_directories(${GTK_LIBRARY_DIRS})
 
-# client build
 set(SOURCE_FILES_client src/client/client.c
         src/parser/cJSON.c src/define/define.h
         src/client/client.h src/dbManagement/dbManagement.c
-        src/client/clientStarter.c src/parser/request_parser.c
+         src/parser/request_parser.c
         src/parser/object.c src/parser/object.h
         main.c)
 add_executable(client ${SOURCE_FILES_client})
@@ -41,3 +38,9 @@ if (PKG_CONFIG_FOUND)
         add_definitions(${GTK_CFLAGS} ${GTK_CFLAGS_OTHER})
     endif()
 endif()
+
+#testing build
+set(SOURCE_FILES_testing src/client/client.c src/client/clientStarter.c
+        src/parser/request_parser.c src/parser/cJSON.c )
+add_executable(testing ${SOURCE_FILES_testing})
+target_link_libraries(testing mysqlclient)

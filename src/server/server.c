@@ -1,5 +1,4 @@
 #include "server.h"
-#include "../parser/request_parser.h"
 
 static int id_counter = 10;
 
@@ -145,9 +144,14 @@ toClient *requestHandler(fromClient *fromClientObj) {
     if (fromClientObj->type == AUTHORIZATION) {
 
         toClientObj = authorizationServer(fromClientObj);
+
     } else if (fromClientObj->type == SEARCH) {
-        toClientObj = searchInDbServer(fromClientObj);
+
+        toClientObj = searchCompanyInvertory(fromClientObj);
+
     } else if (fromClientObj->type == INVENTORY) {
+
+
 
     } else if (fromClientObj->type == PURCHASE) {
 
@@ -177,7 +181,15 @@ toClient *authorizationServer(fromClient *fromClientObj) { //todo: assign value 
     return toClientObj;
 }
 
-toClient* searchInDbServer(fromClient *fromClientObj) {
-    searchByName(fromClientObj->search.name);
+toClient* searchCompanyInvertory(fromClient *fromClientObj) {
+
+}
+
+toClient* showInvertoryServer(fromClient * fromClientObj) {
+
+}
+
+toClient* showComanyOrders(fromClient * fromClientObj) {
+
 }
 

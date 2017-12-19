@@ -5,7 +5,6 @@
 #include "src/parser/request_parser.h"
 #include "src/client/client.h"
 
-#define username "admin"
 #define target "Trimol"
 
 GtkBuilder *builder;
@@ -15,7 +14,7 @@ GtkTextIter start, end;
 GtkTextIter *iter;
 
 
-int main(int argc, char **argv) {
+/*int main(int argc, char **argv) {
 
 
     gtk_init(&argc, &argv);
@@ -33,7 +32,7 @@ int main(int argc, char **argv) {
 
 
     return (0);
-}
+}*/
 
 void on_enter_but_clicked() {
     const char *login;
