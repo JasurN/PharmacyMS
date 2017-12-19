@@ -1,9 +1,9 @@
 #include "client.h"
 
 int main() {
-    //fromServer* fromServerObj =
-            searchCompanyInventory("Trimol");
-    printf("name \n");
-    //free(fromServerObj);
+    fromServer* fromServerObj = searchCompanyInventory("Trimol");
+
+
+    free(fromServerObj);
     return 0;
 }
