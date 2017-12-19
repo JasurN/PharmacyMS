@@ -30,14 +30,14 @@ void *user_parser(MYSQL_RES *result){
     user->authorization.isExist = FALSE;
     while ((row = mysql_fetch_row(result))) {
         strncpy(user->authorization.id, row[0],MAX_SIZE);
-        if((user->authorization.user_type = (uid_t) atoi( row[2])) != ADMIN) {
-            strncpy(user->authorization.name, row[3], MAX_SIZE);
-            strncpy(user->authorization.address, row[4], MAX_TEXT);
-            strncpy(user->authorization.contact, row[5], MAX_SIZE);
+        if((user->authorization.user_type = (uid_t) atoi( row[2])) == ADMIN) {
+            strncpy(user->authorization.name, "", MAX_SIZE);
+            strncpy(user->authorization.address, "", MAX_TEXT);
+            strncpy(user->authorization.contact, "", MAX_SIZE);
         }
-        strncpy(user->authorization.name, "", MAX_SIZE);
-        strncpy(user->authorization.address, "", MAX_TEXT);
-        strncpy(user->authorization.contact, "", MAX_SIZE);
+        strncpy(user->authorization.name, row[3], MAX_SIZE);
+        strncpy(user->authorization.address, row[4], MAX_TEXT);
+        strncpy(user->authorization.contact, row[5], MAX_SIZE);
         user->authorization.isExist = TRUE;
     }
     return user;
