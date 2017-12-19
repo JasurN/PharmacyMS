@@ -5,6 +5,7 @@
 #include "../parser/request_parser.h"
 #include "../client/client.h"
 
+#define username "admin"
 #define target "Trimol"
 
 GtkBuilder *builder;
@@ -13,8 +14,9 @@ GtkTextBuffer *buffer1, *buffer2;
 GtkTextIter start, end;
 GtkTextIter *iter;
 
-
-int main(int argc, char **argv) {
+void filltable1(char*, char*,char*,char*);
+int main(int argc, char **argv)
+{
 
 
     gtk_init(&argc, &argv);
@@ -71,48 +73,61 @@ void on_enter_but_clicked() {
     }
 }
 
-void search_but_clicked() {
+void search_but_clicked(){
     const char *searchedtext;
-    GtkEntry *searchfield = (GtkEntry *) gtk_builder_get_object(builder, "search_entry");
+    GtkEntry* searchfield = (GtkEntry*) gtk_builder_get_object(builder, "search_entry");
     searchedtext = gtk_entry_get_text(searchfield);
-    if (strcmp(searchedtext, "") != 0) {
+    if(strcmp(searchedtext,"")!=0) {
         if (strcmp(searchedtext, target) == 0) {
-            char data[800] = "";
-            char *space = "         |        ";
-            char *id = " 123";
-            char *name = " Trimol ";
-            char *price = " 3500 ";
-            char *producer = " NikaPharm ";
-            strcat(data, id);
-            strcat(data, space);
-            strcat(data, name);
-            strcat(data, space);
-            strcat(data, price);
-            strcat(data, space);
-            strcat(data, producer);
-
-            GtkTextView *tab1 = (GtkTextView *) gtk_builder_get_object(builder, "display1");
-            buffer1 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tab1));
-            gtk_text_buffer_set_text(buffer1, data, -1);
+            filltable1("123", "Trimol", "5000", "Headache, Painkiller");
         }
     }
 }
 
-void add_but_clicked() {
+char order[1000]="";
+void add_but_clicked(){
     const char *amount, *date;
-    GtkTextView *tab2 = (GtkTextView *) gtk_builder_get_object(builder, "display2");
-    GtkEntry *amountfield = (GtkEntry *) gtk_builder_get_object(builder, "amount");
-    GtkEntry *datefield = (GtkEntry *) gtk_builder_get_object(builder, "date");
-    amount = gtk_entry_get_text(amountfield);
-    date = gtk_entry_get_text(datefield);
+    GtkTextView *tab2 = (GtkTextView*) gtk_builder_get_object(builder, "display2");
+    GtkEntry* amountfield = (GtkEntry*) gtk_builder_get_object(builder, "amount");
+    GtkEntry* datefield = (GtkEntry*) gtk_builder_get_object(builder, "date");
+    amount=gtk_entry_get_text(amountfield);
+    date=gtk_entry_get_text(datefield);
 
-    char order[500] = "123         Trimol        ";
-    strcat(order, amount);
-    strcat(order, ",       ");
-    strcat(order, date);
-    buffer2 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tab2));
+    char temp[500]="";
+    strcat(temp, "123,   ");
+    strcat(temp, "       ");
+    strcat(temp, "Trimol");
+    strcat(temp, "       ");
+    strcat(temp, amount);
+    strcat(temp, "       ");
+    strcat(temp, date);
+    strcat(order, temp);
+    strcat(order, "\n");
+    buffer2=gtk_text_view_get_buffer(GTK_TEXT_VIEW(tab2));
     gtk_text_buffer_set_text(buffer2, order, -1);
 
 
+
+}
+
+void filltable1(char *id, char *name, char *price, char *desc){
+    char data[800]="";
+    char temp[40]="";
+    const char *space="          ";
+    const char *nextspace="                         ";
+    printf(id);
+    strcat(data, id);
+    strcat(data, space);
+    strcat(data, name);
+    strncpy(temp, nextspace,(strlen(nextspace) - strlen(name)));
+    strcat(data, temp);
+    strcat(data, price);
+    memset(temp, 0, 40);
+    strcat(data, space);
+    strcat(data, desc);
+
+    GtkTextView *tab1 = (GtkTextView *) gtk_builder_get_object(builder, "display1");
+    buffer1 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tab1));
+    gtk_text_buffer_set_text(buffer1, data, -1);
 }
 
