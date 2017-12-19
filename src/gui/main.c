@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <gtk/gtk.h>
 #include <string.h>
-#include "src/parser/request_parser.h"
-#include "src/client/client.h"
+#include "../parser/request_parser.h"
+#include "../client/client.h"
 
 #define target "Trimol"
 
@@ -14,12 +14,12 @@ GtkTextIter start, end;
 GtkTextIter *iter;
 
 
-/*int main(int argc, char **argv) {
+int main(int argc, char **argv) {
 
 
     gtk_init(&argc, &argv);
     builder = gtk_builder_new();
-    if (gtk_builder_add_from_file(builder, "../login_frame.glade", NULL) == 0) {
+    if (gtk_builder_add_from_file(builder, "../src/gui/login_frame.glade", NULL) == 0) {
         printf(".glade file is not exist");
         return (0);
     }
@@ -32,7 +32,7 @@ GtkTextIter *iter;
 
 
     return (0);
-}*/
+}
 
 void on_enter_but_clicked() {
     const char *login;
