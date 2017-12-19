@@ -2,21 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(PharmacyMS)
 include_directories(/usr/include/mysql)
 set(CMAKE_C_STANDARD 11)
-set (CMAKE_C_FLAGS "-Wall -pthread")
-
-
-
-FIND_PACKAGE(PkgConfig REQUIRED)
-
-INCLUDE_DIRECTORIES(${GTK_INCLUDE_DIRS})
-LINK_DIRECTORIES(${GTK_LIBRARY_DIRS})
-
-PKG_CHECK_MODULES(GTK REQUIRED gtk+-3.0)
-
-ADD_DEFINITIONS(${GTK_CFLAGS_OTHER})
-
-add_definitions(${GTK_CFLAGS_OTHER})
-
+set (CMAKE_C_FLAGS "-Wall -g  -pthread -rdynamic")
 
 #server build
 set(SOURCE_FILES_server src/server/server.c
@@ -34,7 +20,14 @@ set(SOURCE_FILES_client src/client/client.c
         src/client/clientStarter.c src/parser/request_parser.c
         src/parser/object.c src/parser/object.h)
 add_executable(client ${SOURCE_FILES_client})
-target_link_libraries(client mysqlclient)
+find_package(PkgConfig)
+if (PKG_CONFIG_FOUND)
+    pkg_check_modules(GTK "gtk+-3.0")
+    if (GTK_FOUND)
+        target_link_libraries(client ${GTK_LIBRARIES} mysqlclient)
+        add_definitions(${GTK_CFLAGS} ${GTK_CFLAGS_OTHER})
+    endif()
+endif()
 
 # testing build
 set(SOURCE_FILES_testing src/parser/request_parser.c

@@ -30,5 +30,6 @@ size_t str_length(const char*);
 char * jsonParser(const char *);
 toClient* requestHandler(fromClient *);
 toClient* authorizationServer(fromClient *);
+
 toClient* searchInDbServer(fromClient *);
 #endif //PHARMACYMS_SERVER_H

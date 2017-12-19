@@ -159,20 +159,12 @@ toClient *requestHandler(fromClient *fromClientObj) {
 }
 
 toClient *authorizationServer(fromClient *fromClientObj) { //todo: assign value of user from database
-    int auth_result = authorization(fromClientObj->authorization.login,
-                                    fromClientObj->authorization.password);
     toClient *toClientObj = (toClient *) malloc(sizeof(toClient));
+    toClientObj = searchUser(fromClientObj->authorization.login,
+                                 fromClientObj->authorization.password);
 
     toClientObj->type = AUTHORIZATION;
-    if (auth_result == TRUE) {
-        toClientObj->authorization.isExist = TRUE;
-        strcpy(toClientObj->authorization.name, "Jasurbek");
-        strcpy(toClientObj->authorization.contact, "998979997507");
-        strcpy(toClientObj->authorization.id, "u1510326");
-        strcpy(toClientObj->authorization.address, "Sebzor");
-        return toClientObj;
-    }
-        toClientObj->authorization.isExist = FALSE;
+
     return toClientObj;
 }
 

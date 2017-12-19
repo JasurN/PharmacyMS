@@ -22,28 +22,44 @@ void finish_with_error(MYSQL *con) {
     exit(1);
 }
 
-bool authorization(char *login_id, char *login_password) {
+int authorization(char *login_id, char *login_password) {
+    int type=-1;
     MYSQL *con = connectToDB();
     char query[1024];
     sprintf(query, "SELECT * FROM authorization WHERE id = '%s' AND password = '%s'", login_id, login_password);
     if (mysql_query(con, query)) {
         finish_with_error(con);
     }
-
+    MYSQL_ROW row;
     MYSQL_RES *result = mysql_store_result(con);
     my_ulonglong numrows = mysql_num_rows(result);
-
-    if (numrows == 0) {
-        return FALSE;
+    while ((row = mysql_fetch_row(result))){
+        type=atoi(row[2]);
     }
-    return TRUE;
+    return type;
 }
-void *searchUser(char *user_id, char *user_password){
-    if(authorization(user_id, user_password)){
-        return searchFromTable(user_id, "authorization", "id");
+toClient *searchUser(char *user_id, char *user_password){
+    if(authorization(user_id, user_password)==1){
+        MYSQL *con =connectToDB();
+        char query[1024];
+        sprintf(query,"SELECT * FROM authorization natural join company WHERE id='%s'", user_id);
+        if (mysql_query(con, query)) {
+            finish_with_error(con);
+        }
+        MYSQL_RES *result = mysql_store_result(con);
+        return object_parser("auth+comp", result);
     }
-
-
+    else if(authorization(user_id, user_password)==2){
+        MYSQL *con =connectToDB();
+        char query[1024];
+        sprintf(query,"SELECT * FROM authorization natural join drugstore WHERE id='%s'", user_id);
+        if (mysql_query(con, query)) {
+            finish_with_error(con);
+        }
+        MYSQL_RES *result = mysql_store_result(con);
+        return object_parser("auth+comp", result);
+    }
+    return NULL;
 }
 bool isExistAlready(char *user_id, char *tablename,char *field){
 

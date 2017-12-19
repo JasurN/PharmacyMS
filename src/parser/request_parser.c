@@ -146,7 +146,7 @@ char* serverStructToStr(const toClient* server_message) {
             }
             break;
         case INVENTORY:
-            cJSON_AddItemToObject(root, "inventory", searching_inventory = cJSON_CreateObject());
+            cJSON_AddItemToObject(root, "inventory", searching_inventory = cJSON_CreateArray());
             i = 0;
             while (server_message->search_inventory) {
                 cJSON_AddItemToArray(searching_inventory, medical = cJSON_CreateObject());
@@ -183,7 +183,7 @@ char* serverStructToStr(const toClient* server_message) {
             break;
 
         case JOURNAL:
-            cJSON_AddItemToObject(root, "journal", journal = cJSON_CreateObject());
+            cJSON_AddItemToObject(root, "journal", journal = cJSON_CreateArray());
             i = 0;
             while (server_message->journal) {
                 cJSON_AddItemToArray(journal, purchase_query = cJSON_CreateObject());
@@ -209,6 +209,39 @@ char* serverStructToStr(const toClient* server_message) {
     printf("%s\n", out);
     cJSON_Delete(root);
     return out;
+}
+
+char* adminClientStructToStr(const toAdmin *admin_struct) {
+    cJSON *root = cJSON_CreateObject();
+    char *out;
+    cJSON_AddItemToObject(root, "type",
+                          cJSON_CreateNumber(admin_struct->user_type));
+    out = cJSON_Print(root);
+    cJSON_Delete(root);
+}
+
+char* adminServerToStr(const toAdmin *admin_struct) {
+    cJSON *root = cJSON_CreateObject();
+    cJSON *users;
+    cJSON *user;
+    char *out;
+    int i = 0;
+    cJSON_AddItemToObject(root, "type",
+                          cJSON_CreateNumber(admin_struct->user_type));
+    cJSON_AddItemToObject(root, "users", users = cJSON_CreateArray());
+    while (admin_struct->users) {
+        cJSON_AddItemToArray(users, user);
+        cJSON_AddItemToObject(user, "id",
+                              cJSON_CreateString(admin_struct->users->id));
+        cJSON_AddItemToObject(user, "name",
+                              cJSON_CreateString(admin_struct->users->name));
+        cJSON_AddItemToObject(user, "address",
+                              cJSON_CreateString(admin_struct->users->address));
+        cJSON_AddItemToObject(user, "contact",
+                              cJSON_CreateString(admin_struct->users->contact));
+    }
+    out = cJSON_Print(root);
+    cJSON_Delete(root);
 }
 
 void serverStrToStruct(const char *message, fromServer *server_answer) {
@@ -354,3 +387,4 @@ void clientStrToStruct(const char *message, fromClient *client_query) {
     client_query->type = (uid_t) type_item->valueint;
     cJSON_Delete(root);
 }
+

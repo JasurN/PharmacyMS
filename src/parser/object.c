@@ -3,6 +3,8 @@
 //
 #include "stdlib.h"
 #include "object.h"
+#include "request_parser.h"
+
 #define MAX_SIZE 30
 
 void *object_parser(char *tablename, MYSQL_RES *result)
@@ -17,19 +19,21 @@ void *object_parser(char *tablename, MYSQL_RES *result)
         return drugstore_parser(result);
     if (strcmp(tablename, "company") == 0)
         return company_parser(result);
-    if (strcmp(tablename, "authorization") == 0)
+    if (strcmp(tablename, "auth+comp") == 0)
         return user_parser(result);
 }
+
 void *user_parser(MYSQL_RES *result){
     MYSQL_ROW row;
-    struct authorizing *user;
+    toClient *user;
     int i = 0;
-    user = (struct authorizing *)malloc(sizeof(struct authorizing));
+    user = (toClient *)malloc(sizeof(toClient));
     while ((row = mysql_fetch_row(result))) {
-        strncpy(user->login, row[0],MAX_SIZE) ;
-        strncpy(user->password, row[1], MAX_SIZE);
-        user->type = (uid_t) atoi( row[2]);
-
+        strncpy(user->authorization.id, row[0],MAX_SIZE) ;
+        user->authorization.user_type = (uid_t) atoi( row[2]);
+        strncpy(user->authorization.name, row[3], MAX_SIZE);
+        strncpy(user->authorization.address, row[4], MAX_TEXT);
+        strncpy(user->authorization.contact, row[5], MAX_SIZE);
        i++;
     }
     return user;
@@ -37,20 +41,21 @@ void *user_parser(MYSQL_RES *result){
 
 void *company_parser(MYSQL_RES *result) {
     MYSQL_ROW row;
-    //int num_fields = mysql_num_fields(result);
+    toClient **stores;
     my_ulonglong num_rows = mysql_num_rows(result);
-    struct auth_back **stores;
-    stores = (struct auth_back **) malloc(sizeof(struct auth_back *) * num_rows);
-    struct auth_back *store;
+    stores = (toClient **) malloc(sizeof(toClient *) * num_rows);
+    toClient *store = malloc(sizeof(toClient *));
+    store->authorization.isExist = FALSE;
     int i = 0;
     while ((row = mysql_fetch_row(result))) {
-        store = malloc(sizeof(struct auth_back *));
-        strncpy(store->id, row[0], MAX_SIZE);
-        strncpy(store->name, row[1],MAX_SIZE);
-        strncpy(store->address, row[2],MAX_TEXT);
-        strncpy(store->contact, row[3],MAX_SIZE);
-
+        strncpy(store->authorization.id, row[0], MAX_SIZE);
+        strncpy(store->authorization.name, row[1],MAX_SIZE);
+        strncpy(store->authorization.address, row[2],MAX_TEXT);
+        strncpy(store->authorization.contact, row[3],MAX_SIZE);
+        store->authorization.user_type = 1;
+        store->authorization.isExist = TRUE;
         stores[i] = store;
+        store = malloc(sizeof(toClient *));
         i++;
     }
     return stores;
@@ -58,89 +63,84 @@ void *company_parser(MYSQL_RES *result) {
 
 void *drugstore_parser(MYSQL_RES *result) {
     MYSQL_ROW row;
-    //int num_fields = mysql_num_fields(result);
     my_ulonglong num_rows = mysql_num_rows(result);
-    struct auth_back **stores;
-    stores = (struct auth_back **) malloc(sizeof(struct auth_back *) * num_rows);
-    struct auth_back *store;
+    toClient **stores;
+    stores = (toClient **) malloc(sizeof(toClient *) * num_rows);
+    toClient *store = malloc(sizeof(toClient *));
+    store->authorization.isExist=FALSE;
     int i = 0;
     while ((row = mysql_fetch_row(result))) {
-        store = malloc(sizeof(struct auth_back *));
-        strncpy(store->id, row[0],MAX_SIZE);
-        strncpy(store->name, row[1],MAX_SIZE);
-        strncpy(store->address, row[2],MAX_TEXT);
-        strncpy(store->contact, row[3],MAX_SIZE);
-
+        strncpy(store->authorization.id, row[0],MAX_SIZE);
+        strncpy(store->authorization.name, row[1],MAX_SIZE);
+        strncpy(store->authorization.address, row[2],MAX_TEXT);
+        strncpy(store->authorization.contact, row[3],MAX_SIZE);
+        store->authorization.user_type=2;
+        store->authorization.isExist=TRUE;
         stores[i] = store;
+        store = malloc(sizeof(toClient *));
         i++;
     }
     return stores;
 }
+
 void *medicine_parser(MYSQL_RES *result)
 {
     MYSQL_ROW row;
-    //int num_fields = mysql_num_fields(result);
-    my_ulonglong num_rows = mysql_num_rows(result);
-    struct search_back **medicines;
-    medicines = (struct search_back**) malloc(sizeof(struct search_back*) * num_rows);
-    struct search_back *medicine;
-    int i=0;
-    while ((row = mysql_fetch_row(result))) {
-        medicine = malloc(sizeof(struct search_back*));
-        strncpy(medicine->med_id, row[0], MAX_SIZE);
-        strncpy(medicine->name, row[1], MAX_SIZE);
-        strncpy(medicine->description, row[2], MAX_TEXT);
-        medicine->price = atof(row[3]);
-        strncpy(medicine->comp_id, row[4],MAX_SIZE);
+    toClient *medicine;
+    medicine = (toClient *) malloc(sizeof(toClient ) );
 
-        medicines[i] = medicine;
-        i++;
+    medicine->search.isExist=FALSE;
+
+    while ((row = mysql_fetch_row(result))) {
+
+        strncpy(medicine->search.med_id, row[0], MAX_SIZE);
+        strncpy(medicine->search.name, row[1], MAX_SIZE);
+        strncpy(medicine->search.description, row[2], MAX_TEXT);
+        medicine->search.price = atof(row[3]);
+        strncpy(medicine->search.comp_id, row[4],MAX_SIZE);
+        medicine->search.isExist=TRUE;
+
     }
-    return medicines;
+    return medicine;
 }
 
 void *inventory_parser(MYSQL_RES *result)
 {
     MYSQL_ROW row;
     my_ulonglong num_rows = mysql_num_rows(result);
-    struct search_back_inventory **medicines;
-    medicines = (struct search_back_inventory**) malloc(sizeof(struct search_back_inventory*) * num_rows);
-    struct search_back_inventory *medicine;
-    medicine = malloc(sizeof(struct search_back_inventory*));
+    toClient *medicine;
+    medicine = (toClient *) malloc(sizeof(toClient));
+    medicine->search_inventory = (struct search_back_inventory *)malloc(sizeof(struct search_back_inventory) * num_rows);
     int i=0;
     while ((row = mysql_fetch_row(result))) {
-        strncpy(medicine->store_id, row[0],MAX_SIZE);
-        strncpy(medicine->med_id, row[1],MAX_SIZE);
-        strncpy(medicine->name, row[2],MAX_SIZE);
-        medicine->quantity = atoi(row[3]);
-
-        medicines[i] = medicine;
+        strncpy(medicine->search_inventory[i].store_id, row[0],MAX_SIZE);
+        strncpy(medicine->search_inventory[i].med_id, row[1],MAX_SIZE);
+        strncpy(medicine->search_inventory[i].name, row[2],MAX_SIZE);
+        medicine->search_inventory[i].quantity = atoi(row[3]);
         i++;
     }
-    return medicines;
+    return medicine;
 }
 
 void *journal_parser(MYSQL_RES *result)
 {
     MYSQL_ROW row;
     my_ulonglong num_rows = mysql_num_rows(result);
-    struct purchase_back **medicines;
-    medicines = (struct purchase_back**) malloc(sizeof(struct purchase_back*) * num_rows);
-    struct purchase_back *medicine;
+    toClient *medicine;
+    medicine = (toClient *) malloc(sizeof(toClient));
+    medicine->journal = (struct journal_back*) malloc(sizeof(struct journal_back*) * num_rows);
     int i=0;
     while ((row = mysql_fetch_row(result))) {
         medicine = malloc(sizeof(struct purchase_back*));
-        strncpy(medicine->trans_id, row[0], MAX_SIZE);
-        strncpy(medicine->trans_date, row[1], MAX_SIZE);
-        strncpy(medicine->comp_id, row[2], MAX_SIZE);
-        strncpy(medicine->store_id, row[3], MAX_SIZE);
-        strncpy(medicine->med_id, row[4], MAX_SIZE);
-        medicine->quantity=atoi(row[5]);
-
-        medicines[i] = medicine;
+        strncpy(medicine->journal[i].trans_id, row[0], MAX_SIZE);
+        strncpy(medicine->journal[i].trans_date, row[1], MAX_SIZE);
+        strncpy(medicine->journal[i].comp_id, row[2], MAX_SIZE);
+        strncpy(medicine->journal[i].store_id, row[3], MAX_SIZE);
+        strncpy(medicine->journal[i].med_id, row[4], MAX_SIZE);
+        medicine->journal[i].quantity=atoi(row[5]);
         i++;
     }
-    return medicines;
+    return medicine;
 }
 
 

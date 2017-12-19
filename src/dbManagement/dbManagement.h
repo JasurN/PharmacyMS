@@ -4,6 +4,7 @@
 #include "stdio.h"
 
 #include "stdbool.h"
+#include "../parser/request_parser.h"
 #define TRUE 1
 #define FALSE 0
 #define serverAddr "localhost"
@@ -12,9 +13,10 @@
 #define dbName "PharmacyDB"
 
 void finish_with_error(MYSQL * con);
-bool authorization(char* login_id, char* login_password);
+int authorization(char* login_id, char* login_password);
 void addUser(char *user_id, char *user_password, char *user_name, char *user_adress, char * user_contact,
              int type);
+toClient* searchUser(char*, char*);
 MYSQL* connectToDB();
 void *searchFromTable(char *id, char *tablename, char *colname);
 

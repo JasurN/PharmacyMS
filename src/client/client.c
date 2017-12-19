@@ -24,7 +24,7 @@ char* clientStart(char * clientStr) {
     // Convert IPv4 and IPv6 addresses from text to binary form
     if(inet_pton(AF_INET, SERVER_ADDRESS, &server.sin_addr) <= 0) {
         printf("\nInvalid address/ Address not supported \n");
-        return -1;
+        return 0;
     }
 
     printf("CLIENT CONNECTING ON PORT %d TO COMMUNICATE WITH SERVER...\n", PORT);

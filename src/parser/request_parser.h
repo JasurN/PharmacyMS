@@ -76,7 +76,7 @@ typedef struct {
     struct search_back search;
     struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
-    struct journal_back journal[MAX_TEXT];
+    struct journal_back* journal;
 
     uid_t type;
 } toClient;
@@ -105,6 +105,24 @@ typedef struct {
     struct purchasing purchase;
     uid_t type;
 } fromClient;
+
+/* This struct is used by admin */
+
+struct usersToAdmin {
+    char id[MAX_SIZE];
+    char name[MAX_SIZE];
+    char address[MAX_TEXT];
+    char contact[MAX_SIZE];
+};
+
+typedef struct {
+    struct usersToAdmin* users;
+    uid_t user_type;
+} toAdmin;
+
+typedef struct {
+    uid_t user_type;
+} fromAdmin;
 
 void test1();
 char* clientStructToStr(const toServer *);
