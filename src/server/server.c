@@ -86,16 +86,6 @@ void *connection_handler(void *sock_desc) {
 
     send(cli->connfd, serverMessage, str_length(serverMessage), 0);
 
-/*
- *  while(1) {
- *
- *  Here can code that can be edited
- *
- *
- *
- *  }
- * */
-
     if (valRead == FALSE) {
         printf("CLIENT DISCONNECTED!!!\n");
         fflush(stdout);
@@ -152,10 +142,11 @@ toClient *requestHandler(fromClient *fromClientObj) {
     } else if (fromClientObj->type == INVENTORY) {
 
 
-
     } else if (fromClientObj->type == PURCHASE) {
 
+
     } else if (fromClientObj->type == JOURNAL) {
+
 
     }
 

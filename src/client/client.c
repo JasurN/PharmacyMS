@@ -78,7 +78,11 @@ fromServer* searchCompanyInventory(char* searchString) {
     char* strToServer = clientStructToStr(toServerObj);
     char* strFromServer = clientStart(strToServer);
 
+    fromServer *fromServerObj =  (fromServer *)malloc(sizeof(fromServer));
+    printf("Client side: %s\n", strFromServer);
+    serverStrToStruct(strFromServer, fromServerObj);
 
     free(toServerObj);
     free(strFromServer);
+    return fromServerObj;
 }
