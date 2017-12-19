@@ -35,16 +35,6 @@ bool authorization(char *login_id, char *login_password) {
 
     if (numrows == 0) {
         return FALSE;
-    } else {
-        int num_fields = mysql_num_fields(result);
-        MYSQL_ROW row;
-        //MYSQL_FIELD *field;
-        while ((row = mysql_fetch_row(result))) {
-            for (int i = 0; i < num_fields; i++) {
-                printf("%s ", row[i] ? row[i] : "NULL");
-            }
-            printf("\n");
-        }
     }
     return TRUE;
 }
@@ -131,6 +121,16 @@ void *viewOrders(char *id){
 }
 
 // Store queries
+void *viewMedicine(){
+    MYSQL *con =connectToDB();
+    char query[1024];
+    sprintf(query,"SELECT * FROM medicine");
+    if (mysql_query(con, query)) {
+        finish_with_error(con);
+    }
+    MYSQL_RES *result = mysql_store_result(con);
+    return object_parser("medicine", result);
+}
 
 void *viewStoreInventory(char *id){
     return searchFromTable(id, "inventory","store_id" );
