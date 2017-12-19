@@ -47,7 +47,6 @@
  *
  * */
 char* clientStructToStr(const toServer *client_struct) {
-    printf("login : %s\npassword of my %s\ntype: %d", client_struct->authorization.login, client_struct->authorization.password, client_struct->type);
     cJSON *root = cJSON_CreateObject();
     cJSON *authorization;
     cJSON *searching;
@@ -94,7 +93,6 @@ char* clientStructToStr(const toServer *client_struct) {
             break;
     }
     out = cJSON_Print(root);
-    printf("%s\n", out);
     cJSON_Delete(root);
     return out;
 }
