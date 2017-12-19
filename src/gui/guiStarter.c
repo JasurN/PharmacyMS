@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <gtk/gtk.h>
 #include <string.h>
-//#include "src/parser/request_parser.h"
-//#include "src/client/client.h"
+#include "../parser/request_parser.h"
+#include "../client/client.h"
 
 
 

@@ -34,6 +34,7 @@ void *user_parser(MYSQL_RES *result){
             strncpy(user->authorization.name, "", MAX_SIZE);
             strncpy(user->authorization.address, "", MAX_TEXT);
             strncpy(user->authorization.contact, "", MAX_SIZE);
+            break;
         }
         strncpy(user->authorization.name, row[3], MAX_SIZE);
         strncpy(user->authorization.address, row[4], MAX_TEXT);
