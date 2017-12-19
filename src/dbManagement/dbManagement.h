@@ -11,7 +11,6 @@
 #define dbPassword "adminos"
 #define dbName "PharmacyDB"
 
-MYSQL* connectToDB();
 void finish_with_error(MYSQL * con);
 bool authorization(char* login_id, char* login_password);
 void addUser(char *user_id, char *user_password, char *user_name, char *user_adress, char * user_contact,

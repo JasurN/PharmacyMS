@@ -37,20 +37,11 @@ struct search_back_inventory{
 
 struct purchase_back {
     int success;
-    char trans_id[MAX_SIZE];
-    char trans_date[MAX_SIZE];
-    char comp_id[MAX_SIZE];
-    char store_id[MAX_SIZE];
-    char med_id[MAX_SIZE];
-    int quantity;
-};
-
-struct journal_back {
-    char trans_id[MAX_SIZE];
-    char trans_date[MAX_SIZE];
-    char comp_id[MAX_SIZE];
-    char store_id[MAX_SIZE];
-    char med_id[MAX_SIZE];
+    char *trans_id;
+    char *trans_date;
+    char *comp_id;
+    char *store_id;
+    char *med_id;
     int quantity;
 };
 
@@ -74,7 +65,6 @@ typedef struct {
     struct search_back search;
     struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
-    struct journal_back journal[MAX_TEXT];
     uid_t type;
 } toClient;
 
