@@ -159,17 +159,6 @@ toClient *authorizationServer(fromClient *fromClientObj) { //todo: assign value 
                                  fromClientObj->authorization.password);
 
     toClientObj->type = AUTHORIZATION;
-    if (auth_result == TRUE) {
-        toClientObj->authorization.isExist = TRUE;
-        strcpy(toClientObj->authorization.name, "Jasurbek");
-        strcpy(toClientObj->authorization.contact, "998979997507");
-        strcpy(toClientObj->authorization.id, "u1510326");
-        strcpy(toClientObj->authorization.address, "Sebzor");
-        toClientObj->authorization.user_type = DRUGSTORE;
-        return toClientObj;
-    }
-        toClientObj->authorization.isExist = FALSE;
-
     return toClientObj;
 }
 
