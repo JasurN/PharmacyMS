@@ -1,7 +1,7 @@
 #include "client.h"
 
 int main() {
-    fromServer* fromServerObj = authorizationClient("1121", "12345");
+    fromServer* fromServerObj = authorizationClient("22", "22");
 
     free(fromServerObj);
     return 0;

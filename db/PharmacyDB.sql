@@ -10,7 +10,7 @@ CREATE TABLE company (
   comp_address  VARCHAR(40),
   comp_contact VARCHAR(20),
   PRIMARY KEY (id),
-  FOREIGN KEY (comp_id) REFERENCES authorization(id)
+  FOREIGN KEY (id) REFERENCES authorization(id)
 );
 
 CREATE TABLE drugstore (
@@ -18,8 +18,8 @@ CREATE TABLE drugstore (
   store_name VARCHAR(20) NOT NULL,
   store_address  VARCHAR(40),
   store_contact VARCHAR(20),
-  PRIMARY KEY (store_id),
-  FOREIGN KEY (store_id) REFERENCES authorization(id)
+  PRIMARY KEY (id),
+  FOREIGN KEY (id) REFERENCES authorization(id)
 );
 
 CREATE TABLE medicine (
@@ -27,9 +27,9 @@ CREATE TABLE medicine (
   med_name VARCHAR(20) NOT NULL,
   med_description  VARCHAR(200),
   med_price NUMERIC(12, 2) NOT NULL,
-  comp_id   VARCHAR(10) NOT NULL,
+  id   VARCHAR(10) NOT NULL,
   PRIMARY KEY (med_id),
-  FOREIGN KEY (comp_id) REFERENCES company(comp_id)
+  FOREIGN KEY (id) REFERENCES company(id)
   ON DELETE CASCADE
 );
 
@@ -39,7 +39,7 @@ med_id VARCHAR(10) NOT NULL,
 med_name VARCHAR(20) NOT NULL,
 med_quantity NUMERIC(4),
 PRIMARY KEY (store_id, med_id),
-FOREIGN KEY (store_id) REFERENCES drugstore(store_id)
+FOREIGN KEY (store_id) REFERENCES drugstore(id)
 ON DELETE CASCADE,
 FOREIGN KEY (med_id) REFERENCES medicine(med_id)
 on DELETE CASCADE
@@ -55,9 +55,9 @@ CREATE TABLE journal
   quantity NUMERIC(4),
   status NUMERIC(1) check (status IN (0,1)),
   PRIMARY KEY (trans_id),
-  FOREIGN KEY (comp_id) REFERENCES company(comp_id)
+  FOREIGN KEY (comp_id) REFERENCES company(id)
     ON DELETE CASCADE,
-  FOREIGN KEY (store_id) REFERENCES drugstore(store_id)
+  FOREIGN KEY (store_id) REFERENCES drugstore(id)
     ON DELETE CASCADE,
   FOREIGN KEY (med_id) REFERENCES medicine(med_id)
     ON DELETE CASCADE
