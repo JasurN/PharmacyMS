@@ -46,9 +46,11 @@ toClient *searchUser(char *user_id, char *user_password){
     }
     else if(authorization(user_id, user_password) == DRUGSTORE){
         sprintf(query,"SELECT * FROM authorization natural join drugstore WHERE id='%s'", user_id);
-    } else {
+    } else if(authorization(user_id, user_password) == ADMIN){
         sprintf(query,"SELECT * FROM authorization WHERE id='%s'", user_id);
-    }
+    }else
+        {return NULL;}
+
     if (mysql_query(con, query)) {
         finish_with_error(con);
     }
@@ -121,8 +123,9 @@ void *searchFromTable(char *id, char *tablename, char *colname){
     return object_parser(tablename, result);
 }
 void *viewStore(char *id){
-    return searchFromTable(id,"company","comp_id" );
+    return searchFromTable(id,"company","id" );
 }
+
 void *viewInventory(char *id){
     return searchFromTable(id, "medicine", "comp_name");
 }
@@ -151,7 +154,7 @@ void *searchByName(char *med_name){
 void *searchById(char *med_id){
     return searchFromTable(med_id, "medicine", "med_id");
 }
-void *orderRegister(char *med_id, char *comp_id, char *store_id, int quantity){
+void orderRegister(char *med_id, char *comp_id, char *store_id, int quantity){
     MYSQL *con=connectToDB();
     char query[1024];
 
@@ -162,6 +165,33 @@ void *orderRegister(char *med_id, char *comp_id, char *store_id, int quantity){
     }
 
 }
+void medDelivered(char *trans_id){
+    MYSQL *con=connectToDB();
+    char query[1024];
 
+    sprintf(query,"UPDATE journal set status=1 where trans_id=trans_id");
+    if (mysql_query(con, query)) {
+        finish_with_error(con);
+    }
+}
 
+//DELETION
+void delete(char *id, char *tname, char *cname){
+    MYSQL *con=connectToDB();
+    char query[1024];
+
+    sprintf(query,"DELETE from %s  where %s='%s'", tname, cname, id);
+    if (mysql_query(con, query)) {
+        finish_with_error(con);
+    }
+}
+void deleteMedicine(char *id){
+    delete(id, "medicine", "med_id");
+}
+void deleteStore(char *id){
+    delete(id, "drugstore", "id");
+}
+void deleteCompany(char *id){
+    delete(id, "company", "id");
+}
 

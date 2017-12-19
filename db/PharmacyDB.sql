@@ -5,7 +5,7 @@ CREATE TABLE authorization(
   PRIMARY KEY (id)
 );
 CREATE TABLE company (
-  comp_id    VARCHAR(10) not NULL,
+  id    VARCHAR(10) not NULL,
   comp_name VARCHAR(20) not NULL,
   comp_address  VARCHAR(40),
   comp_contact VARCHAR(20),
@@ -14,7 +14,7 @@ CREATE TABLE company (
 );
 
 CREATE TABLE drugstore (
-  store_id    VARCHAR(10) not NULL,
+  id    VARCHAR(10) not NULL,
   store_name VARCHAR(20) not NULL,
   store_address  VARCHAR(40),
   store_contact VARCHAR(20),
@@ -62,3 +62,23 @@ CREATE TABLE journal
   FOREIGN KEY (med_id) REFERENCES medicine(med_id)
     ON DELETE CASCADE
 );
+
+CREATE TRIGGER medicine_delivered after update on journal
+for each row
+begin
+  IF new.status=1 and old.status=0
+  THEN
+    IF EXISTS(SELECT med_quantity FROM inventory WHERE med_id=new.med_id)
+    THEN
+      UPDATE inventory
+      set med_quantity  = med_quantity + new.quantity;
+    ELSE
+      INSERT into inventory(store_id, med_id, med_quantity, med_name)
+        (SELECT new.store_id, new.med_id, new.quantity, med_name
+         FROM medicine
+         WHERE med_id = new.med_id);
+    END IF;
+  END IF;
+END$
+
+
