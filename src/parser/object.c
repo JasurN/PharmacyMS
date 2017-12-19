@@ -3,7 +3,7 @@
 //
 #include "stdlib.h"
 #include "object.h"
-
+#define MAX_SIZE 30
 
 void *object_parser(char *tablename, MYSQL_RES *result)
 {
@@ -22,22 +22,17 @@ void *object_parser(char *tablename, MYSQL_RES *result)
 }
 void *user_parser(MYSQL_RES *result){
     MYSQL_ROW row;
-    //int num_fields = mysql_num_fields(result);
-    my_ulonglong num_rows = mysql_num_rows(result);
-    struct authorizing **users;
-    users= (struct authorizing **) malloc(sizeof(struct authorizing *) * num_rows);
     struct authorizing *user;
     int i = 0;
+    user = (struct authorizing *)malloc(sizeof(struct authorizing));
     while ((row = mysql_fetch_row(result))) {
-        user = malloc(sizeof(struct authorizing *));
-        user->login = row[0];
-        user->password = row[1];
-        user->type = (uid_t) row[2];
+        strncpy(user->login, row[0],MAX_SIZE) ;
+        strncpy(user->password, row[1], MAX_SIZE);
+        user->type = (uid_t) atoi( row[2]);
 
-        users[i] = user;
-        i++;
+       i++;
     }
-    return users;
+    return user;
 }
 
 void *company_parser(MYSQL_RES *result) {
@@ -50,10 +45,10 @@ void *company_parser(MYSQL_RES *result) {
     int i = 0;
     while ((row = mysql_fetch_row(result))) {
         store = malloc(sizeof(struct auth_back *));
-        store->id = row[0];
-        store->name = row[1];
-        store->address = row[2];
-        store->contact = row[3];
+        strncpy(store->id, row[0], MAX_SIZE);
+        strncpy(store->name, row[1],MAX_SIZE);
+        strncpy(store->address, row[2],MAX_TEXT);
+        strncpy(store->contact, row[3],MAX_SIZE);
 
         stores[i] = store;
         i++;
@@ -71,10 +66,10 @@ void *drugstore_parser(MYSQL_RES *result) {
     int i = 0;
     while ((row = mysql_fetch_row(result))) {
         store = malloc(sizeof(struct auth_back *));
-        store->id = row[0];
-        store->name = row[1];
-        store->address = row[2];
-        store->contact = row[3];
+        strncpy(store->id, row[0],MAX_SIZE);
+        strncpy(store->name, row[1],MAX_SIZE);
+        strncpy(store->address, row[2],MAX_TEXT);
+        strncpy(store->contact, row[3],MAX_SIZE);
 
         stores[i] = store;
         i++;
@@ -92,11 +87,11 @@ void *medicine_parser(MYSQL_RES *result)
     int i=0;
     while ((row = mysql_fetch_row(result))) {
         medicine = malloc(sizeof(struct search_back*));
-        medicine->med_id = row[0];
-        medicine->name = row[1];
-        medicine->description = row[2];
+        strncpy(medicine->med_id, row[0], MAX_SIZE);
+        strncpy(medicine->name, row[1], MAX_SIZE);
+        strncpy(medicine->description, row[2], MAX_TEXT);
         medicine->price = atof(row[3]);
-        medicine->comp_id = row[4];
+        strncpy(medicine->comp_id, row[4],MAX_SIZE);
 
         medicines[i] = medicine;
         i++;
@@ -114,9 +109,9 @@ void *inventory_parser(MYSQL_RES *result)
     medicine = malloc(sizeof(struct search_back_inventory*));
     int i=0;
     while ((row = mysql_fetch_row(result))) {
-        medicine->store_id = row[0];
-        medicine->med_id = row[1];
-        medicine->name = row[2];
+        strncpy(medicine->store_id, row[0],MAX_SIZE);
+        strncpy(medicine->med_id, row[1],MAX_SIZE);
+        strncpy(medicine->name, row[2],MAX_SIZE);
         medicine->quantity = atoi(row[3]);
 
         medicines[i] = medicine;
@@ -135,11 +130,11 @@ void *journal_parser(MYSQL_RES *result)
     int i=0;
     while ((row = mysql_fetch_row(result))) {
         medicine = malloc(sizeof(struct purchase_back*));
-        medicine->trans_id = row[0];
-        medicine->trans_date = row[1];
-        medicine->comp_id = row[2];
-        medicine->store_id = row[3];
-        medicine->med_id=row[4];
+        strncpy(medicine->trans_id, row[0], MAX_SIZE);
+        strncpy(medicine->trans_date, row[1], MAX_SIZE);
+        strncpy(medicine->comp_id, row[2], MAX_SIZE);
+        strncpy(medicine->store_id, row[3], MAX_SIZE);
+        strncpy(medicine->med_id, row[4], MAX_SIZE);
         medicine->quantity=atoi(row[5]);
 
         medicines[i] = medicine;
