@@ -1,6 +1,6 @@
 #include "client.h"
 
-int clientStart(char * clientStr) {
+char* clientStart(char * clientStr) {
     // Structure to connect to the server
     struct sockaddr_in server;
     int server_fd = 0, valread;
@@ -37,34 +37,37 @@ int clientStart(char * clientStr) {
     // Send hello message to the sever
     send(server_fd, clientStr, str_length(clientStr), 0);
 
-    //printf("HELLO MESSAGE SENT!!!");
-
     valread = (int) recv(server_fd, buf, MAX_SIZE_BUF, 0);
 
-    printf("message from server: %s\n", buf);
-
-/*
- *  while(1) {
- *  memset(buffer, 0, sizeof(buffer));
- *  memset(cchat, 0, sizeof(cchat));
- *  printf("CLIENT : ");
- *  fgets (cchat, sizeof(cchat), stdin);
- *  send(sock , cchat , strlen(cchat) , 0 );
- *  valread = read( sock , buffer, 1024);
- *  printf("%s\n",buffer );
- *  cchat[strlen(cchat)] = '\0';
- *  if(strncmp(cchat, bye, strlen(bye))==0)
- *      break;
- *
- *
- *  }
- * */
+    //printf("message from server: %s\n", buf);
+    char* returnToClient = (char *)malloc(sizeof(buf));
+    strcpy(returnToClient, buf);
+    return returnToClient;
 }
 
 size_t str_length(const char* buf) {
     size_t i;
     for (i = 0; buf[i] != '\0'; ++i);
     return i;
+}
+fromServer* authorizationClient(char * login, char * password) {
+    toServer *toServerObj = (toServer *)malloc(sizeof(toServer));
+    toServerObj->type = AUTHORIZATION;
+    strcpy(toServerObj->authorization.password, login);
+    strcpy(toServerObj->authorization.login, password);
+
+    char* strToServer = clientStructToStr(toServerObj);
+
+    char * strFromServer = clientStart(strToServer);
+//struct from server with autorization
+    fromServer *fromServerObj =  (fromServer *)malloc(sizeof(fromServer));
+    printf("Client side: %s\n", strFromServer);
+    serverStrToStruct(strFromServer, fromServerObj);
+//there your can use it.
+
+    free(strFromServer);
+    free(toServerObj);
+    return fromServerObj;
 }
 
 

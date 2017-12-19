@@ -48,7 +48,7 @@ on DELETE CASCADE
 CREATE TABLE journal
  (
   trans_id    VARCHAR(10) not NULL AUTO_INCREMENT,
-  trans_date Date,
+  trans_date Date datetime DEFAULT(getdate()),
   comp_id   VARCHAR(10) not NULL,
   store_id VARCHAR(10) not NULL,
   med_id VARCHAR(10) not NULL,
