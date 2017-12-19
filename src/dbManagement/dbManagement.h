@@ -7,9 +7,9 @@
 #define TRUE 1
 #define FALSE 0
 #define serverAddr "localhost"
-#define dbUser "admin"
-#define dbPassword "adminos"
-#define dbName "PharmacyDB"
+#define dbUser "root"
+#define dbPassword "Azikinhatashkent"
+#define dbName "pharmacydb"
 
 MYSQL* connectToDB();
 void finish_with_error(MYSQL * con);
