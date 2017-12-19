@@ -10,7 +10,7 @@ MYSQL *connectToDB() {
         exit(1);
     }
     if (mysql_real_connect(con, serverAddr, dbUser, dbPassword,
-                           dbName, 0, NULL, 0) == NULL) {
+                           dbName, 3307, NULL, 0) == NULL) {
         finish_with_error(con);
     }
     return con;

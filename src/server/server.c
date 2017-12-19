@@ -154,7 +154,7 @@ toClient *requestHandler(fromClient *fromClientObj) {
 }
 
 toClient *authorizationServer(fromClient *fromClientObj) { //todo: assign value of user from database
-    toClient *toClientObj = (toClient *) malloc(sizeof(toClient));
+    toClient *toClientObj;
     toClientObj = searchUser(fromClientObj->authorization.login,
                                  fromClientObj->authorization.password);
 

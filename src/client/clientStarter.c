@@ -1,8 +1,7 @@
 #include "client.h"
 
 int main() {
-    fromServer* fromServerObj = searchCompanyInventory("Trimol");
-
+    fromServer* fromServerObj = authorizationClient("1121", "12345");
 
     free(fromServerObj);
     return 0;
