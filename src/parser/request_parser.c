@@ -11,41 +11,6 @@
  */
 #include "request_parser.h"
 
-/*int main() {
-    *//*client_message = (toServer *)malloc(sizeof(toServer));
-    strcpy(client_message->authorization.login, "login");
-    strcpy(client_message->authorization.password, "password");
-    client_message->type = (uid_t) 0;
-    serialization1(client_message);
-    //test1();
-    //free(client_message);
-
-    server_message = (toClient *)malloc(sizeof(toClient));
-
-     // Here should be some assigning values to the struct
-
-    free(server_message);
-
-
-    //server_answer = (fromServer *)malloc(sizeof(fromServer));
-    client_query = (fromClient *)malloc(sizeof(fromClient));
-    client_query = deserialization2(serialization1(client_message), client_query);
-
-
-    free(client_message);*//*
-    test1();
-    return 0;
-}*/
-/*
- *  Just testing function
- *
- * */
-
-/*
- *  This function converts queries to be
- *  sent to the server from clientOn (Drug Stores)
- *
- * */
 char* clientStructToStr(const toServer *client_struct) {
     cJSON *root = cJSON_CreateObject();
     cJSON *authorization;
@@ -206,7 +171,6 @@ char* serverStructToStr(const toClient* server_message) {
             break;
     }
     out = cJSON_Print(root);
-    printf("%s\n", out);
     cJSON_Delete(root);
     return out;
 }
@@ -245,6 +209,7 @@ char* adminServerToStr(const toAdmin *admin_struct) {
 }
 
 void serverStrToStruct(const char *message, fromServer *server_answer) {
+
     cJSON *root = cJSON_Parse(message);
     cJSON *type_item = cJSON_GetObjectItemCaseSensitive(root, "type");
     if (type_item->valueint == AUTHORIZATION) {

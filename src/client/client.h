@@ -17,4 +17,5 @@
 char* clientStart(char *string);
 size_t str_length(const char* clientStr);
 fromServer* authorizationClient(char * login, char * password);
+fromServer* searchCompanyInventory(char* searchString);
 #endif //PHARMACYMS_CLIENT_H

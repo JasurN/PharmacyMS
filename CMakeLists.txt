@@ -14,25 +14,33 @@ add_executable(server ${SOURCE_FILES_server})
 target_link_libraries(server mysqlclient)
 
 # client build
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK REQUIRED "gtk+-3.0")
+
+# Add the path to its header files to the compiler command line
+include_directories(${GTK_INCLUDE_DIRS})
+link_directories(${GTK_LIBRARY_DIRS})
+
 set(SOURCE_FILES_client src/client/client.c
         src/parser/cJSON.c src/define/define.h
         src/client/client.h src/dbManagement/dbManagement.c
-        src/client/clientStarter.c src/parser/request_parser.c
-        src/parser/object.c src/parser/object.h)
+         src/parser/request_parser.c
+        src/parser/object.c src/parser/object.h
+        main.c)
 add_executable(client ${SOURCE_FILES_client})
+target_link_libraries(client mysqlclient ${GTK_LIBRARY_DIRS})
+
 find_package(PkgConfig)
 if (PKG_CONFIG_FOUND)
     pkg_check_modules(GTK "gtk+-3.0")
     if (GTK_FOUND)
-        target_link_libraries(client ${GTK_LIBRARIES} mysqlclient)
+        target_link_libraries(client ${GTK_LIBRARIES})
         add_definitions(${GTK_CFLAGS} ${GTK_CFLAGS_OTHER})
     endif()
 endif()
 
-# testing build
-set(SOURCE_FILES_testing src/parser/request_parser.c
-        main.c
-        src/parser/cJSON.c
-        src/dbManagement/dbManagement.c src/parser/request_parser.h src/dbManagement/dbManagement.h)
+#testing build
+set(SOURCE_FILES_testing src/client/client.c src/client/clientStarter.c
+        src/parser/request_parser.c src/parser/cJSON.c )
 add_executable(testing ${SOURCE_FILES_testing})
 target_link_libraries(testing mysqlclient)

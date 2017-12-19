@@ -1,5 +1,4 @@
 #include "server.h"
-#include "../parser/request_parser.h"
 
 static int id_counter = 10;
 
@@ -87,16 +86,6 @@ void *connection_handler(void *sock_desc) {
 
     send(cli->connfd, serverMessage, str_length(serverMessage), 0);
 
-/*
- *  while(1) {
- *
- *  Here can code that can be edited
- *
- *
- *
- *  }
- * */
-
     if (valRead == FALSE) {
         printf("CLIENT DISCONNECTED!!!\n");
         fflush(stdout);
@@ -145,13 +134,19 @@ toClient *requestHandler(fromClient *fromClientObj) {
     if (fromClientObj->type == AUTHORIZATION) {
 
         toClientObj = authorizationServer(fromClientObj);
+
     } else if (fromClientObj->type == SEARCH) {
-        toClientObj = searchInDbServer(fromClientObj);
+
+        toClientObj = searchCompanyInvertory(fromClientObj);
+
     } else if (fromClientObj->type == INVENTORY) {
+
 
     } else if (fromClientObj->type == PURCHASE) {
 
+
     } else if (fromClientObj->type == JOURNAL) {
+
 
     }
 
@@ -164,11 +159,29 @@ toClient *authorizationServer(fromClient *fromClientObj) { //todo: assign value 
                                  fromClientObj->authorization.password);
 
     toClientObj->type = AUTHORIZATION;
+    if (auth_result == TRUE) {
+        toClientObj->authorization.isExist = TRUE;
+        strcpy(toClientObj->authorization.name, "Jasurbek");
+        strcpy(toClientObj->authorization.contact, "998979997507");
+        strcpy(toClientObj->authorization.id, "u1510326");
+        strcpy(toClientObj->authorization.address, "Sebzor");
+        toClientObj->authorization.user_type = DRUGSTORE;
+        return toClientObj;
+    }
+        toClientObj->authorization.isExist = FALSE;
 
     return toClientObj;
 }
 
-toClient* searchInDbServer(fromClient *fromClientObj) {
-    searchByName(fromClientObj->search.name);
+toClient* searchCompanyInvertory(fromClient *fromClientObj) {
+
+}
+
+toClient* showInvertoryServer(fromClient * fromClientObj) {
+
+}
+
+toClient* showComanyOrders(fromClient * fromClientObj) {
+
 }
 
