@@ -35,18 +35,15 @@ bool authorization(char *login_id, char *login_password) {
 
     if (numrows == 0) {
         return FALSE;
-    } else {
-        int num_fields = mysql_num_fields(result);
-        MYSQL_ROW row;
-        //MYSQL_FIELD *field;
-        while ((row = mysql_fetch_row(result))) {
-            for (int i = 0; i < num_fields; i++) {
-                printf("%s ", row[i] ? row[i] : "NULL");
-            }
-            printf("\n");
-        }
     }
     return TRUE;
+}
+void *searchUser(char *user_id, char *user_password){
+    if(authorization(user_id, user_password)){
+        return searchFromTable(user_id, "authorization", "id");
+    }
+
+
 }
 bool isExistAlready(char *user_id, char *tablename,char *field){
 
@@ -113,23 +110,36 @@ void *searchFromTable(char *id, char *tablename, char *colname){
     MYSQL_RES *result = mysql_store_result(con);
     return object_parser(tablename, result);
 }
-void viewInventory(char *id){
-    searchFromTable(id, "medicine", "comp_name");
+void *viewStore(char *id){
+    return searchFromTable(id,"company","comp_id" );
 }
-void viewOrders(char *id){
-    searchFromTable(id, "journal", "comp_name");
+void *viewInventory(char *id){
+    return searchFromTable(id, "medicine", "comp_name");
+}
+void *viewOrders(char *id){
+    return searchFromTable(id, "journal", "comp_name");
 }
 
 // Store queries
+void *viewMedicine(){
+    MYSQL *con =connectToDB();
+    char query[1024];
+    sprintf(query,"SELECT * FROM medicine");
+    if (mysql_query(con, query)) {
+        finish_with_error(con);
+    }
+    MYSQL_RES *result = mysql_store_result(con);
+    return object_parser("medicine", result);
+}
 
-void viewStoreInventory(char *id){
-    searchFromTable(id, "inventory","store_id" );
+void *viewStoreInventory(char *id){
+    return searchFromTable(id, "inventory","store_id" );
 }
-void searchByName(char *med_name){
-    searchFromTable(med_name, "medicine", "med_name");
+void *searchByName(char *med_name){
+    return searchFromTable(med_name, "medicine", "med_name");
 }
-void searchById(char *med_id){
-    searchFromTable(med_id, "medicine", "med_id");
+void *searchById(char *med_id){
+    return searchFromTable(med_id, "medicine", "med_id");
 }
 void orderRegister(char *med_id, char *comp_id, char *store_id, int quantity){
     MYSQL *con=connectToDB();
@@ -144,24 +154,4 @@ void orderRegister(char *med_id, char *comp_id, char *store_id, int quantity){
 }
 
 
-/*
-int main(int argc, char **argv)
-{
-   /* char id[10], description[20], name[10], adress[30], comp_id[30];
-    float price;
-    scanf("%s",id);
-    scanf("%s" ,name);
-    scanf("%s" ,description);
-    scanf("%f",&price );
-    scanf("%s" ,comp_id);
- /* bool a =authorization(id, pass);
-  if(a)
-  printf("registered");
-  else
-  printf("not found");
-    viewOrders("hi123");
-  
-  exit(0);
-}
-*/
 

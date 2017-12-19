@@ -13,9 +13,9 @@
 struct auth_back {
     int isExist;
     char id[MAX_SIZE];
-    char name[MAX_TEXT];
+    char name[MAX_SIZE];
     char address[MAX_TEXT];
-    char contact[MAX_TEXT];
+    char contact[MAX_SIZE];
     uid_t user_type;
 };
 
@@ -24,7 +24,7 @@ struct search_back {
     char med_id[MAX_SIZE];
     char name[MAX_SIZE];
     char description[MAX_TEXT];
-    float price;
+    double price;
     char comp_id[MAX_SIZE];
 };
 
@@ -43,6 +43,7 @@ struct purchase_back {
     char store_id[MAX_SIZE];
     char med_id[MAX_SIZE];
     int quantity;
+    int status;
 };
 
 struct journal_back {
@@ -58,6 +59,7 @@ struct journal_back {
 struct authorizing {
     char login[MAX_SIZE];
     char password[MAX_SIZE];
+    uid_t type;
 };
 
 struct searching {
@@ -75,6 +77,7 @@ typedef struct {
     struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
     struct journal_back journal[MAX_TEXT];
+
     uid_t type;
 } toClient;
 

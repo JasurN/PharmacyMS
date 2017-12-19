@@ -11,11 +11,11 @@
 #define dbPassword "Azikinhatashkent"
 #define dbName "pharmacydb"
 
-MYSQL* connectToDB();
 void finish_with_error(MYSQL * con);
 bool authorization(char* login_id, char* login_password);
 void addUser(char *user_id, char *user_password, char *user_name, char *user_adress, char * user_contact,
              int type);
 MYSQL* connectToDB();
+void *searchFromTable(char *id, char *tablename, char *colname);
 
 #endif //PHARMACYMS_DATABASE_H
