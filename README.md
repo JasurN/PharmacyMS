@@ -9,6 +9,8 @@ Pharmacy Management System provides effective connection between producer, selle
 *** Running GUI file instructions:
           1) gcc  -Wall -Wextra -o main main.c $(pkg-config gtk+-3.0 --cflags --libs) -rdynamic //within that directory
           2) ./main
+          3) temporary login: admin
+                       password: admin
 
 
 
