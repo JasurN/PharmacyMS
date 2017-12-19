@@ -39,36 +39,21 @@ int authorization(char *login_id, char *login_password) {
     return type;
 }
 toClient *searchUser(char *user_id, char *user_password){
+    MYSQL *con =connectToDB();
+    char query[1024];
     if(authorization(user_id, user_password) == ADMIN) {
-        MYSQL *con =connectToDB();
-        char query[1024];
         sprintf(query,"SELECT * FROM authorization WHERE id='%s'", user_id);
-        if (mysql_query(con, query)) {
-            finish_with_error(con);
-        }
-        MYSQL_RES *result = mysql_store_result(con);
-        return object_parser("auth+comp", result);
     } else if(authorization(user_id, user_password) == COMPANY){
-        MYSQL *con =connectToDB();
-        char query[1024];
         sprintf(query,"SELECT * FROM authorization natural join company WHERE id='%s'", user_id);
-        if (mysql_query(con, query)) {
-            finish_with_error(con);
-        }
-        MYSQL_RES *result = mysql_store_result(con);
-        return object_parser("auth+comp", result);
     }
     else if(authorization(user_id, user_password) == DRUGSTORE){
-        MYSQL *con =connectToDB();
-        char query[1024];
         sprintf(query,"SELECT * FROM authorization natural join drugstore WHERE id='%s'", user_id);
-        if (mysql_query(con, query)) {
-            finish_with_error(con);
-        }
-        MYSQL_RES *result = mysql_store_result(con);
-        return object_parser("auth+comp", result);
     }
-    return NULL;
+    if (mysql_query(con, query)) {
+        finish_with_error(con);
+    }
+    MYSQL_RES *result = mysql_store_result(con);
+    return object_parser("auth+comp", result);
 }
 bool isExistAlready(char *user_id, char *tablename,char *field){
 
@@ -166,7 +151,7 @@ void *searchByName(char *med_name){
 void *searchById(char *med_id){
     return searchFromTable(med_id, "medicine", "med_id");
 }
-void orderRegister(char *med_id, char *comp_id, char *store_id, int quantity){
+void *orderRegister(char *med_id, char *comp_id, char *store_id, int quantity){
     MYSQL *con=connectToDB();
     char query[1024];
 

@@ -19,5 +19,9 @@ void addUser(char *user_id, char *user_password, char *user_name, char *user_adr
 toClient* searchUser(char*, char*);
 MYSQL* connectToDB();
 void *searchFromTable(char *id, char *tablename, char *colname);
+void *searchByName(char*);
+void *viewStoreInventory(char*);
+void *viewOrders(char*);
+void *orderRegister(char*, char*, char*, int);
 
 #endif //PHARMACYMS_DATABASE_H
