@@ -424,7 +424,6 @@ void clientStrToStruct(const char *message, fromClient *client_query) {
         client_query->authorization.type = (uid_t) admin_type_item->valueint;
                 client_query->type = (uid_t) user_type_item->valueint;
     }
-
     client_query->type = (uid_t) type_item->valueint;
     cJSON_Delete(root);
 }

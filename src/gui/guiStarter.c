@@ -14,7 +14,6 @@ struct newMedicine{
     char NAME[30];
     double PRICE;
     char DESCRIPTION[300];
-    int QUANTITY;
 };
 
 struct newMedicine *newMedicineObject;
@@ -175,7 +174,7 @@ void order_clicked()
     int quantity;
     quantity=atoi(amount);
 
-    orderNewMedicine(newMedicineObject->NAME, quantity, newMedicineObject->ID);
+    orderNewMedicine(newMedicineObject->NAME, quantity, userID);
 
     strcat(temp, newMedicineObject->ID );
     strcat(temp, "       ");

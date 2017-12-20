@@ -129,7 +129,7 @@ fromServer* produceMedicineByCompany(const char *drugName, const char *ID,
 
 }
 
-fromServer* orderNewMedecine(char* name, int quantity, char* storeId) {
+fromServer* orderNewMedicine(char* name, int quantity, char* storeId) {
     toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
     toServerObj->type = PURCHASE;
     strcpy(toServerObj->authorization.login, storeId);
