@@ -168,24 +168,8 @@ fromServer* searchCompany(char* name, int quantity) {
     free(strFromServer);
     return fromServerObj;
 }
-
-fromServer* viewOrder(char* companyID) {
-    toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
-    toServerObj->type = JOURNAL;
-    strcpy(toServerObj->authorization.login, companyID);
-
-    char *strToServer = clientStructToStr(toServerObj);
-    char *strFromServer = clientStart(strToServer);
-
-    fromServer *fromServerObj = (fromServer *) malloc(sizeof(fromServer));
-    printf("Message from server: %s\n", strFromServer);
-    serverStrToStruct(strFromServer, fromServerObj);
-
-    free(toServerObj);
-    free(strFromServer);
-    return fromServerObj;
-}
-/*fromServer* addUser(char* name, int quantity) {
+/*
+fromServer* addUser(char* name, int quantity) {
     toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
     toServerObj->type = PURCHASE;
 

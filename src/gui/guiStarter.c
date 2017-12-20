@@ -175,6 +175,7 @@ void order_clicked()
     int quantity;
     quantity=atoi(amount);
 
+    orderNewMedicine(newMedicineObject->NAME, quantity, newMedicineObject->ID);
 
     strcat(temp, newMedicineObject->ID );
     strcat(temp, "       ");
