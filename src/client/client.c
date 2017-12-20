@@ -169,7 +169,23 @@ fromServer* searchCompany(char* name, int quantity) {
     return fromServerObj;
 }
 
-fromServer* addUser(char* name, int quantity) {
+fromServer* viewOrder(char* companyID) {
+    toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
+    toServerObj->type = JOURNAL;
+    strcpy(toServerObj->authorization.login, companyID);
+
+    char *strToServer = clientStructToStr(toServerObj);
+    char *strFromServer = clientStart(strToServer);
+
+    fromServer *fromServerObj = (fromServer *) malloc(sizeof(fromServer));
+    printf("Message from server: %s\n", strFromServer);
+    serverStrToStruct(strFromServer, fromServerObj);
+
+    free(toServerObj);
+    free(strFromServer);
+    return fromServerObj;
+}
+/*fromServer* addUser(char* name, int quantity) {
     toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
     toServerObj->type = PURCHASE;
 
@@ -186,7 +202,7 @@ fromServer* addUser(char* name, int quantity) {
     free(toServerObj);
     free(strFromServer);
     return fromServerObj;
-}
+}*/
 fromServer* addNewUser(char *user_id,char *user_password, char *user_name, char *user_adress, char *user_contact, int type) {
 
 }

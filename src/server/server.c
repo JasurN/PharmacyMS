@@ -149,8 +149,7 @@ toClient *requestHandler(fromClient *fromClientObj) {
         toClientObj = orderMedicine(fromClientObj);
 
     } else if (fromClientObj->type == JOURNAL) {
-
-
+        toClientObj = showCompanyOrders(fromClientObj);
 
     } else if (fromClientObj->type == MEDICINE) {
 

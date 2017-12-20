@@ -136,7 +136,7 @@ void on_enter_but_clicked() {
 }
 
 
-void search_but_clicked() {//todo: make double price. Important
+void search_but_clicked() {
     printf("it is here");
     newMedicineObject=malloc(sizeof(struct newMedicine));
     const char *searchedtext;
