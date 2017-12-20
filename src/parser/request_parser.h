@@ -71,41 +71,6 @@ struct purchasing {
     int quantity;
 };
 
-typedef struct {
-    struct auth_back authorization;
-    struct search_back search;
-    struct search_back_inventory* search_inventory;
-    struct purchase_back purchase;
-    struct journal_back* journal;
-
-    uid_t type;
-} toClient;
-
-typedef struct {
-    struct authorizing authorization;
-    struct searching search;
-    struct purchasing purchase;
-    uid_t type;
-} toServer;
-
-/* This struct is used when got answer from server by clientOn (Drugstore) */
-typedef struct {
-    struct auth_back authorization;
-    struct search_back search;
-    struct search_back_inventory* search_inventory;
-    struct purchase_back purchase;
-    struct journal_back journal[MAX_TEXT];
-    uid_t type;
-} fromServer;
-
-/* This struct is used when got query from clientOn (Company) */
-typedef struct {
-    struct authorizing authorization;
-    struct searching search;
-    struct purchasing purchase;
-    uid_t type;
-} fromClient;
-
 /* This struct is used by admin */
 
 struct usersToAdmin {
@@ -115,22 +80,56 @@ struct usersToAdmin {
     char contact[MAX_SIZE];
 };
 
-typedef struct {
+struct toAdmin {
     struct usersToAdmin* users;
     uid_t user_type;
-} toAdmin;
+} ;
+
+struct fromAdmin {
+    uid_t user_type;
+};
 
 typedef struct {
-    uid_t user_type;
-} fromAdmin;
+    struct auth_back authorization;
+    struct search_back search;
+    struct search_back_inventory* search_inventory;
+    struct purchase_back purchase;
+    struct journal_back* journal;
+    struct toAdmin admin;
+    uid_t type;
+} toClient;
+
+typedef struct {
+    struct authorizing authorization;
+    struct searching search;
+    struct purchasing purchase;
+    struct fromAdmin admin;
+    uid_t type;
+} toServer;
+
+/* This struct is used when got answer from server by clientOn (Drugstore) */
+typedef struct {
+    struct auth_back authorization;
+    struct search_back search;
+    struct search_back_inventory* search_inventory;
+    struct purchase_back purchase;
+    struct journal_back* journal;
+    struct toAdmin admin;
+    uid_t type;
+} fromServer;
+
+/* This struct is used when got query from clientOn (Company) */
+typedef struct {
+    struct authorizing authorization;
+    struct searching search;
+    struct purchasing purchase;
+    struct fromAdmin admin;
+    uid_t type;
+} fromClient;
 
 void test1();
 char* clientStructToStr(const toServer *);
 char* serverStructToStr(const toClient*);
 void serverStrToStruct(const char *, fromServer *);
 void clientStrToStruct(const char *, fromClient *);
-char* adminClientStructToStr(const toAdmin *admin_struct);
-char* adminServerToStr(const toAdmin *admin_struct);
-void adminServerToStruct(const char *message, toAdmin *admin_answer);
-void adminClientToStruct(const char *message, fromAdmin *admin_query);
 #endif //PHARMACYMS_REQUEST_PARSER_H
