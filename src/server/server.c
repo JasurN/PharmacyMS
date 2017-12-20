@@ -150,9 +150,14 @@ toClient *requestHandler(fromClient *fromClientObj) {
 
     } else if (fromClientObj->type == JOURNAL) {
 
-        
+
+
+    } else if (fromClientObj->type == MEDICINE) {
+
+        toClientObj = showCompanyInventory(fromClientObj);
 
     }
+
 
     return toClientObj;
 }
@@ -175,8 +180,15 @@ toClient *searchCompanyInventory(fromClient *fromClientObj) {
 
 toClient *showInventoryServer(fromClient *fromClientObj) {
     toClient *toClientObj;
-    toClientObj = viewStoreInventory(fromClientObj->search.name);
+    toClientObj = viewStoreInventory(fromClientObj->authorization.login);
     toClientObj->type = INVENTORY;
+    return toClientObj;
+}
+
+toClient *showCompanyInventory(fromClient *fromClientObj) {
+    toClient *toClientObj;
+    toClientObj = viewInventory(fromClientObj->authorization.login);
+    toClientObj->type = MEDICINE;
     return toClientObj;
 }
 

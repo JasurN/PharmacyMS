@@ -20,6 +20,7 @@ fromServer* authorizationClient(const char * login,const char * password);
 fromServer* searchCompanyInventory(const char* searchString);
 fromServer* adminAddUser();
 fromServer* searchStoreInventory(const char* searchString);
+fromServer* viewCompanyMedicine(const char*);
 fromServer* orderNewMedecine(char*, int, char*);
 fromServer* produceMedicineByCompany(const char *drugName, const char *ID, const char *description, const char *price);
 
