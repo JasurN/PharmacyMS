@@ -135,10 +135,10 @@ void *journal_parser(MYSQL_RES *result)
     my_ulonglong num_rows = mysql_num_rows(result);
     toClient *medicine;
     medicine = (toClient *) malloc(sizeof(toClient));
-    medicine->journal = (struct journal_back*) malloc(sizeof(struct journal_back*) * num_rows);
+    medicine->journal = (struct journal_back*) malloc(sizeof(struct journal_back) * num_rows);
     int i=0;
     while ((row = mysql_fetch_row(result))) {
-        medicine = malloc(sizeof(struct purchase_back*));
+        printf("%s", row[0]);
         strncpy(medicine->journal[i].trans_id, row[0], MAX_SIZE);
         strncpy(medicine->journal[i].trans_date, row[1], MAX_SIZE);
         strncpy(medicine->journal[i].comp_id, row[2], MAX_SIZE);

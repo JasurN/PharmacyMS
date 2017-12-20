@@ -2,7 +2,7 @@
 
 int main() {
     //fromServer* fromServerObj = searchCompanyInventory("Teraflu");
-    fromServer* fromServerObj = searchStoreInventory("1125");
+    fromServer* fromServerObj = viewOrder("1124");
 
             free(fromServerObj);
     return 0;

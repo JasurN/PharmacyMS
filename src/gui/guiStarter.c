@@ -5,9 +5,11 @@
 #include "../parser/request_parser.h"
 #include "../client/client.h"
 
-
+#define type1 "1"
 #define type2 "2"
 #define target "Trimol"
+
+char* userID;
 
 GtkBuilder *builder;
 GtkWidget *window, *window1, *window2, *window3;
@@ -52,6 +54,7 @@ void on_enter_but_clicked() {
 
     if (fromServerObj->authorization.isExist == 1) {
 
+        strcpy(userID, fromServerObj->authorization.id);
         if (fromServerObj->authorization.user_type == ADMIN) {
             char *name = "OxyMed";
 
@@ -162,7 +165,7 @@ void filltable1(char *id, char *name, char *price, char *desc) {
     gtk_text_buffer_set_text(buffer1, data, -1);
 }
 
-
+// this button for registration new user.
 void regButClicked() {
     const char *ID, *password, *name, *contact, *address, *type;
     GtkTextView *pharmlist = (GtkTextView *) gtk_builder_get_object(builder, "adPharmList");
@@ -180,27 +183,7 @@ void regButClicked() {
     contact = gtk_entry_get_text(contactfield);
     address = gtk_entry_get_text(addressfield);
 
-
-/*    char order[500] = "   ";
-    strcat(order, ID);
-    strcat(order, "           ");
-    strcat(order, password);
-    strcat(order, "           ");
-    strcat(order, name);
-    strcat(order, "           ");
-    strcat(order, contact);
-    strcat(order, "           ");
-    strcat(order, address);
-    buffer7 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(pharmlist));
-    buffer6 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(comlist));
-    if (strcmp(type, type1) == 0) {
-        gtk_text_buffer_set_text(buffer7, order, -1);
-
-    } else if (strcmp(type, type2) == 0) {
-        gtk_text_buffer_set_text(buffer6, order, -1);
-    } else {
-
-    }*/
+    addNewUser(ID, password, name, address, contact, type);
 }
 
 void addButClicked() {//todo: Implement. produce new medicine button.
@@ -251,11 +234,7 @@ void adDelBut1Clicked() {
     GtkEntry *pharmidfield = (GtkEntry *) gtk_builder_get_object(builder, "adPharmIDEntry");
     pharmId = gtk_entry_get_text(pharmidfield);
 
-    char order[500] = "    ";
-    strcat(order, pharmId);
-
-    buffer4 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(pharmlist));
-    gtk_text_buffer_set_text(buffer4, order, -1);
+    deleteUser(pharmId, 2);
 }
 
 void adDelBut2Clicked() {
@@ -269,4 +248,10 @@ void adDelBut2Clicked() {
 
     buffer5 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(adcomlist));
     gtk_text_buffer_set_text(buffer5, order, -1);
+}
+
+
+void back_but_clicked(){
+    gtk_widget_destroy(window1);
+    gtk_widget_show_all(window);
 }
