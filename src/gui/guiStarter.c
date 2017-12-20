@@ -9,6 +9,15 @@
 #define type2 "2"
 #define target "Trimol"
 
+struct newMedicine{
+    char ID[30];
+    char NAME[30];
+    double PRICE;
+    char DESCRIPTION[300];
+    int QUANTITY;
+};
+
+struct newMedicine *newMedicineObject;
 char* userID;
 
 GtkBuilder *builder;
@@ -54,13 +63,9 @@ void on_enter_but_clicked() {
 
     if (fromServerObj->authorization.isExist == 1) {
 
+        userID = (char *)malloc(sizeof(fromServerObj->authorization.id));
         strcpy(userID, fromServerObj->authorization.id);
         if (fromServerObj->authorization.user_type == ADMIN) {
-            char *name = "OxyMed";
-
-            window1 = GTK_WIDGET(gtk_builder_get_object(builder, "adminWindow"));
-            GtkLabel *storename = (GtkLabel *) gtk_builder_get_object(builder, "drugstore");
-            gtk_label_set_text(GTK_LABEL(storename), name);
 
 
             gtk_widget_show_all(window1);
@@ -69,11 +74,10 @@ void on_enter_but_clicked() {
         }
 
         else if (fromServerObj->authorization.user_type == DRUGSTORE) {
-            char *name = "OxyMed";
 
             window2 = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
             GtkLabel *storename = (GtkLabel *) gtk_builder_get_object(builder, "drugstore");
-            gtk_label_set_text(GTK_LABEL(storename), name);
+            gtk_label_set_text(GTK_LABEL(storename), fromServerObj->authorization.name);
 
 
             gtk_widget_show_all(window2);
@@ -81,15 +85,46 @@ void on_enter_but_clicked() {
 
         }
         else if(fromServerObj->authorization.user_type == COMPANY) {
-            char *name = "OxyMed";
 
             window3 = GTK_WIDGET(gtk_builder_get_object(builder, "companyWindow"));
             GtkLabel *storename = (GtkLabel *) gtk_builder_get_object(builder, "drugstore");
-            gtk_label_set_text(GTK_LABEL(storename), name);
+            gtk_label_set_text(GTK_LABEL(storename), fromServerObj->authorization.name);
+
+            toClient *toClientObj = viewOrders(userID);
+            char tableChar[10000] = "";
+            char *p;
+
+            for (p = toClientObj->journal; *p /*what does this mean?*/; p++)
+            {
+                // Code
+
+                char temp[1000];
+                strcat(temp, toClientObj->journal->trans_id);
+                strcat(temp, "                          ");
 
 
+                strcat(temp, toClientObj->journal->med_id);
+                strcat(temp, "                                  ");
+
+                char quantity[8];
+                sprintf(quantity, "%d", toClientObj->journal->quantity);
+                strcat(temp, quantity);
+                strcat(temp, "                                      ");
+
+                strcat(temp, toClientObj->journal->trans_date);
+                strcat(temp, "                  ");
+
+                strcat(temp, "\n");
+                strcat(tableChar, temp);
+
+            }
+
+            GtkTextView *tablerequest = (GtkTextView*) gtk_builder_get_object(builder, "comReqList");
+            buffer6=gtk_text_view_get_buffer(tablerequest);
+            gtk_text_buffer_set_text(buffer6, tableChar, -1);
             gtk_widget_show_all(window3);
             gtk_widget_destroy(window);
+            free(toClientObj);
         }
     } else {
         GtkLabel *warn = (GtkLabel *) gtk_builder_get_object(builder, "warning");
@@ -103,6 +138,7 @@ void on_enter_but_clicked() {
 
 void search_but_clicked() {//todo: make double price. Important
     printf("it is here");
+    newMedicineObject=malloc(sizeof(struct newMedicine));
     const char *searchedtext;
     GtkEntry *searchfield = (GtkEntry *) gtk_builder_get_object(builder, "search_entry");
     searchedtext = gtk_entry_get_text(searchfield);
@@ -113,6 +149,12 @@ void search_but_clicked() {//todo: make double price. Important
             sprintf(price, "%lf", fromServerObj->search.price);
             filltable1(fromServerObj->search.med_id, fromServerObj->search.name,
                        price, fromServerObj->search.description);
+
+            strcpy(newMedicineObject->DESCRIPTION, fromServerObj->search.description);
+            strcpy(newMedicineObject->ID, fromServerObj->search.med_id);
+            strcpy(newMedicineObject->NAME, fromServerObj->search.name);
+            newMedicineObject->PRICE=fromServerObj->search.price;
+
         }
         free(fromServerObj);
     }
@@ -120,31 +162,33 @@ void search_but_clicked() {//todo: make double price. Important
 
 char order[1000] = "";
 
-void add_but_clicked() {
-    const char *amount, *date;
+void order_clicked()
+{
+    const char *amount;
     GtkTextView *tab2 = (GtkTextView *) gtk_builder_get_object(builder, "display2");
     GtkEntry *amountfield = (GtkEntry *) gtk_builder_get_object(builder, "amount");
-    GtkEntry *datefield = (GtkEntry *) gtk_builder_get_object(builder, "date");
     amount = gtk_entry_get_text(amountfield);
-    date = gtk_entry_get_text(datefield);
+
+
 
     char temp[500] = "";
-    strcat(temp, "123,   ");
+    int quantity;
+    quantity=atoi(amount);
+
+
+    strcat(temp, newMedicineObject->ID );
     strcat(temp, "       ");
-    strcat(temp, "Trimol");
+    strcat(temp,  newMedicineObject->NAME);
     strcat(temp, "       ");
-    strcat(temp, amount);
-    strcat(temp, "       ");
-    strcat(temp, date);
+    strcat(temp, quantity);
     strcat(order, temp);
     strcat(order, "\n");
     buffer2 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tab2));
     gtk_text_buffer_set_text(buffer2, order, -1);
-
-
 }
 
-void filltable1(char *id, char *name, char *price, char *desc) {
+void filltable1(char *id, char *name, char *price, char *desc)
+{
     char data[800] = "";
     char temp[40] = "";
     const char *space = "          ";
@@ -166,7 +210,8 @@ void filltable1(char *id, char *name, char *price, char *desc) {
 }
 
 // this button for registration new user.
-void regButClicked() {
+void regButClicked()
+{
     const char *ID, *password, *name, *contact, *address, *type;
     GtkTextView *pharmlist = (GtkTextView *) gtk_builder_get_object(builder, "adPharmList");
     GtkTextView *comlist = (GtkTextView *) gtk_builder_get_object(builder, "adComList");
@@ -185,8 +230,8 @@ void regButClicked() {
 
     addNewUser(ID, password, name, address, contact, type);
 }
-
-void addButClicked() {//todo: Implement. produce new medicine button.
+void addButClicked()
+{//todo: Implement. produce new medicine button.
     const char *drugName, *id, *descript, *price;
     GtkTextView *inventlist = (GtkTextView *) gtk_builder_get_object(builder, "comInventList");
     GtkEntry *namefield = (GtkEntry *) gtk_builder_get_object(builder, "comNameEntry");
@@ -218,7 +263,7 @@ void comDelButClicked() {
     GtkEntry *comidfield = (GtkEntry *) gtk_builder_get_object(builder, "comIDEntry");
     comId = gtk_entry_get_text(comidfield);
 
-    char order[500] = "                                                        ";
+    char order[500] = "";
     strcat(order, comId);
 
     buffer4 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(inventlist));
@@ -228,13 +273,12 @@ void comDelButClicked() {
 void comRefButClicked() {
 }
 
-void adDelBut1Clicked() {
+void adDelBut1Clicked()
+{
     const char *pharmId;
     GtkTextView *pharmlist = (GtkTextView *) gtk_builder_get_object(builder, "adPharmList");
     GtkEntry *pharmidfield = (GtkEntry *) gtk_builder_get_object(builder, "adPharmIDEntry");
     pharmId = gtk_entry_get_text(pharmidfield);
-
-    deleteUser(pharmId, 2);
 }
 
 void adDelBut2Clicked() {
@@ -250,8 +294,9 @@ void adDelBut2Clicked() {
     gtk_text_buffer_set_text(buffer5, order, -1);
 }
 
+void back3_but_clicked(){
 
-void back_but_clicked(){
-    gtk_widget_destroy(window1);
-    gtk_widget_show_all(window);
+    gtk_widget_destroy(window2);
 }
+
+

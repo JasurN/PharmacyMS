@@ -149,7 +149,7 @@ toClient *requestHandler(fromClient *fromClientObj) {
 
     } else if (fromClientObj->type == JOURNAL) {
         toClientObj = viewOrders(fromClientObj->authorization.login);
-
+        toClientObj->type = JOURNAL;
     }
 
     return toClientObj;
