@@ -163,9 +163,22 @@ void *searchByName(char *med_name){
 void *searchById(char *med_id){
     return searchFromTable(med_id, "medicine", "med_id");
 }
-void orderRegister(char *med_id, char *comp_id, char *store_id, int quantity){
+void orderRegister(char *med_name, char *store_id, int quantity){
     MYSQL *con=connectToDB();
     char query[1024];
+    sprintf(query,"SELECT id, med_id FROM medicine WHERE med_name='%s'", med_name);
+    if (mysql_query(con, query)) {
+        finish_with_error(con);
+    }
+    MYSQL_ROW  row;
+    MYSQL_RES *result = mysql_store_result(con);
+    char *comp_id = (char *)malloc(sizeof(char) * mysql_num_rows(result));
+    char *med_id = (char *)malloc(sizeof(char) * mysql_num_rows(result));
+
+    while ((row = mysql_fetch_row(result))){
+        strcpy(comp_id, row[0]);
+        strcpy(med_id, row[1]);
+    }
 
     sprintf(query,"INSERT INTO journal(comp_id, store_id, med_id, quantity, status) VALUES ('%s', '%s', '%s', %d, %d)",
             comp_id, store_id, med_id, quantity, 0 );

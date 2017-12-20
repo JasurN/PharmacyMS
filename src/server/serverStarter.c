@@ -3,5 +3,6 @@
 #include "../dbManagement/dbManagement.h"
 
 int main() {
-      startServer();
+      //startServer();
+    orderRegister("Trimol", "1125", 56);
 }
