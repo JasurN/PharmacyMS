@@ -139,7 +139,7 @@ void *viewInventory(char *id) {
     return searchFromTable(id, "medicine", "comp_id");
 }
 void *viewOrders(char *id){
-    return searchFromTable(id, "journal", "comp_name");
+    return searchFromTable(id, "journal", "comp_id");
 }
 
 // Store queries
