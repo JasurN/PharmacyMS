@@ -1,6 +1,7 @@
 #include "dbManagement.h"
 #include "../define/define.h"
 #include "../parser/object.h"
+#include "../parser/request_parser.h"
 
 MYSQL *connectToDB() {
     MYSQL *con = mysql_init(NULL);
@@ -49,7 +50,12 @@ toClient *searchUser(char *user_id, char *user_password){
     } else if(authorization(user_id, user_password) == ADMIN){
         sprintf(query,"SELECT * FROM authorization WHERE id='%s'", user_id);
     }else
-        {return NULL;}
+        {
+            toClient *user;
+            user = (toClient *)malloc(sizeof(toClient));
+            user->authorization.isExist = FALSE;
+            return user;
+        }
 
     if (mysql_query(con, query)) {
         finish_with_error(con);
