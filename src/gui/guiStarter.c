@@ -122,9 +122,10 @@ void on_enter_but_clicked() {
             GtkTextView *tablerequest = (GtkTextView*) gtk_builder_get_object(builder, "comReqList");
             buffer6=gtk_text_view_get_buffer(tablerequest);
             gtk_text_buffer_set_text(buffer6, tableChar, -1);
+            free(toClientObj);
+
             gtk_widget_show_all(window3);
             gtk_widget_destroy(window);
-            free(toClientObj);
         }
     } else {
         GtkLabel *warn = (GtkLabel *) gtk_builder_get_object(builder, "warning");
@@ -137,6 +138,7 @@ void on_enter_but_clicked() {
 
 
 void search_but_clicked() {
+    printf("it is here");
     newMedicineObject=malloc(sizeof(struct newMedicine));
     const char *searchedtext;
     GtkEntry *searchfield = (GtkEntry *) gtk_builder_get_object(builder, "search_entry");
