@@ -5,7 +5,7 @@ char* clientStart(char * clientStr) {
     // Structure to connect to the server
     struct sockaddr_in server;
     int server_fd = 0;
-    char buf[MAX_SIZE_BUF] = {0};
+    char buf[MAX_SIZE_BUF * 5] = {0};
 
    // printf("CREATING CLIENT SOCKET...\n");
 

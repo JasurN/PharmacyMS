@@ -49,13 +49,13 @@ void startServer() {
     printf("WAITING FOR CONNECTIONS...\n");
     while ((new_socket = accept(server_fd, (struct sockaddr *) &client, (socklen_t *) &addrlen))) {
         printf("CONNECTION ACCEPTED!!!\n");
-
+        
         // Creating thread for a new clientOn (*cli)
         client_t *cli = (client_t *) malloc(sizeof(client_t));
         cli->addr = client;
         cli->connfd = new_socket;
         cli->uid = id_counter++;
-
+        
         // Adding clientOn to the queue
         queue_add(cli);
 
@@ -84,7 +84,7 @@ void *connection_handler(void *sock_desc) {
     valRead = (int) recv(cli->connfd, buf, MAX_SIZE_BUFF, 0);
 
     char *serverMessage = jsonParser(buf);
-
+    printf("%s\n", serverMessage);
     send(cli->connfd, serverMessage, str_length(serverMessage), 0);
 
     if (valRead == FALSE) {
