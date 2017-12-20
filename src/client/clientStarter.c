@@ -1,9 +1,9 @@
 #include "client.h"
 
 int main() {
-    //fromServer* fromServerObj = searchCompanyInventory("Teraflu");
-    fromServer* fromServerObj = searchStoreInventory("1125");
 
+    //fromServer *fromServerObj = authorizationClient("1124", "12345");
+    fromServer *fromServerObj = orderNewMedecine("Parasetamol", 99, "1127");
             free(fromServerObj);
     return 0;
 }

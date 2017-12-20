@@ -79,7 +79,7 @@ void *connection_handler(void *sock_desc) {
     // Get the socket descriptor to server_fd
     client_t *cli = (client_t *) sock_desc;
     int valRead = 0;
-    char buf[MAX_SIZE_BUFF] = {0};
+    char buf[MAX_SIZE_BUFF];
 
     valRead = (int) recv(cli->connfd, buf, MAX_SIZE_BUFF, 0);
 
@@ -146,9 +146,11 @@ toClient *requestHandler(fromClient *fromClientObj) {
 
     } else if (fromClientObj->type == PURCHASE) {
 
+        toClientObj = orderMedicine(fromClientObj);
 
     } else if (fromClientObj->type == JOURNAL) {
 
+        
 
     }
 
@@ -180,7 +182,8 @@ toClient *showInventoryServer(fromClient *fromClientObj) {
 
 toClient *orderMedicine(fromClient *fromClientObj) {
     toClient *toClientObj;
-    toClientObj = viewOrders(fromClientObj->authorization.login);
+    toClientObj = orderRegister(fromClientObj->purchase.name, fromClientObj->authorization.login,
+                                fromClientObj->purchase.quantity);
     toClientObj->type = PURCHASE;
     return toClientObj;
 }

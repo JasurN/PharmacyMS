@@ -1,5 +1,4 @@
 #include "client.h"
-#include "../parser/request_parser.h"
 
 char* clientStart(char * clientStr) {
     // Structure to connect to the server
@@ -112,7 +111,47 @@ fromServer* produceMedicineByCompany(const char *drugName, const char *ID,
 
 }
 
-fromServer* orderNewMedecine(char* name, int quantity) {
+fromServer* orderNewMedecine(char* name, int quantity, char* id) {
+    toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
+    toServerObj->type = PURCHASE;
+    strcpy(toServerObj->authorization.login, id);
+
+    strcpy(toServerObj->purchase.name, name);
+    toServerObj->purchase.quantity = quantity;
+
+    char *strToServer = clientStructToStr(toServerObj);
+    char *strFromServer = clientStart(strToServer);
+
+    fromServer *fromServerObj = (fromServer *) malloc(sizeof(fromServer));
+    printf("Message from server: %s\n", strFromServer);
+    serverStrToStruct(strFromServer, fromServerObj);
+
+    free(toServerObj);
+    free(strFromServer);
+    return fromServerObj;
+}
+
+
+fromServer* searchCompany(char* name, int quantity) {
+    toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
+    toServerObj->type = PURCHASE;
+
+    strcpy(toServerObj->purchase.name, name);
+    toServerObj->purchase.quantity = quantity;
+
+    char *strToServer = clientStructToStr(toServerObj);
+    char *strFromServer = clientStart(strToServer);
+
+    fromServer *fromServerObj = (fromServer *) malloc(sizeof(fromServer));
+    printf("Message from server: %s\n", strFromServer);
+    serverStrToStruct(strFromServer, fromServerObj);
+
+    free(toServerObj);
+    free(strFromServer);
+    return fromServerObj;
+}
+
+fromServer* addUser(char* name, int quantity) {
     toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
     toServerObj->type = PURCHASE;
 

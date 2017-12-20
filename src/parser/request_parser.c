@@ -162,7 +162,7 @@ char* serverStructToStr(const toClient* server_message) {
         case JOURNAL:
             cJSON_AddItemToObject(root, "journal", journal = cJSON_CreateArray());
             i = 0;
-            while (server_message->journal) {
+            while (i < (sizeof(server_message->journal) / sizeof(server_message->journal[0]))) {
                 cJSON_AddItemToArray(journal, purchase_query = cJSON_CreateObject());
                 cJSON_AddItemToObject(purchase_query, "trans_id",
                                       cJSON_CreateString(server_message->journal[i].trans_id));
@@ -182,7 +182,7 @@ char* serverStructToStr(const toClient* server_message) {
         case USERS:
             i = 0;
             cJSON_AddItemToObject(root, "users", users = cJSON_CreateArray());
-            while (server_message->admin.users) {
+            while (i < (sizeof(server_message->admin.users) / sizeof(server_message->admin.users[0]))) {
                 cJSON_AddItemToArray(users, user = cJSON_CreateObject());
                 cJSON_AddItemToObject(user, "id",
                                       cJSON_CreateString(server_message->admin.users[i].id));
