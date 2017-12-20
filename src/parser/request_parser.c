@@ -116,7 +116,8 @@ char* serverStructToStr(const toClient* server_message) {
         case INVENTORY:
             cJSON_AddItemToObject(root, "inventory", searching_inventory = cJSON_CreateArray());
             i = 0;
-            while (server_message->search_inventory) {
+            while (server_message->search_inventory) {//TODO: BUG IS HERE
+                printf("here %d i\n", i);
                 cJSON_AddItemToArray(searching_inventory, medical = cJSON_CreateObject());
                 cJSON_AddItemToObject(medical, "store_id",
                                       cJSON_CreateString(server_message->search_inventory[i].store_id));

@@ -88,6 +88,7 @@ void addUser(char *user_id,char *user_password, char *user_name, char *user_adre
         finish_with_error(con);
         }
         char query1[1024];
+
         if (type == COMPANY) {
             sprintf(query1,"INSERT INTO company VALUES('%s','%s', '%s','%s')", user_id, user_name, user_adress, user_contact);
             if (mysql_query(con, query1)) {
@@ -98,6 +99,8 @@ void addUser(char *user_id,char *user_password, char *user_name, char *user_adre
             if (mysql_query(con, query1)) {
             finish_with_error(con);
             }
+
+
         }
     }
     else printf("User is already exist!");

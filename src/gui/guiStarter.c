@@ -203,20 +203,22 @@ void regButClicked() {
     }*/
 }
 
-void addButClicked() {
-    const char *name, *id, *descript, *price;
+void addButClicked() {//todo: Implement. produce new medicine button.
+    const char *drugName, *id, *descript, *price;
     GtkTextView *inventlist = (GtkTextView *) gtk_builder_get_object(builder, "comInventList");
     GtkEntry *namefield = (GtkEntry *) gtk_builder_get_object(builder, "comNameEntry");
     GtkEntry *idfield = (GtkEntry *) gtk_builder_get_object(builder, "comIDEntr");
     GtkEntry *descriptfield = (GtkEntry *) gtk_builder_get_object(builder, "comDesEntry");
     GtkEntry *pricefield = (GtkEntry *) gtk_builder_get_object(builder, "comPriceEntry");
-    name = gtk_entry_get_text(namefield);
+    drugName = gtk_entry_get_text(namefield);
     id = gtk_entry_get_text(idfield);
     descript = gtk_entry_get_text(descriptfield);
     price = gtk_entry_get_text(pricefield);
 
+    produceMedicineByCompany(drugName, id, descript, price);
+
     char order[500] = "   ";
-    strcat(order, name);
+    strcat(order, drugName);
     strcat(order, "           ");
     strcat(order, id);
     strcat(order, "           ");

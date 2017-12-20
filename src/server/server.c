@@ -49,13 +49,13 @@ void startServer() {
     printf("WAITING FOR CONNECTIONS...\n");
     while ((new_socket = accept(server_fd, (struct sockaddr *) &client, (socklen_t *) &addrlen))) {
         printf("CONNECTION ACCEPTED!!!\n");
-        
+
         // Creating thread for a new clientOn (*cli)
         client_t *cli = (client_t *) malloc(sizeof(client_t));
         cli->addr = client;
         cli->connfd = new_socket;
         cli->uid = id_counter++;
-        
+
         // Adding clientOn to the queue
         queue_add(cli);
 
@@ -84,7 +84,7 @@ void *connection_handler(void *sock_desc) {
     valRead = (int) recv(cli->connfd, buf, MAX_SIZE_BUFF, 0);
 
     char *serverMessage = jsonParser(buf);
-    printf("%s\n", serverMessage);
+    printf("server message: %s\n", serverMessage);
     send(cli->connfd, serverMessage, str_length(serverMessage), 0);
 
     if (valRead == FALSE) {
@@ -155,42 +155,55 @@ toClient *requestHandler(fromClient *fromClientObj) {
     return toClientObj;
 }
 
-toClient *authorizationServer(fromClient *fromClientObj) { //todo: assign value of user from database
+toClient *authorizationServer(fromClient *fromClientObj) {
     toClient *toClientObj;
     toClientObj = searchUser(fromClientObj->authorization.login,
-                                 fromClientObj->authorization.password);
+                             fromClientObj->authorization.password);
 
     toClientObj->type = AUTHORIZATION;
     return toClientObj;
 }
 
-toClient* searchCompanyInventory(fromClient *fromClientObj) {
+toClient *searchCompanyInventory(fromClient *fromClientObj) {
     toClient *toClientObj;
     toClientObj = searchByName(fromClientObj->search.name);
     toClientObj->type = SEARCH;
     return toClientObj;
 }
 
-toClient* showInventoryServer(fromClient * fromClientObj) {
+toClient *showInventoryServer(fromClient *fromClientObj) {
     toClient *toClientObj;
-    toClientObj = viewStoreInventory(fromClientObj->authorization.login);
+    toClientObj = viewStoreInventory(fromClientObj->search.name);
     toClientObj->type = INVENTORY;
     return toClientObj;
 }
 
-toClient* ordermedicine(fromClient * fromClientObj) {
+toClient *orderMedicine(fromClient *fromClientObj) {
     toClient *toClientObj;
     toClientObj = viewOrders(fromClientObj->authorization.login);
     toClientObj->type = PURCHASE;
     return toClientObj;
 }
 
-toClient* showCompanyOrders(fromClient * fromClientObj) {
+toClient *showCompanyOrders(fromClient *fromClientObj) {
     toClient *toClientObj;
     toClientObj = viewOrders(fromClientObj->authorization.login);
     toClientObj->type = JOURNAL;
     return toClientObj;
 }
 
+toClient *addNewUser(fromClient *fromClientObj) {//todo : implement with parsers
+    addUser("id", "password", "username", "userAddress", "userContact", 1);
+}
+
+toClient *deleteUser(fromClient *fromClientObj) {
+    int userType;
+    if (userType == 1) {
+        deleteCompany("id");
+    }
+    else if(userType == 2) {
+        deleteStore("id");
+    }
+}
 
 

@@ -72,6 +72,7 @@ fromServer* authorizationClient(const char * login, const char * password) {
     return fromServerObj;
 }
 
+
 fromServer* searchCompanyInventory(const char* searchString) {
     toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
     toServerObj->type = SEARCH;
@@ -89,10 +90,34 @@ fromServer* searchCompanyInventory(const char* searchString) {
     return fromServerObj;
 }
 
-fromServer* searchStoreInventory(char* searchString) {
+fromServer* searchStoreInventory(const char* searchString) {
     toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
     toServerObj->type = INVENTORY;
-    strcpy(toServerObj->authorization.login, searchString);
+    strcpy(toServerObj->search.name, searchString);
+
+    char *strToServer = clientStructToStr(toServerObj);
+    char *strFromServer = clientStart(strToServer);
+
+    fromServer *fromServerObj = (fromServer *) malloc(sizeof(fromServer));
+    printf("Message from server: %s\n", strFromServer);
+    serverStrToStruct(strFromServer, fromServerObj);
+
+    free(toServerObj);
+    free(strFromServer);
+    return fromServerObj;
+}
+
+fromServer* produceMedicineByCompany(const char *drugName, const char *ID,
+                                     const char *description, const char *price) {
+
+}
+
+fromServer* orderNewMedecine(char* name, int quantity) {
+    toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
+    toServerObj->type = PURCHASE;
+
+    strcpy(toServerObj->purchase.name, name);
+    toServerObj->purchase.quantity = quantity;
 
     char *strToServer = clientStructToStr(toServerObj);
     char *strFromServer = clientStart(strToServer);

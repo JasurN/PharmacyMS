@@ -36,4 +36,9 @@ toClient* searchCompanyInventory(fromClient *);
 toClient* showInventoryDrugStore(fromClient *);
 toClient* showCompanyOrders(fromClient *);
 toClient* showInventoryServer(fromClient *);
+toClient* produceMedicine(fromClient *);
+toClient* orderMedicine(fromClient *);
+
+toClient* addNewUser(fromClient *);
+toClient* deleteUser(fromClient *);
 #endif //PHARMACYMS_SERVER_H
