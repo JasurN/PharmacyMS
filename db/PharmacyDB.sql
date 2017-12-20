@@ -39,7 +39,7 @@ med_id VARCHAR(10) not null,
 med_name VARCHAR(20) not null,
 med_quantity NUMERIC(4),
 PRIMARY KEY (id, med_id),
-FOREIGN KEY (id) REFERENCES drugstore(store_id)
+FOREIGN KEY (id) REFERENCES drugstore(id)
 ON DELETE CASCADE,
 FOREIGN KEY (med_id) REFERENCES medicine(med_id)
 on DELETE CASCADE

@@ -18,7 +18,7 @@ struct newMedicine{
 };
 
 struct newMedicine *newMedicineObject;
-char* userID;
+char userID[4];
 
 GtkBuilder *builder;
 GtkWidget *window, *window1, *window2, *window3;
@@ -63,7 +63,7 @@ void on_enter_but_clicked() {
 
     if (fromServerObj->authorization.isExist == 1) {
 
-        userID = (char *)malloc(sizeof(fromServerObj->authorization.id));
+
         strcpy(userID, fromServerObj->authorization.id);
         if (fromServerObj->authorization.user_type == ADMIN) {
 
@@ -137,7 +137,6 @@ void on_enter_but_clicked() {
 
 
 void search_but_clicked() {
-    printf("it is here");
     newMedicineObject=malloc(sizeof(struct newMedicine));
     const char *searchedtext;
     GtkEntry *searchfield = (GtkEntry *) gtk_builder_get_object(builder, "search_entry");
@@ -175,7 +174,7 @@ void order_clicked()
     int quantity;
     quantity=atoi(amount);
 
-    orderNewMedicine(newMedicineObject->NAME, quantity, newMedicineObject->ID);
+    orderNewMedicine(newMedicineObject->NAME, quantity, userID);
 
     strcat(temp, newMedicineObject->ID );
     strcat(temp, "       ");
