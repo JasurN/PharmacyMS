@@ -149,8 +149,7 @@ toClient *requestHandler(fromClient *fromClientObj) {
         toClientObj = orderMedicine(fromClientObj);
 
     } else if (fromClientObj->type == JOURNAL) {
-
-
+        toClientObj = showCompanyOrders(fromClientObj);
 
     } else if (fromClientObj->type == MEDICINE) {
 
@@ -213,7 +212,7 @@ toClient *addNewUser(fromClient *fromClientObj) {//todo : implement with parsers
 
 toClient *deleteUser(fromClient *fromClientObj) {
     if (fromClientObj->admin.user_type == COMPANY) {
-        deleteCompany(fromClientObj->admin.);
+        //deleteCompany(fromClientObj->admin.); //todo; finish delete
     }
     else if(fromClientObj->admin.user_type == DRUGSTORE) {
         deleteStore("id");
