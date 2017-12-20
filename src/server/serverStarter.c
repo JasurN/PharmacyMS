@@ -3,5 +3,5 @@
 #include "../dbManagement/dbManagement.h"
 
 int main() {
-    startServer();
+      startServer();
 }

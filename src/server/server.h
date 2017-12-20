@@ -31,6 +31,7 @@ char * jsonParser(const char *);
 toClient* requestHandler(fromClient *);
 toClient* authorizationServer(fromClient *);
 
+toClient *showCompanyInventory(fromClient *);
 toClient* searchInDbServer(fromClient *);
 toClient* searchCompanyInventory(fromClient *);
 toClient* showInventoryDrugStore(fromClient *);

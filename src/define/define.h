@@ -11,7 +11,9 @@
 #define INVENTORY 2
 #define PURCHASE 3
 #define JOURNAL 4
-#define USERS 5
+#define MEDICINE 5
+#define NEW_MEDICINE 6
+#define USERS 7
 //User types
 #define ADMIN 0
 #define COMPANY 1

@@ -79,7 +79,7 @@ void *connection_handler(void *sock_desc) {
     // Get the socket descriptor to server_fd
     client_t *cli = (client_t *) sock_desc;
     int valRead = 0;
-    char buf[MAX_SIZE_BUFF] = {0};
+    char buf[MAX_SIZE_BUFF];
 
     valRead = (int) recv(cli->connfd, buf, MAX_SIZE_BUFF, 0);
 
@@ -146,11 +146,18 @@ toClient *requestHandler(fromClient *fromClientObj) {
 
     } else if (fromClientObj->type == PURCHASE) {
 
+        toClientObj = orderMedicine(fromClientObj);
 
     } else if (fromClientObj->type == JOURNAL) {
-        toClientObj = viewOrders(fromClientObj->authorization.login);
-        toClientObj->type = JOURNAL;
+
+
+
+    } else if (fromClientObj->type == MEDICINE) {
+
+        toClientObj = showCompanyInventory(fromClientObj);
+
     }
+
 
     return toClientObj;
 }
@@ -173,14 +180,22 @@ toClient *searchCompanyInventory(fromClient *fromClientObj) {
 
 toClient *showInventoryServer(fromClient *fromClientObj) {
     toClient *toClientObj;
-    toClientObj = viewStoreInventory(fromClientObj->search.name);
+    toClientObj = viewStoreInventory(fromClientObj->authorization.login);
     toClientObj->type = INVENTORY;
+    return toClientObj;
+}
+
+toClient *showCompanyInventory(fromClient *fromClientObj) {
+    toClient *toClientObj;
+    toClientObj = viewInventory(fromClientObj->authorization.login);
+    toClientObj->type = MEDICINE;
     return toClientObj;
 }
 
 toClient *orderMedicine(fromClient *fromClientObj) {
     toClient *toClientObj;
-    toClientObj = viewOrders(fromClientObj->authorization.login);
+    toClientObj = orderRegister(fromClientObj->purchase.name, fromClientObj->authorization.login,
+                                fromClientObj->purchase.quantity);
     toClientObj->type = PURCHASE;
     return toClientObj;
 }

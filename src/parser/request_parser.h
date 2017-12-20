@@ -92,6 +92,7 @@ struct fromAdmin {
 typedef struct {
     struct auth_back authorization;
     struct search_back search;
+    struct search_back *medicine;
     struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
     struct journal_back* journal;
@@ -111,6 +112,7 @@ typedef struct {
 typedef struct {
     struct auth_back authorization;
     struct search_back search;
+    struct search_back* medicine;
     struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
     struct journal_back* journal;

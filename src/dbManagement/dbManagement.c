@@ -135,11 +135,11 @@ void *viewStore(char *id){
     return searchFromTable(id,"company","id" );
 }
 
-void *viewInventory(char *id){
+void *viewInventory(char *id) {
     return searchFromTable(id, "medicine", "comp_id");
 }
 void *viewOrders(char *id){
-    return searchFromTable(id, "journal", "comp_id");
+    return searchFromTable(id, "journal", "comp_name");
 }
 
 // Store queries
@@ -163,7 +163,7 @@ void *searchByName(char *med_name){
 void *searchById(char *med_id){
     return searchFromTable(med_id, "medicine", "med_id");
 }
-void orderRegister(char *med_name, char *store_id, int quantity){
+void *orderRegister(char *med_name, char *store_id, int quantity){
     MYSQL *con=connectToDB();
     char query[1024];
     sprintf(query,"SELECT id, med_id FROM medicine WHERE med_name='%s'", med_name);
@@ -185,15 +185,42 @@ void orderRegister(char *med_name, char *store_id, int quantity){
     if (mysql_query(con, query)) {
         finish_with_error(con);
     }
-
+    sprintf(query,"Select * from journal where comp_id='%s' and store_id = '%s' and"
+                    " med_id='%s' and quantity=%d and status=0", comp_id, store_id, med_id, quantity );
+    if (mysql_query(con, query)) {
+        finish_with_error(con);
+    }
+    result = mysql_store_result(con);
+    toClient *client_answer = (toClient *)malloc(sizeof(toClient));
+    while ((row = mysql_fetch_row(result))){
+        client_answer->purchase.success = TRUE;
+        strcpy(client_answer->purchase.trans_id, row[0]);
+        strcpy(client_answer->purchase.trans_date, row[1]);
+        strcpy(client_answer->purchase.comp_id, row[2]);
+        strcpy(client_answer->purchase.store_id, row[3]);
+        strcpy(client_answer->purchase.med_id, row[4]);
+        client_answer->purchase.quantity = atoi(row[5]);
+        client_answer->purchase.status = atoi(row[6]);
+    }
+    return client_answer;
 }
-void medDelivered(char *trans_id){
+void medDelivered(char *trans_id, char *med_id){
     MYSQL *con=connectToDB();
     char query[1024];
 
     sprintf(query,"UPDATE journal set status=1 where trans_id=trans_id");
     if (mysql_query(con, query)) {
         finish_with_error(con);
+    }
+
+    sprintf(query,"SELECT * from inventory where  med_id=med_id");
+    if (mysql_query(con, query)) {
+        finish_with_error(con);
+    }
+    MYSQL_RES *result = mysql_store_result(con);
+    int num = (int) mysql_num_rows(result);
+    if (num == 0) {
+
     }
 }
 
