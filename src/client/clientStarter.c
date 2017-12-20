@@ -3,10 +3,7 @@
 
 int main() {
 
-    //fromServer *fromServerObj = authorizationClient("1124", "12345");
-    //fromServer *fromServerObj = orderNewMedecine("Parasetamol", 99, "1127");
-    fromServer *fromServerObj = viewCompanyMedicine("1123");
-    printf("%s", fromServerObj->medicine[0].name);
+    fromServer *fromServerObj = orderNewMedicine("Trimol", 100, "m001");
             free(fromServerObj);
     return 0;
 }

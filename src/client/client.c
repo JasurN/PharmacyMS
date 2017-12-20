@@ -73,10 +73,10 @@ fromServer* authorizationClient(const char * login, const char * password) {
 }
 
 
-fromServer* searchCompanyInventory(const char* searchString) {
+fromServer* searchCompanyInventory(const char* id) {
     toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
     toServerObj->type = SEARCH;
-    strcpy(toServerObj->search.name, searchString);
+    strcpy(toServerObj->search.name, id);
 
     char *strToServer = clientStructToStr(toServerObj);
     char *strFromServer = clientStart(strToServer);
@@ -129,7 +129,7 @@ fromServer* produceMedicineByCompany(const char *drugName, const char *ID,
 
 }
 
-fromServer* orderNewMedecine(char* name, int quantity, char* id) {
+fromServer* orderNewMedicine(char* name, int quantity, char* id) {
     toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
     toServerObj->type = PURCHASE;
     strcpy(toServerObj->authorization.login, id);
