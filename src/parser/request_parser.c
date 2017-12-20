@@ -56,6 +56,12 @@ char* clientStructToStr(const toServer *client_struct) {
             cJSON_AddItemToObject(root, "journal", journal = cJSON_CreateObject());
             cJSON_AddItemToObject(journal, "id",
                                   cJSON_CreateString(client_struct->authorization.login));
+            break;
+        case USERS:
+            cJSON_AddItemToObject(root, "user_type",
+                                  cJSON_CreateNumber(ADMIN));
+            cJSON_AddItemToObject(root, "type",
+                                  cJSON_CreateNumber(client_struct->admin.user_type));
         default:
             perror("Please enter proper type!");
             break;
@@ -74,6 +80,8 @@ char* serverStructToStr(const toClient* server_message) {
     cJSON *purchasing;
     cJSON *journal;
     cJSON *purchase_query;
+    cJSON *users;
+    cJSON *user;
     char *out;
     int i;
 
@@ -170,45 +178,26 @@ char* serverStructToStr(const toClient* server_message) {
                                       cJSON_CreateNumber(server_message->journal[i].quantity));
                 ++i;
             }
+            break;
+        case USERS:
+            i = 0;
+            cJSON_AddItemToObject(root, "users", users = cJSON_CreateArray());
+            while (server_message->admin.users) {
+                cJSON_AddItemToArray(users, user = cJSON_CreateObject());
+                cJSON_AddItemToObject(user, "id",
+                                      cJSON_CreateString(server_message->admin.users[i].id));
+                cJSON_AddItemToObject(user, "name",
+                                      cJSON_CreateString(server_message->admin.users[i].name));
+                cJSON_AddItemToObject(user, "address",
+                                      cJSON_CreateString(server_message->admin.users[i].address));
+                cJSON_AddItemToObject(user, "contact",
+                                      cJSON_CreateString(server_message->admin.users[i].contact));
+                ++i;
+            }
+            break;
         default:
             perror("Please enter proper type!");
             break;
-    }
-    out = cJSON_Print(root);
-    cJSON_Delete(root);
-    return out;
-}
-
-char* adminClientStructToStr(const toAdmin *admin_struct) {
-    cJSON *root = cJSON_CreateObject();
-    char *out;
-    cJSON_AddItemToObject(root, "type",
-                          cJSON_CreateNumber(admin_struct->user_type));
-    out = cJSON_Print(root);
-    cJSON_Delete(root);
-    return out;
-}
-
-char* adminServerToStr(const toAdmin *admin_struct) {
-    cJSON *root = cJSON_CreateObject();
-    cJSON *users;
-    cJSON *user;
-    char *out;
-    int i = 0;
-    cJSON_AddItemToObject(root, "type",
-                          cJSON_CreateNumber(admin_struct->user_type));
-    cJSON_AddItemToObject(root, "users", users = cJSON_CreateArray());
-    while (admin_struct->users) {
-        cJSON_AddItemToArray(users, user = cJSON_CreateObject());
-        cJSON_AddItemToObject(user, "id",
-                              cJSON_CreateString(admin_struct->users[i].id));
-        cJSON_AddItemToObject(user, "name",
-                              cJSON_CreateString(admin_struct->users[i].name));
-        cJSON_AddItemToObject(user, "address",
-                              cJSON_CreateString(admin_struct->users[i].address));
-        cJSON_AddItemToObject(user, "contact",
-                              cJSON_CreateString(admin_struct->users[i].contact));
-        ++i;
     }
     out = cJSON_Print(root);
     cJSON_Delete(root);
@@ -312,6 +301,26 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
             strcpy(server_answer->journal[i].med_id, comp_id_item->valuestring);
             server_answer->journal[i].quantity = quantity_item->valueint;
         }
+    } else if (type_item->valueint == USERS) {
+        cJSON *user_type_item = cJSON_GetObjectItemCaseSensitive(root, "type");
+        cJSON *users_item = cJSON_GetObjectItemCaseSensitive(root, "users");
+        cJSON *user_item;
+        cJSON *id_item;
+        cJSON *name_item;
+        cJSON *address_item;
+        cJSON *contact_item;
+        for (int i = 0; i < cJSON_GetArraySize(users_item); ++i) {
+            user_item = cJSON_GetArrayItem(users_item, i);
+            id_item = cJSON_GetObjectItemCaseSensitive(user_item, "id");
+            name_item = cJSON_GetObjectItemCaseSensitive(user_item, "name");
+            address_item = cJSON_GetObjectItemCaseSensitive(user_item, "address");
+            contact_item = cJSON_GetObjectItemCaseSensitive(user_item, "contact");
+            strcpy(server_answer->admin.users[i].id, id_item->valuestring);
+            strcpy(server_answer->admin.users[i].name, name_item->valuestring);
+            strcpy(server_answer->admin.users[i].address, address_item->valuestring);
+            strcpy(server_answer->admin.users[i].contact, contact_item->valuestring);
+        }
+        server_answer->authorization.user_type = (uid_t) user_type_item->valueint;
     }
 
     server_answer->type = (uid_t) type_item->valueint;
@@ -345,43 +354,18 @@ void clientStrToStruct(const char *message, fromClient *client_query) {
         strcpy(client_query->authorization.login, id_item->valuestring);
         strcpy(client_query->purchase.name, name_item->valuestring);
         client_query->purchase.quantity = quantity_item->valueint;
-    } else if(type_item->valueint == JOURNAL) {
+    } else if (type_item->valueint == JOURNAL) {
         cJSON *journal_item = cJSON_GetObjectItemCaseSensitive(root, "journal");
         cJSON *id_item = cJSON_GetObjectItemCaseSensitive(journal_item, "id");
         strcpy(client_query->authorization.login, id_item->valuestring);
+    } else if (type_item->valueint == USERS) {
+        cJSON *admin_type_item = cJSON_GetObjectItemCaseSensitive(root, "user_type");
+        cJSON *user_type_item = cJSON_GetObjectItemCaseSensitive(root, "type");
+        client_query->authorization.type = (uid_t) admin_type_item->valueint;
+                client_query->type = (uid_t) user_type_item->valueint;
     }
 
     client_query->type = (uid_t) type_item->valueint;
     cJSON_Delete(root);
 }
 
-void adminServerToStruct(const char *message, toAdmin *admin_answer) {
-    cJSON *root = cJSON_Parse(message);
-    cJSON *user_type_item = cJSON_GetObjectItemCaseSensitive(root, "type");
-    cJSON *users_item = cJSON_GetObjectItemCaseSensitive(root, "users");
-    cJSON *user_item;
-    cJSON *id_item;
-    cJSON *name_item;
-    cJSON *address_item;
-    cJSON *contact_item;
-    for (int i = 0; i < cJSON_GetArraySize(users_item); ++i) {
-        user_item = cJSON_GetArrayItem(users_item, i);
-        id_item = cJSON_GetObjectItemCaseSensitive(user_item, "id");
-        name_item = cJSON_GetObjectItemCaseSensitive(user_item, "name");
-        address_item = cJSON_GetObjectItemCaseSensitive(user_item, "address");
-        contact_item = cJSON_GetObjectItemCaseSensitive(user_item, "contact");
-        strcpy(admin_answer->users[i].id, id_item->valuestring);
-        strcpy(admin_answer->users[i].name, name_item->valuestring);
-        strcpy(admin_answer->users[i].address, address_item->valuestring);
-        strcpy(admin_answer->users[i].contact, contact_item->valuestring);
-    }
-    admin_answer->user_type = (uid_t) user_type_item->valueint;
-    cJSON_Delete(root);
-}
-
-void adminClientToStruct(const char *message, fromAdmin *admin_query) {
-    cJSON *root = cJSON_Parse(message);
-    cJSON *user_type_item = cJSON_GetObjectItemCaseSensitive(root, "type");
-    admin_query->user_type = (uid_t) user_type_item->valueint;
-    cJSON_Delete(root);
-}

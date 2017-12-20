@@ -98,7 +98,7 @@ void on_enter_but_clicked() {
 }
 
 
-void search_but_clicked() {//todo: make double price. Important
+void search_but_clicked() {
     printf("it is here");
     const char *searchedtext;
     GtkEntry *searchfield = (GtkEntry *) gtk_builder_get_object(builder, "search_entry");

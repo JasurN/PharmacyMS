@@ -9,7 +9,7 @@
 #define TRUE 1
 #define FALSE 0
 #define serverAddr "localhost"
-#define dbUser "root"
+#define dbUser " "
 #define dbPassword "Azikinhatashkent"
 #define dbName "PharmacyDB"
 
