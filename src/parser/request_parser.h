@@ -81,15 +81,23 @@ struct usersToAdmin {
 };
 
 struct addingUser {
+    struct usersToAdmin signin;
+    char password[MAX_SIZE];
+};
+
+struct deleteUser {
     char id[MAX_SIZE];
 };
 
 struct toAdmin {
     struct usersToAdmin* users;
+    int success;
     uid_t user_type;
 } ;
 
 struct fromAdmin {
+    struct addingUser add_user;
+    struct deleteUser delete_user;
     uid_t user_type;
 };
 
