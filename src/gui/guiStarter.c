@@ -4,7 +4,7 @@
 #include <string.h>
 #include "../parser/request_parser.h"
 #include "../client/client.h"
-
+#include "../dbManagement/dbManagement.h"
 #define type1 "1"
 #define type2 "2"
 #define target "Trimol"
