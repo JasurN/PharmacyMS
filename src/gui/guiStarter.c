@@ -17,6 +17,7 @@ GtkTextIter start, end;
 GtkTextIter *iter;
 
 void filltable1(char *id, char *name, char *price, char *desc);
+void filllistView();
 
 int main(int argc, char **argv) {
 
@@ -56,8 +57,7 @@ void on_enter_but_clicked() {
             char *name = "OxyMed";
 
             window1 = GTK_WIDGET(gtk_builder_get_object(builder, "adminWindow"));
-            GtkLabel *storename = (GtkLabel *) gtk_builder_get_object(builder, "drugstore");
-            gtk_label_set_text(GTK_LABEL(storename), name);
+
 
 
             gtk_widget_show_all(window1);
@@ -70,7 +70,8 @@ void on_enter_but_clicked() {
 
             window2 = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
             GtkLabel *storename = (GtkLabel *) gtk_builder_get_object(builder, "drugstore");
-            gtk_label_set_text(GTK_LABEL(storename), name);
+            gtk_label_set_text(GTK_LABEL(storename), fromServerObj->authorization.name);
+            filllistView();
 
 
             gtk_widget_show_all(window2);
@@ -78,11 +79,10 @@ void on_enter_but_clicked() {
 
         }
         else if(fromServerObj->authorization.user_type == COMPANY) {
-            char *name = "OxyMed";
+
 
             window3 = GTK_WIDGET(gtk_builder_get_object(builder, "companyWindow"));
-            GtkLabel *storename = (GtkLabel *) gtk_builder_get_object(builder, "drugstore");
-            gtk_label_set_text(GTK_LABEL(storename), name);
+
 
 
             gtk_widget_show_all(window3);
@@ -92,7 +92,6 @@ void on_enter_but_clicked() {
         GtkLabel *warn = (GtkLabel *) gtk_builder_get_object(builder, "warning");
         const gchar *text = "Login or Password wrong";
         gtk_label_set_text(GTK_LABEL(warn), text);
-        g_print("Wrong");
 
     }
 }
@@ -162,6 +161,27 @@ void filltable1(char *id, char *name, char *price, char *desc) {
     gtk_text_buffer_set_text(buffer1, data, -1);
 }
 
+
+void filllistView(){
+    char list[6000] = "";
+    char item[40] = "";
+    char temp[500] = "";
+    const char *space = "          ";
+    const char *nextspace = "                         ";
+    strcat(item, "1234");
+    strcat(item, space);
+    strcat(item, "Coldrex");
+    strncpy(temp, nextspace, (strlen(nextspace) - strlen("Coldrex")));
+    strcat(item, temp );
+    strcat(item, "13000");
+    memset(item, 0, 40);
+    strcat(item, space);
+    strcat(item, "Flue, caughing, high temperature");
+    
+    GtkTextView *listview=(GtkTreeView*) gtk_builder_get_object(builder,"list_view");
+    buffer7=gtk_text_view_get_buffer(GTK_TEXT_VIEW(listview));
+    
+}
 
 void regButClicked() {
     const char *ID, *password, *name, *contact, *address, *type;
