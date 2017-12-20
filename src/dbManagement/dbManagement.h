@@ -9,8 +9,8 @@
 #define TRUE 1
 #define FALSE 0
 #define serverAddr "localhost"
-#define dbUser "admin"
-#define dbPassword "adminos"
+#define dbUser "root"
+#define dbPassword "Azikinhatashkent"
 #define dbName "PharmacyDB"
 
 void finish_with_error(MYSQL * con);
@@ -23,6 +23,7 @@ void *searchFromTable(char *id, char *tablename, char *colname);
 void *searchByName(char*);
 void *viewStoreInventory(char*);
 void *viewOrders(char*);
+void *viewInventory(char*);
 void *orderRegister(char*, char*, int);
 void medDelivered(char *trans_id, char*);
 void delete(char *id, char *tname, char *cname);

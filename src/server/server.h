@@ -31,6 +31,7 @@ char * jsonParser(const char *);
 toClient* requestHandler(fromClient *);
 toClient* authorizationServer(fromClient *);
 
+toClient *showCompanyInventory(fromClient *);
 toClient* searchInDbServer(fromClient *);
 toClient* searchCompanyInventory(fromClient *);
 toClient* showInventoryDrugStore(fromClient *);
@@ -39,6 +40,4 @@ toClient* showInventoryServer(fromClient *);
 toClient* produceMedicine(fromClient *);
 toClient* orderMedicine(fromClient *);
 
-toClient* addNewUser(fromClient *);
-toClient* deleteUser(fromClient *);
 #endif //PHARMACYMS_SERVER_H

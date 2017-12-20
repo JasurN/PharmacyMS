@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include "../parser/request_parser.h"
+#include "../dbManagement/dbManagement.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -20,9 +21,11 @@ fromServer* authorizationClient(const char * login,const char * password);
 fromServer* searchCompanyInventory(const char* searchString);
 fromServer* adminAddUser();
 fromServer* searchStoreInventory(const char* searchString);
+fromServer* viewCompanyMedicine(const char*);
 fromServer* orderNewMedecine(char*, int, char*);
 fromServer* produceMedicineByCompany(const char *drugName, const char *ID, const char *description, const char *price);
 
 fromServer* addNewUser(char *user_id,char *user_password, char *user_name, char *user_adress, char *user_contact, int type);
-fromServer* deleteUser(char *id);
+fromServer* deleteUser(char *id, int userType);
+fromServer* viewOrder(char* companyID);
 #endif //PHARMACYMS_CLIENT_H

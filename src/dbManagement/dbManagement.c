@@ -135,8 +135,8 @@ void *viewStore(char *id){
     return searchFromTable(id,"company","id" );
 }
 
-void *viewInventory(char *id){
-    return searchFromTable(id, "medicine", "comp_name");
+void *viewInventory(char *id) {
+    return searchFromTable(id, "medicine", "comp_id");
 }
 void *viewOrders(char *id){
     return searchFromTable(id, "journal", "comp_name");

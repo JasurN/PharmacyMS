@@ -26,7 +26,9 @@ set(SOURCE_FILES_client src/client/client.c
         src/client/client.h src/dbManagement/dbManagement.c
          src/parser/request_parser.c
         src/parser/object.c src/parser/object.h
-        src/gui/guiStarter.c)
+        src/gui/guiStarter.c
+        src/dbManagement/dbManagement.c
+        src/parser/object.c)
 add_executable(client ${SOURCE_FILES_client})
 target_link_libraries(client mysqlclient ${GTK_LIBRARY_DIRS})
 
@@ -41,6 +43,8 @@ endif()
 
 #testing build
 set(SOURCE_FILES_testing src/client/client.c src/client/clientStarter.c
-        src/parser/request_parser.c src/parser/cJSON.c )
+        src/parser/request_parser.c src/parser/cJSON.c
+        src/dbManagement/dbManagement.c
+        src/parser/object.c)
 add_executable(testing ${SOURCE_FILES_testing})
 target_link_libraries(testing mysqlclient)
