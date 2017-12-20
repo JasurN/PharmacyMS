@@ -14,6 +14,8 @@
 #define MEDICINE 5
 #define NEW_MEDICINE 6
 #define USERS 7
+#define ADD_USER 8
+#define DELETE_USER 9
 //User types
 #define ADMIN 0
 #define COMPANY 1
