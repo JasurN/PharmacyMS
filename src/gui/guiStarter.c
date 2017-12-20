@@ -50,7 +50,6 @@ void on_enter_but_clicked() {
 
     fromServer *fromServerObj = authorizationClient(login, password);
 
-    printf("name :%s\n", fromServerObj->authorization.name);
     if (fromServerObj->authorization.isExist == 1) {
 
         if (fromServerObj->authorization.user_type == ADMIN) {
@@ -107,12 +106,12 @@ void search_but_clicked() {//todo: make double price. Important
     if (strcmp(searchedtext, "") != 0) {
         fromServer* fromServerObj = searchCompanyInventory(searchedtext);
         if(fromServerObj->search.isExist == TRUE ){
-            char price[sizeof(fromServerObj->search.price)];
+         char price[30];
             sprintf(price, "%lf", fromServerObj->search.price);
-            printf("price is: %s", price);
             filltable1(fromServerObj->search.med_id, fromServerObj->search.name,
-                       fromServerObj->search.med_id, fromServerObj->search.description);
+                       price, fromServerObj->search.description);
         }
+        free(fromServerObj);
     }
 }
 
