@@ -73,10 +73,10 @@ fromServer* authorizationClient(const char * login, const char * password) {
 }
 
 
-fromServer* searchCompanyInventory(const char* searchString) {
+fromServer* searchCompanyInventory(const char* id) {
     toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
     toServerObj->type = SEARCH;
-    strcpy(toServerObj->search.name, searchString);
+    strcpy(toServerObj->search.name, id);
 
     char *strToServer = clientStructToStr(toServerObj);
     char *strFromServer = clientStart(strToServer);

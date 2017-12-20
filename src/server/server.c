@@ -211,11 +211,10 @@ toClient *addNewUser(fromClient *fromClientObj) {//todo : implement with parsers
 }
 
 toClient *deleteUser(fromClient *fromClientObj) {
-    int userType;
-    if (userType == 1) {
-        deleteCompany("id");
+    if (fromClientObj->admin.user_type == COMPANY) {
+        deleteCompany(fromClientObj->admin.);
     }
-    else if(userType == 2) {
+    else if(fromClientObj->admin.user_type == DRUGSTORE) {
         deleteStore("id");
     }
 }
