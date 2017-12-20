@@ -107,7 +107,9 @@ void search_but_clicked() {//todo: make double price. Important
     if (strcmp(searchedtext, "") != 0) {
         fromServer* fromServerObj = searchCompanyInventory(searchedtext);
         if(fromServerObj->search.isExist == TRUE ){
-
+            char price[sizeof(fromServerObj->search.price)];
+            sprintf(price, "%lf", fromServerObj->search.price);
+            printf("price is: %s", price);
             filltable1(fromServerObj->search.med_id, fromServerObj->search.name,
                        fromServerObj->search.med_id, fromServerObj->search.description);
         }
