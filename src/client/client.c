@@ -188,5 +188,40 @@ fromServer* addUser(char* name, int quantity) {
     return fromServerObj;
 }*/
 fromServer* addNewUser(char *user_id,char *user_password, char *user_name, char *user_adress, char *user_contact, int type) {
+    toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
+    toServerObj->type = ADD_USER;
+    toServerObj->admin.user_type = (uid_t) type;
+    strcpy(toServerObj->admin.add_user.password, user_password);
+    strcpy(toServerObj->admin.add_user.signin.id, user_id);
+    strcpy(toServerObj->admin.add_user.signin.name, user_name);
+    strcpy(toServerObj->admin.add_user.signin.address, user_adress);
+    strcpy(toServerObj->admin.add_user.signin.contact, user_contact);
 
+    char *strToServer = clientStructToStr(toServerObj);
+    char *strFromServer = clientStart(strToServer);
+
+    fromServer *fromServerObj = (fromServer *) malloc(sizeof(fromServer));
+    printf("Message from server: %s\n", strFromServer);
+    serverStrToStruct(strFromServer, fromServerObj);
+
+    free(toServerObj);
+    free(strFromServer);
+    return fromServerObj;
+}
+
+fromServer* viewOrder(char* companyID) {
+    toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
+    toServerObj->type = JOURNAL;
+
+    strcpy(toServerObj->authorization.login, companyID);
+    char *strToServer = clientStructToStr(toServerObj);
+    char *strFromServer = clientStart(strToServer);
+
+    fromServer *fromServerObj = (fromServer *) malloc(sizeof(fromServer));
+    printf("Message from server: %s\n", strFromServer);
+    serverStrToStruct(strFromServer, fromServerObj);
+
+    free(toServerObj);
+    free(strFromServer);
+    return fromServerObj;
 }

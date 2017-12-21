@@ -155,6 +155,8 @@ toClient *requestHandler(fromClient *fromClientObj) {
 
         toClientObj = showCompanyInventory(fromClientObj);
 
+    } else if (fromClientObj->type == ADD_USER) {
+        toClientObj = addNewUser(fromClientObj);
     }
 
 
@@ -207,7 +209,16 @@ toClient *showCompanyOrders(fromClient *fromClientObj) {
 }
 
 toClient *addNewUser(fromClient *fromClientObj) {//todo : implement with parsers
-    addUser("id", "password", "username", "userAddress", "userContact", 1);
+    toClient *toClientObj = (toClient *) malloc(sizeof(toClient));
+    addUser(fromClientObj->admin.add_user.signin.id,
+            fromClientObj->admin.add_user.password,
+            fromClientObj->admin.add_user.signin.name,
+            fromClientObj->admin.add_user.signin.address,
+            fromClientObj->admin.add_user.signin.contact,
+            fromClientObj->admin.user_type);
+    toClientObj->type = JOURNAL;
+    toClientObj->admin.success = TRUE;
+
 }
 
 toClient *deleteUser(fromClient *fromClientObj) {

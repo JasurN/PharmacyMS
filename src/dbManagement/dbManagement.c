@@ -65,23 +65,17 @@ toClient *searchUser(char *user_id, char *user_password){
 }
 bool isExistAlready(char *user_id, char *tablename,char *field){
 
-    MYSQL *con = connectToDB();
-    char query[1024];
-    sprintf(query, "SELECT * FROM %s WHERE  %s = '%s'", tablename, field, user_id);
-    if (mysql_query(con, query)) {
-        finish_with_error(con);
-    }
-    MYSQL_RES *result = mysql_store_result(con);
-    my_ulonglong numrows = mysql_num_rows(result);
-    if (numrows==0)
-        return FALSE;
-    else
-        return TRUE;
+//    MYSQL *con = connectToDB();
+//    my_ulonglong numrows = mysql_num_rows(result);
+//    if (numrows==0)
+//        return FALSE;
+//    else
+//        return TRUE;
 }
 
 void addUser(char *user_id,char *user_password, char *user_name, char *user_adress, char *user_contact, int type) {
      MYSQL *con =connectToDB();
-    if(!isExistAlready(user_id, "authorization", "id")){
+
         char query[1024];
         sprintf(query,"INSERT INTO authorization VALUES('%s','%s', %d)", user_id, user_password, type);
         if (mysql_query(con, query)) {
@@ -102,8 +96,7 @@ void addUser(char *user_id,char *user_password, char *user_name, char *user_adre
 
 
         }
-    }
-    else printf("User is already exist!");
+
 }
 
 // company queries

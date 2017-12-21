@@ -39,5 +39,6 @@ toClient* showCompanyOrders(fromClient *);
 toClient* showInventoryServer(fromClient *);
 toClient* produceMedicine(fromClient *);
 toClient* orderMedicine(fromClient *);
+toClient *addNewUser(fromClient *fromClientObj);
 
 #endif //PHARMACYMS_SERVER_H
