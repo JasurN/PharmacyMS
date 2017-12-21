@@ -88,7 +88,7 @@ void on_enter_but_clicked() {
             window3 = GTK_WIDGET(gtk_builder_get_object(builder, "companyWindow"));
             GtkLabel *storename = (GtkLabel *) gtk_builder_get_object(builder, "drugstore");
             gtk_label_set_text(GTK_LABEL(storename), fromServerObj->authorization.name);
-            toClient *toClientObj = viewOrder(userID);
+            fromServer *fromServerObj = viewOrder(userID);
             GtkLabel *companyname = (GtkLabel*) gtk_builder_get_object(builder, "comp_name");
             GtkLabel *companyname2 = (GtkLabel*) gtk_builder_get_object(builder, "comp_name2");
             GtkLabel *companyname3 = (GtkLabel*) gtk_builder_get_object(builder, "comp_name3");
@@ -107,19 +107,19 @@ void on_enter_but_clicked() {
                 // Code
 
                 char temp[1000] = "";
-                strcat(temp, toClientObj->journal->trans_id);
+                strcat(temp, fromServerObj->journal->trans_id);
                 strcat(temp, "                          ");
 
 
-                strcat(temp, toClientObj->journal->med_id);
+                strcat(temp, fromServerObj->journal->med_id);
                 strcat(temp, "                                  ");
 
                 char quantity[8];
-                sprintf(quantity, "%d", toClientObj->journal->quantity);
+                sprintf(quantity, "%d", fromServerObj->journal->quantity);
                 strcat(temp, quantity);
                 strcat(temp, "                                      ");
 
-                strcat(temp, toClientObj->journal->trans_date);
+                strcat(temp, fromServerObj->journal->trans_date);
                 strcat(temp, "                  ");
 
                 strcat(temp, "\n");
@@ -132,7 +132,7 @@ void on_enter_but_clicked() {
             buffer6 = gtk_text_view_get_buffer(tablerequest);
             gtk_text_buffer_set_text(buffer6, tableChar, -1);
 
-        free(toClientObj);
+        free(fromServerObj  );
         }
     } else {
         GtkLabel *warn = (GtkLabel *) gtk_builder_get_object(builder, "warning");
