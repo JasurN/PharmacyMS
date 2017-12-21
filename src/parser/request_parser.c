@@ -520,7 +520,6 @@ void clientStrToStruct(const char *message, fromClient *client_query) {
         cJSON *id_item = cJSON_GetObjectItemCaseSensitive(user_item, "id");
         strcpy(client_query->admin.delete_user.id, id_item->valuestring);
     }
-
     client_query->type = (uid_t) type_item->valueint;
     cJSON_Delete(root);
 }

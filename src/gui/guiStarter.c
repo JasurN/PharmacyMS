@@ -5,12 +5,11 @@
 #include "../parser/request_parser.h"
 #include "../client/client.h"
 #include "../dbManagement/dbManagement.h"
-
 #define type1 "1"
 #define type2 "2"
 #define target "Trimol"
 
-struct newMedicine {
+struct newMedicine{
     char ID[30];
     char NAME[30];
     double PRICE;
@@ -67,12 +66,14 @@ void on_enter_but_clicked() {
 
         strcpy(userID, fromServerObj->authorization.id);
         if (fromServerObj->authorization.user_type == ADMIN) {
-
+            window1 = GTK_WIDGET(gtk_builder_get_object(builder, "adminWindow"));
 
             gtk_widget_show_all(window1);
             gtk_widget_destroy(window);
 
-        } else if (fromServerObj->authorization.user_type == DRUGSTORE) {
+        }
+
+        else if (fromServerObj->authorization.user_type == DRUGSTORE) {
 
             window2 = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
             GtkLabel *storename = (GtkLabel *) gtk_builder_get_object(builder, "drugstore");
@@ -82,18 +83,54 @@ void on_enter_but_clicked() {
             gtk_widget_show_all(window2);
             gtk_widget_destroy(window);
 
-        } else if (fromServerObj->authorization.user_type == COMPANY) {
+        }
+        else if(fromServerObj->authorization.user_type == COMPANY) {
 
             window3 = GTK_WIDGET(gtk_builder_get_object(builder, "companyWindow"));
             GtkLabel *storename = (GtkLabel *) gtk_builder_get_object(builder, "drugstore");
             gtk_label_set_text(GTK_LABEL(storename), fromServerObj->authorization.name);
             toClient *toClientObj = viewOrders(userID);
+            GtkLabel *companyname = (GtkLabel*) gtk_builder_get_object(builder, "comp_name");
+            GtkLabel *companyname2 = (GtkLabel*) gtk_builder_get_object(builder, "comp_name2");
+            GtkLabel *companyname3 = (GtkLabel*) gtk_builder_get_object(builder, "comp_name3");
+            gtk_label_set_text(GTK_LABEL(companyname), fromServerObj->authorization.name);
+            gtk_label_set_text(GTK_LABEL(companyname2), fromServerObj->authorization.name);
+            gtk_label_set_text(GTK_LABEL(companyname3), fromServerObj->authorization.name);
 
-            char one[20];
-            char two[20];
-            strcpy(one, toClientObj->journal[1].med_id);
-            strcpy(two, toClientObj->journal[2].med_id);
-            free(toClientObj);
+
+            gtk_widget_show_all(window3);
+            gtk_widget_destroy(window);
+
+
+            /*toClient *toClientObj = viewOrdersdsds(userID);
+            char tableChar[10000] = "";
+            char *p;*/
+
+
+                /*char temp[1000];
+                strcat(temp, toClientObj->journal->trans_id);
+                strcat(temp, "                          ");
+
+
+                strcat(temp, toClientObj->journal->med_id);
+                strcat(temp, "                                  ");
+
+                char quantity[8];
+                sprintf(quantity, "%d", toClientObj->journal->quantity);
+                strcat(temp, quantity);
+                strcat(temp, "                                      ");
+
+                strcat(temp, toClientObj->journal->trans_date);
+                strcat(temp, "                  ");
+
+                strcat(temp, "\n");
+                strcat(tableChar, temp);
+
+//            char one[20];
+//            char two[20];
+//            strcpy(one, toClientObj->journal[1].med_id);
+//            strcpy(two, toClientObj->journal[2].med_id);
+//            free(toClientObj);
 //
 //            char tableChar[10000] = "";
 //
@@ -128,8 +165,7 @@ void on_enter_but_clicked() {
 //            gtk_text_buffer_set_text(buffer6, tableChar, -1);
 //            free(toClientObj);
 
-            gtk_widget_show_all(window3);
-            gtk_widget_destroy(window);
+            free(toClientObj);*/
         }
     } else {
         GtkLabel *warn = (GtkLabel *) gtk_builder_get_object(builder, "warning");
@@ -158,7 +194,7 @@ void search_but_clicked() {
             strcpy(newMedicineObject->DESCRIPTION, fromServerObj->search.description);
             strcpy(newMedicineObject->ID, fromServerObj->search.med_id);
             strcpy(newMedicineObject->NAME, fromServerObj->search.name);
-            newMedicineObject->PRICE = fromServerObj->search.price;
+            newMedicineObject->PRICE=fromServerObj->search.price;
 
         }
         free(fromServerObj);
@@ -213,7 +249,8 @@ void filltable1(char *id, char *name, char *price, char *desc) {
 }
 
 // this button for registration new user.
-void regButClicked() {
+void regButClicked()
+{
     const char *ID, *password, *name, *contact, *address, *type;
     GtkTextView *pharmlist = (GtkTextView *) gtk_builder_get_object(builder, "adPharmList");
     GtkTextView *comlist = (GtkTextView *) gtk_builder_get_object(builder, "adComList");
@@ -272,17 +309,19 @@ void comDelButClicked() {
     gtk_text_buffer_set_text(buffer4, order, -1);
 }
 
-void comRefButClicked() {
+void comRefButClicked()
+{
 }
 
-void adDelBut1Clicked() {
+void adDelBut1Clicked()
+{
     const char *pharmId;
     GtkTextView *pharmlist = (GtkTextView *) gtk_builder_get_object(builder, "adPharmList");
     GtkEntry *pharmidfield = (GtkEntry *) gtk_builder_get_object(builder, "adPharmIDEntry");
     pharmId = gtk_entry_get_text(pharmidfield);
 }
-
-void adDelBut2Clicked() {
+void adDelBut2Clicked()
+{
     const char *comId2;
     GtkTextView *adcomlist = (GtkTextView *) gtk_builder_get_object(builder, "adComList");
     GtkEntry *adcomidfield = (GtkEntry *) gtk_builder_get_object(builder, "adComIDEntry");
@@ -293,11 +332,6 @@ void adDelBut2Clicked() {
 
     buffer5 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(adcomlist));
     gtk_text_buffer_set_text(buffer5, order, -1);
-}
-
-void back3_but_clicked() {
-
-    gtk_widget_destroy(window2);
 }
 
 
