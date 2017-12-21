@@ -230,7 +230,7 @@ void regButClicked() {
     contact = gtk_entry_get_text(contactfield);
     address = gtk_entry_get_text(addressfield);
 
-    addNewUser(ID, password, name, address, contact, type);
+    addUser(ID, password, name, address, contact, atoi(type));
 }
 
 void addButClicked() {//todo: Implement. produce new medicine button.
