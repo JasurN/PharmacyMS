@@ -248,7 +248,8 @@ toClient* addNewMedicineComp(fromClient * fromClientObj) {
     return toClientObj;
 }
 toClient* viewCompanyInventory(fromClient* fromClientObj) {
-    toClient* toClientObj = viewInventory(fromClientObj->search.name);
+
+    toClient* toClientObj = viewInventory(fromClientObj->authorization.login);
 
     toClientObj->type = MEDICINE;
 

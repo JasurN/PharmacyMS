@@ -22,7 +22,7 @@ char userID[4];
 GtkBuilder *builder;
 GtkWidget *window, *window1, *window2, *window3;
 GtkLabel *warnlabel;
-GtkTextBuffer *buffer1, *buffer2, *buffer3, *buffer4, *buffer5, *buffer6, *buffer7, *buffer8;
+GtkTextBuffer *buffer1, *buffer2, *buffer3, *buffer4, *buffer5, *buffer6, *buffer7, *buffer8,*buffer9;
 GtkTextIter start, end;
 GtkTextIter *iter;
 
@@ -74,49 +74,22 @@ void on_enter_but_clicked() {
 
         else if (fromServerObj->authorization.user_type == DRUGSTORE) {
             fromServer *fromServerInventory = searchStoreInventory(fromServerObj->authorization.id);
-            char inventory_table[4000]="";
+            char inventory_table[5000]="";
             //Filling Inventory table in Drugstore
-            char temp[300]="";
-            strcat(temp,"m004");
-            strcat(temp, "                    ");
-
-
-            strcat(temp,"Teraflu");
-            strcat(temp, "                          ");
-
-            //char quantity[8];
-            //sprintf(quantity, "%d", toClientObj->journal->quantity);
-            strcat(temp,"60");
-            strcat(temp, "\n");
-
-            strcat(temp,"m006");
-            strcat(temp, "                    ");
-
-
-            strcat(temp,"DoctorMoM");
-            strcat(temp, "                          ");
-
-            //char quantity[8];
-            //sprintf(quantity, "%d", toClientObj->journal->quantity);
-            strcat(temp,"150");
-            strcat(temp, "\n");
-
-            strcat(temp,"m002");
-            strcat(temp, "                    ");
-
-
-            strcat(temp,"Sinepar");
-            strcat(temp, "                          ");
-
-            //char quantity[8];
-            //sprintf(quantity, "%d", toClientObj->journal->quantity);
-            strcat(temp,"90");
-            strcat(temp, "\n");
-
-
-
-
-            strcat(inventory_table, temp);
+            int i=0;
+            while(i<struct_length) {
+                char temp[500]="";
+                strcat(temp, fromServerInventory->search_inventory[i].med_id);
+                strcat(temp, "                    ");
+                strcat(temp, fromServerInventory->search_inventory[i].name);
+                strcat(temp, "                          ");
+                char quantity[8];
+                sprintf(quantity, "%d", fromServerInventory->search_inventory[i].quantity);
+                strcat(temp, quantity);
+                strcat(temp, "\n");
+                strcat(inventory_table, temp);
+                i++;
+            }
 
             GtkTextView *invent_tab = (GtkTextView*) gtk_builder_get_object(builder, "list_view");
             buffer7=gtk_text_view_get_buffer(GTK_TEXT_VIEW(invent_tab));
@@ -171,16 +144,16 @@ void on_enter_but_clicked() {
 
 
                 strcat(temp, viewOrderObj->journal[i].store_id);
-                strcat(temp, "                                  ");
+                strcat(temp, "                                      ");
 
                 char quantity[8];
                 sprintf(quantity, "%d", viewOrderObj->journal[i].quantity);
-                strcat(temp, viewOrderObj->journal[i].store_id);
-                strcat(temp, "                                  ");
+                strcat(temp, quantity);
+                strcat(temp, "                                      ");
 
 
                 strcat(temp, viewOrderObj->journal[i].trans_date);
-                strcat(temp, "                                  ");
+                strcat(temp, "                  ");
 
                 strcat(temp, "\n");
                 strcat(tableChar, temp);
@@ -297,7 +270,7 @@ void regButClicked()
     addNewUser(ID, password, name, address, contact, atoi(type));
 }
 
-void addButClicked() {
+void addButClicked() {//todo: Implement. produce new medicine button.
     const char *drugName, *id, *descript, *price;
     GtkTextView *inventlist = (GtkTextView *) gtk_builder_get_object(builder, "comInventList");
     GtkEntry *namefield = (GtkEntry *) gtk_builder_get_object(builder, "comNameEntry");
@@ -406,6 +379,55 @@ void adDelBut2Clicked() {
 
     buffer5 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(adcomlist));
     gtk_text_buffer_set_text(buffer5, order, -1);
+}
+void refresh_store_clicked(){
+
+    fromServer *fromServerInventory = searchStoreInventory(userID);
+    char inventory_table[5000]="";
+    //Filling Inventory table in Drugstore
+    int i=0;
+    while(i<struct_length) {
+        char temp[500]="";
+        strcat(temp, fromServerInventory->search_inventory[i].med_id);
+        strcat(temp, "                    ");
+        strcat(temp, fromServerInventory->search_inventory[i].name);
+        strcat(temp, "                          ");
+        char quantity[8];
+        sprintf(quantity, "%d", fromServerInventory->search_inventory[i].quantity);
+        strcat(temp, quantity);
+        strcat(temp, "\n");
+        strcat(inventory_table, temp);
+        i++;
+    }
+
+    GtkTextView *invent_tab = (GtkTextView*) gtk_builder_get_object(builder, "list_view");
+    buffer7=gtk_text_view_get_buffer(GTK_TEXT_VIEW(invent_tab));
+    gtk_text_buffer_set_text(buffer7, inventory_table, -1);
+
+}
+void company_refresh_inv(){
+    fromServer *viewOrderObj = viewOrder(userID);
+    char comp_inventory_table[5000]="";
+    //Filling Inventory table in Drugstore
+    int i=0;
+    while(i<struct_length) {
+        char temp[500]="";
+        strcat(temp, viewOrderObj->journal[i].med_id);
+        strcat(temp, "                    ");
+        strcat(temp, viewOrderObj->journal[i].trans_id);
+        strcat(temp, "                          ");
+        char quantity[8];
+        sprintf(quantity, "%d", viewOrderObj->journal[i].quantity);
+        strcat(temp, quantity);
+        strcat(temp, "\n");
+        strcat(comp_inventory_table, temp);
+        i++;
+    }
+
+    GtkTextView *com_invent_tab = (GtkTextView*) gtk_builder_get_object(builder, "comInventList");
+    buffer9=gtk_text_view_get_buffer(GTK_TEXT_VIEW(com_invent_tab));
+    gtk_text_buffer_set_text(buffer9, comp_inventory_table, -1);
+
 }
 
 

@@ -720,8 +720,9 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">start</property>
                 <property name="margin_top">10</property>
-                <property name="label" translatable="yes">     Trans ID     |          Medicine ID          |          Store ID          |          Quantity          |     Trans Date     </property>
+                <property name="label" translatable="yes">   Medicine ID          |          Medicine Name         |         Description          |     Price    </property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -770,7 +771,17 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkButton" id="refreshinventory">
+                <property name="label" translatable="yes">Refresh</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="company_refresh_inv" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">7</property>
+              </packing>
             </child>
             <child>
               <placeholder/>
@@ -1403,6 +1414,19 @@ Please log in to access the application!</property>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="refresh_store">
+                <property name="label" translatable="yes">Refresh</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="refresh_store_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
               </packing>
             </child>
           </object>
