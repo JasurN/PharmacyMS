@@ -93,13 +93,13 @@ fromServer* searchCompanyInventory(const char* id) {
 fromServer* viewCompanyMedicine(const char* id) {
     toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
     toServerObj->type = MEDICINE;
-    strcpy(toServerObj->search.name, id);
+    strcpy(toServerObj->authorization.login, id);
 
     char *strToServer = clientStructToStr(toServerObj);
     char *strFromServer = clientStart(strToServer);
 
     fromServer *fromServerObj = (fromServer *) malloc(sizeof(fromServer));
-    //printf("Message from server: %s\n", strFromServer);
+    printf("Message from server: %s\n", strFromServer);
     serverStrToStruct(strFromServer, fromServerObj);
 
     free(toServerObj);

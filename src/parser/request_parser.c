@@ -496,7 +496,7 @@ void clientStrToStruct(const char *message, fromClient *client_query) {
         cJSON *id_item = cJSON_GetObjectItemCaseSensitive(journal_item, "id");
         strcpy(client_query->authorization.login, id_item->valuestring);
     } else if (type_item->valueint == MEDICINE) {
-        cJSON *search_item = cJSON_GetObjectItemCaseSensitive(root, "search");
+        cJSON *search_item = cJSON_GetObjectItemCaseSensitive(root, "medicine");
         cJSON *id_item = cJSON_GetObjectItemCaseSensitive(search_item, "id");
         strcpy(client_query->authorization.login, id_item->valuestring);
     } else if (type_item->valueint == NEW_MEDICINE) {
