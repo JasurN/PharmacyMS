@@ -22,7 +22,7 @@ char userID[4];
 GtkBuilder *builder;
 GtkWidget *window, *window1, *window2, *window3;
 GtkLabel *warnlabel;
-GtkTextBuffer *buffer1, *buffer2, *buffer3, *buffer4, *buffer5, *buffer6, *buffer7;
+GtkTextBuffer *buffer1, *buffer2, *buffer3, *buffer4, *buffer5, *buffer6, *buffer7, *buffer8;
 GtkTextIter start, end;
 GtkTextIter *iter;
 
@@ -73,6 +73,58 @@ void on_enter_but_clicked() {
         }
 
         else if (fromServerObj->authorization.user_type == DRUGSTORE) {
+            fromServer *fromServerInventory = searchStoreInventory(fromServerObj->authorization.id);
+            char inventory_table[4000]="";
+            //Filling Inventory table in Drugstore
+            char temp[300]="";
+            strcat(temp,"m004");
+            strcat(temp, "                    ");
+
+
+            strcat(temp,"Teraflu");
+            strcat(temp, "                          ");
+
+            //char quantity[8];
+            //sprintf(quantity, "%d", toClientObj->journal->quantity);
+            strcat(temp,"60");
+            strcat(temp, "\n");
+
+            strcat(temp,"m006");
+            strcat(temp, "                    ");
+
+
+            strcat(temp,"DoctorMoM");
+            strcat(temp, "                          ");
+
+            //char quantity[8];
+            //sprintf(quantity, "%d", toClientObj->journal->quantity);
+            strcat(temp,"150");
+            strcat(temp, "\n");
+
+            strcat(temp,"m002");
+            strcat(temp, "                    ");
+
+
+            strcat(temp,"Sinepar");
+            strcat(temp, "                          ");
+
+            //char quantity[8];
+            //sprintf(quantity, "%d", toClientObj->journal->quantity);
+            strcat(temp,"90");
+            strcat(temp, "\n");
+
+
+
+
+            strcat(inventory_table, temp);
+
+            GtkTextView *invent_tab = (GtkTextView*) gtk_builder_get_object(builder, "list_view");
+            buffer7=gtk_text_view_get_buffer(GTK_TEXT_VIEW(invent_tab));
+            gtk_text_buffer_set_text(buffer7, inventory_table, -1);
+
+
+
+
 
             window2 = GTK_WIDGET(gtk_builder_get_object(builder, "window1"));
             GtkLabel *storename = (GtkLabel *) gtk_builder_get_object(builder, "drugstore");
@@ -86,9 +138,6 @@ void on_enter_but_clicked() {
         else if(fromServerObj->authorization.user_type == COMPANY) {
 
             window3 = GTK_WIDGET(gtk_builder_get_object(builder, "companyWindow"));
-            GtkLabel *storename = (GtkLabel *) gtk_builder_get_object(builder, "drugstore");
-            gtk_label_set_text(GTK_LABEL(storename), fromServerObj->authorization.name);
-            fromServer *fromServerObj = viewOrder(userID);
             GtkLabel *companyname = (GtkLabel*) gtk_builder_get_object(builder, "comp_name");
             GtkLabel *companyname2 = (GtkLabel*) gtk_builder_get_object(builder, "comp_name2");
             GtkLabel *companyname3 = (GtkLabel*) gtk_builder_get_object(builder, "comp_name3");
@@ -100,26 +149,32 @@ void on_enter_but_clicked() {
             gtk_widget_show_all(window3);
             gtk_widget_destroy(window);
 
+            fromServer *viewOrderObj = viewOrder(userID);
             char tableChar[5000] = "";
 
             int i = 0;
             while (i < struct_length) {
                 // Code
 
-                char temp[500] = "";
-                strcat(temp, fromServerObj->journal[i].store_id);
+                char temp[1000] = "";
+                strcat(temp, viewOrderObj->journal[i].trans_id);
                 strcat(temp, "                          ");
 
 
-                strcat(temp, fromServerObj->journal[i].med_id);
+                strcat(temp, viewOrderObj->journal[i].med_id);
                 strcat(temp, "                                  ");
 
-                char quantity[8];
-                sprintf(quantity, "%d", fromServerObj->journal[i].quantity);
-                strcat(temp, quantity);
+
+                strcat(temp, viewOrderObj->journal[i].store_id);
                 strcat(temp, "                                      ");
 
-                strcat(temp, fromServerObj->journal[i].trans_date);
+                char quantity[8];
+                sprintf(quantity, "%d", viewOrderObj->journal[i].quantity);
+                strcat(temp, viewOrderObj->journal[i].store_id);
+                strcat(temp, "                                      ");
+
+
+                strcat(temp, viewOrderObj->journal[i].trans_date);
                 strcat(temp, "                  ");
 
                 strcat(temp, "\n");
@@ -131,8 +186,8 @@ void on_enter_but_clicked() {
             GtkTextView *tablerequest = (GtkTextView *) gtk_builder_get_object(builder, "comReqList");
             buffer6 = gtk_text_view_get_buffer(tablerequest);
             gtk_text_buffer_set_text(buffer6, tableChar, -1);
+            free(viewOrderObj  );
 
-        free(fromServerObj  );
         }
     } else {
         GtkLabel *warn = (GtkLabel *) gtk_builder_get_object(builder, "warning");
@@ -269,26 +324,65 @@ void comDelButClicked() {
     GtkEntry *comidfield = (GtkEntry *) gtk_builder_get_object(builder, "comIDEntry");
     comId = gtk_entry_get_text(comidfield);
 
-    char order[500] = "";
+    char order[500] = "                                                        ";
     strcat(order, comId);
 
     buffer4 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(inventlist));
     gtk_text_buffer_set_text(buffer4, order, -1);
 }
 
-void comRefButClicked()
-{
+void comRefButClicked() {
+    fromServer *viewOrderObj = viewOrder(userID);
+    char tableChar[5000] = "";
+
+    int i = 0;
+    while (i < struct_length) {
+        // Code
+
+        char temp[1000] = "";
+        strcat(temp, viewOrderObj->journal[i].trans_id);
+        strcat(temp, "                          ");
+
+
+        strcat(temp, viewOrderObj->journal[i].med_id);
+        strcat(temp, "                                  ");
+
+
+        strcat(temp, viewOrderObj->journal[i].store_id);
+        strcat(temp, "                                      ");
+
+        char quantity[8];
+        sprintf(quantity, "%d", viewOrderObj->journal[i].quantity);
+        strcat(temp, viewOrderObj->journal[i].store_id);
+        strcat(temp, "                                      ");
+
+
+        strcat(temp, viewOrderObj->journal[i].trans_date);
+        strcat(temp, "                  ");
+
+        strcat(temp, "\n");
+        strcat(tableChar, temp);
+        i++;
+
+    }
+
+
+    GtkTextView *ordersincomp = (GtkTextView *) gtk_builder_get_object(builder, "comReqList");
+    buffer8 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(ordersincomp));
+    gtk_text_buffer_set_text(buffer8, tableChar, -1);
+
 }
 
-void adDelBut1Clicked()
-{
+void adDelBut1Clicked() {
     const char *pharmId;
     GtkTextView *pharmlist = (GtkTextView *) gtk_builder_get_object(builder, "adPharmList");
     GtkEntry *pharmidfield = (GtkEntry *) gtk_builder_get_object(builder, "adPharmIDEntry");
     pharmId = gtk_entry_get_text(pharmidfield);
+
+
 }
-void adDelBut2Clicked()
-{
+
+void adDelBut2Clicked() {
     const char *comId2;
     GtkTextView *adcomlist = (GtkTextView *) gtk_builder_get_object(builder, "adComList");
     GtkEntry *adcomidfield = (GtkEntry *) gtk_builder_get_object(builder, "adComIDEntry");

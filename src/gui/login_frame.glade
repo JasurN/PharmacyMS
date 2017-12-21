@@ -16,7 +16,6 @@
             <property name="can_focus">False</property>
             <child>
               <object class="GtkLabel">
-                <property name="width_request">800</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_top">10</property>
@@ -70,7 +69,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_top">20</property>
-                <property name="label" translatable="yes">ID     |          Password         |          Name          |          Contact          |          Address          </property>
+                <property name="label" translatable="yes">ID     |            Name             |                Contact          |          Address          </property>
                 <property name="xalign">0.10000000149011612</property>
               </object>
               <packing>
@@ -109,17 +108,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="back_but">
-                <property name="label" translatable="yes">Back</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="back_but_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
-              </packing>
+              <placeholder/>
             </child>
           </object>
         </child>
@@ -541,7 +530,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="comp_name">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_top">10</property>
@@ -576,7 +565,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_top">10</property>
-                <property name="label" translatable="yes">     No     |          Drug Name          |          Quantity          |          Uploaded          |     Until                                                                           </property>
+                <property name="label" translatable="yes">     Trans ID     |          Medicine ID          |          Store ID          |          Quantity          |     Trans Date                                                                          </property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -611,25 +600,36 @@
                 <signal name="clicked" handler="comRefButClicked" swapped="no"/>
               </object>
               <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="id_entryCom">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="placeholder_text" translatable="yes">ID</property>
+              </object>
+              <packing>
                 <property name="left_attach">3</property>
                 <property name="top_attach">7</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="back2_but">
-                <property name="label" translatable="yes">Back</property>
+              <object class="GtkButton" id="Accept">
+                <property name="label" translatable="yes">Accept</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="back2_but_clicked" swapped="no"/>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
+                <property name="left_attach">4</property>
                 <property name="top_attach">7</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
             <child>
               <placeholder/>
@@ -687,7 +687,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="comp_name2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_top">10</property>
@@ -721,7 +721,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_top">10</property>
-                <property name="label" translatable="yes">Drug Name          |          ID          |          Description          |          Price                                                                                                  </property>
+                <property name="label" translatable="yes">     Trans ID     |          Medicine ID          |          Store ID          |          Quantity          |     Trans Date     </property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -820,7 +820,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkLabel" id="comp_name3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_top">10</property>
@@ -1349,17 +1349,7 @@ Please log in to access the application!</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="back3">
-                <property name="label" translatable="yes">Back</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="back3_but_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">10</property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
               <placeholder/>
@@ -1386,9 +1376,35 @@ Please log in to access the application!</property>
           </packing>
         </child>
         <child>
-          <object class="GtkTextView" id="list_view">
+          <object class="GtkGrid">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkTextView" id="list_view">
+                <property name="width_request">700</property>
+                <property name="height_request">500</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="halign">center</property>
+                <property name="editable">False</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="columns_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">  ID                      NAME                           QUANTITY</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="position">1</property>
