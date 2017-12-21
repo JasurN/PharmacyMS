@@ -100,26 +100,26 @@ void on_enter_but_clicked() {
             gtk_widget_show_all(window3);
             gtk_widget_destroy(window);
 
-            char tableChar[10000] = "";
+            char tableChar[5000] = "";
 
             int i = 0;
-            while (i < 10) {
+            while (i < struct_length) {
                 // Code
 
-                char temp[1000] = "";
-                strcat(temp, fromServerObj->journal->trans_id);
+                char temp[500] = "";
+                strcat(temp, fromServerObj->journal[i].store_id);
                 strcat(temp, "                          ");
 
 
-                strcat(temp, fromServerObj->journal->med_id);
+                strcat(temp, fromServerObj->journal[i].med_id);
                 strcat(temp, "                                  ");
 
                 char quantity[8];
-                sprintf(quantity, "%d", fromServerObj->journal->quantity);
+                sprintf(quantity, "%d", fromServerObj->journal[i].quantity);
                 strcat(temp, quantity);
                 strcat(temp, "                                      ");
 
-                strcat(temp, fromServerObj->journal->trans_date);
+                strcat(temp, fromServerObj->journal[i].trans_date);
                 strcat(temp, "                  ");
 
                 strcat(temp, "\n");
@@ -234,7 +234,7 @@ void regButClicked()
     contact = gtk_entry_get_text(contactfield);
     address = gtk_entry_get_text(addressfield);
 
-    addUser(ID, password, name, address, contact, atoi(type));
+    addNewUser(ID, password, name, address, contact, atoi(type));
 }
 
 void addButClicked() {//todo: Implement. produce new medicine button.
