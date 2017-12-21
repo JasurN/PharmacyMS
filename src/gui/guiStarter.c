@@ -4,7 +4,6 @@
 #include <string.h>
 #include "../parser/request_parser.h"
 #include "../client/client.h"
-#include "../dbManagement/dbManagement.h"
 #define type1 "1"
 #define type2 "2"
 #define target "Trimol"
@@ -89,7 +88,7 @@ void on_enter_but_clicked() {
             window3 = GTK_WIDGET(gtk_builder_get_object(builder, "companyWindow"));
             GtkLabel *storename = (GtkLabel *) gtk_builder_get_object(builder, "drugstore");
             gtk_label_set_text(GTK_LABEL(storename), fromServerObj->authorization.name);
-            toClient *toClientObj = viewOrders(userID);
+            toClient *toClientObj = viewOrder(userID);
             GtkLabel *companyname = (GtkLabel*) gtk_builder_get_object(builder, "comp_name");
             GtkLabel *companyname2 = (GtkLabel*) gtk_builder_get_object(builder, "comp_name2");
             GtkLabel *companyname3 = (GtkLabel*) gtk_builder_get_object(builder, "comp_name3");
@@ -101,13 +100,13 @@ void on_enter_but_clicked() {
             gtk_widget_show_all(window3);
             gtk_widget_destroy(window);
 
-
-            /*toClient *toClientObj = viewOrdersdsds(userID);
             char tableChar[10000] = "";
-            char *p;*/
 
+            int i = 0;
+            while (i < 10) {
+                // Code
 
-                /*char temp[1000];
+                char temp[1000] = "";
                 strcat(temp, toClientObj->journal->trans_id);
                 strcat(temp, "                          ");
 
@@ -125,47 +124,15 @@ void on_enter_but_clicked() {
 
                 strcat(temp, "\n");
                 strcat(tableChar, temp);
+                i++;
 
-//            char one[20];
-//            char two[20];
-//            strcpy(one, toClientObj->journal[1].med_id);
-//            strcpy(two, toClientObj->journal[2].med_id);
-//            free(toClientObj);
-//
-//            char tableChar[10000] = "";
-//
-//            int i = 0;
-//            while (i < 5 && toClientObj->journal) {
-//                // Code
-//
-//                char temp[1000] = "";
-//                strcat(temp, toClientObj->journal->trans_id);
-//                strcat(temp, "                          ");
-//
-//
-//                strcat(temp, toClientObj->journal->med_id);
-//                strcat(temp, "                                  ");
-//
-//                char quantity[8];
-//                sprintf(quantity, "%d", toClientObj->journal->quantity);
-//                strcat(temp, quantity);
-//                strcat(temp, "                                      ");
-//
-//                strcat(temp, toClientObj->journal->trans_date);
-//                strcat(temp, "                  ");
-//
-//                strcat(temp, "\n");
-//                strcat(tableChar, temp);
-//                i++;
-//
-//            }
-//
-//            GtkTextView *tablerequest = (GtkTextView *) gtk_builder_get_object(builder, "comReqList");
-//            buffer6 = gtk_text_view_get_buffer(tablerequest);
-//            gtk_text_buffer_set_text(buffer6, tableChar, -1);
-//            free(toClientObj);
+            }
 
-            free(toClientObj);*/
+            GtkTextView *tablerequest = (GtkTextView *) gtk_builder_get_object(builder, "comReqList");
+            buffer6 = gtk_text_view_get_buffer(tablerequest);
+            gtk_text_buffer_set_text(buffer6, tableChar, -1);
+
+        free(toClientObj);
         }
     } else {
         GtkLabel *warn = (GtkLabel *) gtk_builder_get_object(builder, "warning");
@@ -220,7 +187,7 @@ void order_clicked() {
     strcat(temp, "       ");
     strcat(temp, newMedicineObject->NAME);
     strcat(temp, "       ");
-    strcat(temp, quantity);
+    strcat(temp, amount);
     strcat(order, temp);
     strcat(order, "\n");
     buffer2 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tab2));

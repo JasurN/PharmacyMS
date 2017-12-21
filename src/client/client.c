@@ -1,5 +1,4 @@
 #include "client.h"
-#include "../parser/request_parser.h"
 
 char* clientStart(char * clientStr) {
     // Structure to connect to the server
