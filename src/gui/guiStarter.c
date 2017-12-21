@@ -58,12 +58,14 @@ void on_enter_but_clicked() {
 
     fromServer *fromServerObj = authorizationClient(login, password);
 
+
+
     if (fromServerObj->authorization.isExist == 1) {
 
 
         strcpy(userID, fromServerObj->authorization.id);
         if (fromServerObj->authorization.user_type == ADMIN) {
-
+            window1 = GTK_WIDGET(gtk_builder_get_object(builder, "adminWindow"));
 
             gtk_widget_show_all(window1);
             gtk_widget_destroy(window);
@@ -82,20 +84,25 @@ void on_enter_but_clicked() {
 
         }
         else if(fromServerObj->authorization.user_type == COMPANY) {
-
             window3 = GTK_WIDGET(gtk_builder_get_object(builder, "companyWindow"));
-            GtkLabel *storename = (GtkLabel *) gtk_builder_get_object(builder, "drugstore");
-            gtk_label_set_text(GTK_LABEL(storename), fromServerObj->authorization.name);
+            GtkLabel *companyname = (GtkLabel*) gtk_builder_get_object(builder, "comp_name");
+            GtkLabel *companyname2 = (GtkLabel*) gtk_builder_get_object(builder, "comp_name2");
+            GtkLabel *companyname3 = (GtkLabel*) gtk_builder_get_object(builder, "comp_name3");
+            gtk_label_set_text(GTK_LABEL(companyname), fromServerObj->authorization.name);
+            gtk_label_set_text(GTK_LABEL(companyname2), fromServerObj->authorization.name);
+            gtk_label_set_text(GTK_LABEL(companyname3), fromServerObj->authorization.name);
 
-            toClient *toClientObj = viewOrders(userID);
+
+            gtk_widget_show_all(window3);
+            gtk_widget_destroy(window);
+
+
+            /*toClient *toClientObj = viewOrdersdsds(userID);
             char tableChar[10000] = "";
-            char *p;
+            char *p;*/
 
-            for (p = toClientObj->journal; *p /*what does this mean?*/; p++)
-            {
-                // Code
 
-                char temp[1000];
+                /*char temp[1000];
                 strcat(temp, toClientObj->journal->trans_id);
                 strcat(temp, "                          ");
 
@@ -121,8 +128,7 @@ void on_enter_but_clicked() {
             gtk_text_buffer_set_text(buffer6, tableChar, -1);
             free(toClientObj);
 
-            gtk_widget_show_all(window3);
-            gtk_widget_destroy(window);
+            free(toClientObj);*/
         }
     } else {
         GtkLabel *warn = (GtkLabel *) gtk_builder_get_object(builder, "warning");
@@ -185,8 +191,7 @@ void order_clicked()
     gtk_text_buffer_set_text(buffer2, order, -1);
 }
 
-void filltable1(char *id, char *name, char *price, char *desc)
-{
+void filltable1(char *id, char *name, char *price, char *desc) {
     char data[800] = "";
     char temp[40] = "";
     const char *space = "          ";
@@ -292,11 +297,6 @@ void adDelBut2Clicked()
 
     buffer5 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(adcomlist));
     gtk_text_buffer_set_text(buffer5, order, -1);
-}
-void back3_but_clicked()
-{
-
-    gtk_widget_destroy(window2);
 }
 
 
