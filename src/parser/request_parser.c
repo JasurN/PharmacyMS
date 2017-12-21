@@ -295,7 +295,7 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
 
     cJSON *root = cJSON_Parse(message);
     cJSON *type_item = cJSON_GetObjectItemCaseSensitive(root, "type");
-    if (type_item->valueint == AUTHORIZATION) {
+        if (type_item->valueint == AUTHORIZATION) {
         cJSON *authorization_item = cJSON_GetObjectItemCaseSensitive(root, "authorization");
         cJSON *isExist_item = cJSON_GetObjectItemCaseSensitive(authorization_item, "isExist");
         if (isExist_item->valueint == TRUE) {
