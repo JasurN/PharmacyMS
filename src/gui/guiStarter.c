@@ -4,7 +4,7 @@
 #include <string.h>
 #include "../parser/request_parser.h"
 #include "../client/client.h"
-
+#include "../dbManagement/dbManagement.h"
 #define type1 "1"
 #define type2 "2"
 #define target "Trimol"
@@ -17,7 +17,7 @@ struct newMedicine{
 };
 
 struct newMedicine *newMedicineObject;
-char* userID;
+char userID[4];
 
 GtkBuilder *builder;
 GtkWidget *window, *window1, *window2, *window3;
@@ -60,7 +60,7 @@ void on_enter_but_clicked() {
 
     if (fromServerObj->authorization.isExist == 1) {
 
-        userID = (char *)malloc(sizeof(fromServerObj->authorization.id));
+
         strcpy(userID, fromServerObj->authorization.id);
         if (fromServerObj->authorization.user_type == ADMIN) {
 
@@ -119,9 +119,10 @@ void on_enter_but_clicked() {
             GtkTextView *tablerequest = (GtkTextView*) gtk_builder_get_object(builder, "comReqList");
             buffer6=gtk_text_view_get_buffer(tablerequest);
             gtk_text_buffer_set_text(buffer6, tableChar, -1);
+            free(toClientObj);
+
             gtk_widget_show_all(window3);
             gtk_widget_destroy(window);
-            free(toClientObj);
         }
     } else {
         GtkLabel *warn = (GtkLabel *) gtk_builder_get_object(builder, "warning");
@@ -133,7 +134,7 @@ void on_enter_but_clicked() {
 }
 
 
-void search_but_clicked() {//todo: make double price. Important
+void search_but_clicked() {
     printf("it is here");
     newMedicineObject=malloc(sizeof(struct newMedicine));
     const char *searchedtext;

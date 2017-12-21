@@ -9,8 +9,8 @@
 #define TRUE 1
 #define FALSE 0
 #define serverAddr "localhost"
-#define dbUser "root"
-#define dbPassword "Azikinhatashkent"
+#define dbUser "admin"
+#define dbPassword "adminos"
 #define dbName "PharmacyDB"
 
 void finish_with_error(MYSQL * con);

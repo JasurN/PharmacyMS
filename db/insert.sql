@@ -28,8 +28,8 @@ insert into journal(comp_id, store_id, med_id, quantity, status) values ('1124',
 insert into journal(comp_id, store_id, med_id, quantity, status) values ('1121', '1125', 'm005', 200, 0);
 insert into journal(comp_id, store_id, med_id, quantity, status) values ('1124', '1126', 'm004', 100, 0);
 insert into journal(comp_id, store_id, med_id, quantity, status) values ('1123', '1125', 'm003', 100, 0);
-INSERT INTO inventory VALUES ('1125', 'm005', 'Sefazalin', 10)
-INSERT INTO inventory VALUES ('1125', 'm008', 'Streptotsit', 3)
-INSERT INTO inventory VALUES ('1125', 'm002', 'Sinepar', 50)
-INSERT INTO inventory VALUES ('1125', 'm003', 'Parasetamol', 9)
+INSERT INTO inventory VALUES ('1125', 'm005', 'Sefazalin', 10);
+INSERT INTO inventory VALUES ('1125', 'm008', 'Streptotsit', 3);
+INSERT INTO inventory VALUES ('1125', 'm002', 'Sinepar', 50);
+INSERT INTO inventory VALUES ('1125', 'm003', 'Parasetamol', 9);
 

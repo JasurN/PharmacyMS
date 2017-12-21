@@ -80,12 +80,24 @@ struct usersToAdmin {
     char contact[MAX_SIZE];
 };
 
+struct addingUser {
+    struct usersToAdmin signin;
+    char password[MAX_SIZE];
+};
+
+struct deleteUser {
+    char id[MAX_SIZE];
+};
+
 struct toAdmin {
     struct usersToAdmin* users;
+    int success;
     uid_t user_type;
 } ;
 
 struct fromAdmin {
+    struct addingUser add_user;
+    struct deleteUser delete_user;
     uid_t user_type;
 };
 
@@ -93,6 +105,7 @@ typedef struct {
     struct auth_back authorization;
     struct search_back search;
     struct search_back *medicine;
+    struct search_back new_medicine;
     struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
     struct journal_back* journal;
@@ -104,6 +117,7 @@ typedef struct {
     struct authorizing authorization;
     struct searching search;
     struct purchasing purchase;
+    struct search_back new_medicine;
     struct fromAdmin admin;
     uid_t type;
 } toServer;
@@ -113,6 +127,7 @@ typedef struct {
     struct auth_back authorization;
     struct search_back search;
     struct search_back* medicine;
+    struct search_back new_medicine;
     struct search_back_inventory* search_inventory;
     struct purchase_back purchase;
     struct journal_back* journal;
@@ -124,6 +139,7 @@ typedef struct {
 typedef struct {
     struct authorizing authorization;
     struct searching search;
+    struct search_back new_medicine;
     struct purchasing purchase;
     struct fromAdmin admin;
     uid_t type;

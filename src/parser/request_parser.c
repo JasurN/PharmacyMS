@@ -13,60 +13,96 @@
 
 char* clientStructToStr(const toServer *client_struct) {
     cJSON *root = cJSON_CreateObject();
-    cJSON *authorization;
-    cJSON *searching;
-    cJSON *inventory;
-    cJSON *purchasing;
-    cJSON *journal;
+    cJSON *subRoot;
     char *out;
 
     cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_struct->type));
     switch (client_struct->type) {
         case AUTHORIZATION:
-            cJSON_AddItemToObject(root, "authorization", authorization = cJSON_CreateObject());
-            cJSON_AddItemToObject(authorization, "login",
+            cJSON_AddItemToObject(root, "authorization", subRoot = cJSON_CreateObject());
+            cJSON_AddItemToObject(subRoot, "login",
                                   cJSON_CreateString(client_struct->authorization.login));
-            cJSON_AddItemToObject(authorization, "password",
+            cJSON_AddItemToObject(subRoot, "password",
                                   cJSON_CreateString(client_struct->authorization.password));
             break;
         case SEARCH:
-            cJSON_AddItemToObject(root, "search", searching = cJSON_CreateObject());
-            cJSON_AddItemToObject(searching, "name",
+            cJSON_AddItemToObject(root, "search", subRoot = cJSON_CreateObject());
+            cJSON_AddItemToObject(subRoot, "name",
                                   cJSON_CreateString(client_struct->search.name));
             break;
 
         case INVENTORY:
-            cJSON_AddItemToObject(root, "inventory", inventory = cJSON_CreateObject());
-            cJSON_AddItemToObject(inventory, "id",
+            cJSON_AddItemToObject(root, "inventory", subRoot = cJSON_CreateObject());
+            cJSON_AddItemToObject(subRoot, "id",
                                   cJSON_CreateString(client_struct->authorization.login));
             cJSON_AddItemToObject(root, "type", cJSON_CreateNumber(client_struct->type));
             break;
 
         case PURCHASE:
-            cJSON_AddItemToObject(root, "purchase", purchasing = cJSON_CreateObject());
-            cJSON_AddItemToObject(purchasing, "id",
+            cJSON_AddItemToObject(root, "purchase", subRoot = cJSON_CreateObject());
+            cJSON_AddItemToObject(subRoot, "id",
                                   cJSON_CreateString(client_struct->authorization.login));
-            cJSON_AddItemToObject(purchasing, "name",
+            cJSON_AddItemToObject(subRoot, "name",
                                   cJSON_CreateString(client_struct->purchase.name));
-            cJSON_AddItemToObject(purchasing, "quantity",
+            cJSON_AddItemToObject(subRoot, "quantity",
                                   cJSON_CreateNumber(client_struct->purchase.quantity));
             break;
 
         case JOURNAL:
-            cJSON_AddItemToObject(root, "journal", journal = cJSON_CreateObject());
-            cJSON_AddItemToObject(journal, "id",
+            cJSON_AddItemToObject(root, "journal", subRoot = cJSON_CreateObject());
+            cJSON_AddItemToObject(subRoot, "id",
                                   cJSON_CreateString(client_struct->authorization.login));
             break;
+
         case MEDICINE:
-            cJSON_AddItemToObject(root, "medicine", journal = cJSON_CreateObject());
-            cJSON_AddItemToObject(journal, "id",
+            cJSON_AddItemToObject(root, "medicine", subRoot = cJSON_CreateObject());
+            cJSON_AddItemToObject(subRoot, "id",
                                   cJSON_CreateString(client_struct->authorization.login));
             break;
+
+        case NEW_MEDICINE:
+            cJSON_AddItemToObject(root, "medicine", subRoot = cJSON_CreateObject());
+            cJSON_AddItemToObject(subRoot, "med_id",
+                                  cJSON_CreateString(client_struct->new_medicine.med_id));
+            cJSON_AddItemToObject(subRoot, "name",
+                                  cJSON_CreateString(client_struct->new_medicine.name));
+            cJSON_AddItemToObject(subRoot, "description",
+                                  cJSON_CreateString(client_struct->new_medicine.description));
+            cJSON_AddItemToObject(subRoot, "price",
+                                  cJSON_CreateNumber(client_struct->new_medicine.price));
+            cJSON_AddItemToObject(subRoot, "comp_id",
+                                  cJSON_CreateString(client_struct->new_medicine.comp_id));
+            break;
+
         case USERS:
-            cJSON_AddItemToObject(root, "user_type",
+            cJSON_AddItemToObject(root, "user", subRoot = cJSON_CreateObject());
+            cJSON_AddItemToObject(subRoot, "user_type",
                                   cJSON_CreateNumber(ADMIN));
-            cJSON_AddItemToObject(root, "type",
+            cJSON_AddItemToObject(subRoot, "type",
                                   cJSON_CreateNumber(client_struct->admin.user_type));
+            break;
+
+        case ADD_USER:
+            cJSON_AddItemToObject(root, "user", subRoot = cJSON_CreateObject());
+            cJSON_AddItemToObject(subRoot, "id",
+                                  cJSON_CreateString(client_struct->admin.add_user.signin.id));
+            cJSON_AddItemToObject(subRoot, "name",
+                                  cJSON_CreateString(client_struct->admin.add_user.signin.name));
+            cJSON_AddItemToObject(subRoot, "address",
+                                  cJSON_CreateString(client_struct->admin.add_user.signin.address));
+            cJSON_AddItemToObject(subRoot, "contact",
+                                  cJSON_CreateString(client_struct->admin.add_user.signin.contact));
+            cJSON_AddItemToObject(subRoot, "password",
+                                  cJSON_CreateString(client_struct->admin.add_user.password));
+            cJSON_AddItemToObject(subRoot, "user_type",
+                                  cJSON_CreateNumber(client_struct->admin.user_type));
+            break;
+
+        case DELETE_USER:
+            cJSON_AddItemToObject(root, "user", subRoot = cJSON_CreateObject());
+            cJSON_AddItemToObject(subRoot, "id",
+                                  cJSON_CreateString(client_struct->admin.delete_user.id));
+            break;
 
         default:
             perror("Please enter proper type!");
@@ -111,6 +147,7 @@ char* serverStructToStr(const toClient* server_message) {
                                       cJSON_CreateNumber(server_message->authorization.user_type));
             }
             break;
+
         case SEARCH:
             cJSON_AddItemToObject(root, "search", searching = cJSON_CreateObject());
             cJSON_AddItemToObject(searching, "isExist",
@@ -128,6 +165,7 @@ char* serverStructToStr(const toClient* server_message) {
                                       cJSON_CreateString(server_message->search.comp_id));
             }
             break;
+
         case INVENTORY:
             cJSON_AddItemToObject(root, "inventory", searching_inventory = cJSON_CreateArray());
             i = 0;
@@ -147,6 +185,7 @@ char* serverStructToStr(const toClient* server_message) {
             }
 
             break;
+
         case PURCHASE:
             cJSON_AddItemToObject(root, "purchase", purchasing = cJSON_CreateObject());
             cJSON_AddItemToObject(purchasing, "success",
@@ -187,6 +226,7 @@ char* serverStructToStr(const toClient* server_message) {
                 ++i;
             }
             break;
+
         case MEDICINE:
             i = 0;
             cJSON_AddItemToObject(root, "medicine", medicine = cJSON_CreateArray());
@@ -209,6 +249,12 @@ char* serverStructToStr(const toClient* server_message) {
                 ++i;
             }
             break;
+
+        case NEW_MEDICINE:
+            cJSON_AddItemToObject(root, "medicine", medicine = cJSON_CreateObject());
+            cJSON_AddItemToObject(medicine, "success",
+                                  cJSON_CreateNumber(server_message->new_medicine.isExist));
+            break;
         case USERS:
             i = 0;
             cJSON_AddItemToObject(root, "users", users = cJSON_CreateArray());
@@ -225,6 +271,18 @@ char* serverStructToStr(const toClient* server_message) {
                 ++i;
             }
             break;
+        case ADD_USER:
+            cJSON_AddItemToObject(root, "user", user = cJSON_CreateObject());
+            cJSON_AddItemToObject(user, "success",
+                                  cJSON_CreateNumber(server_message->admin.success));
+            break;
+
+        case DELETE_USER:
+            cJSON_AddItemToObject(root, "user", user = cJSON_CreateObject());
+            cJSON_AddItemToObject(user, "success",
+                                  cJSON_CreateNumber(server_message->admin.success));
+            break;
+
         default:
             perror("Please enter proper type!");
             break;
@@ -357,6 +415,9 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
             }
             server_answer->medicine[i].isExist = (uid_t) isExist_item->valueint;
         }
+    } else if (type_item->valueint == NEW_MEDICINE) {
+        cJSON *success_item = cJSON_GetObjectItemCaseSensitive(root, "success");
+        server_answer->new_medicine.isExist = success_item->valueint;
     } else if (type_item->valueint == USERS) {
         cJSON *user_type_item = cJSON_GetObjectItemCaseSensitive(root, "type");
         cJSON *users_item = cJSON_GetObjectItemCaseSensitive(root, "users");
@@ -377,6 +438,10 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
             strcpy(server_answer->admin.users[i].contact, contact_item->valuestring);
         }
         server_answer->authorization.user_type = (uid_t) user_type_item->valueint;
+    } else if (type_item->valueint == ADD_USER || type_item->valueint == DELETE_USER) {
+        cJSON *user_item = cJSON_GetObjectItemCaseSensitive(root, "user");
+        cJSON *success_item = cJSON_GetObjectItemCaseSensitive(user_item, "success");
+        server_answer->admin.success =  success_item->valueint;
     }
 
     server_answer->type = (uid_t) type_item->valueint;
@@ -414,15 +479,46 @@ void clientStrToStruct(const char *message, fromClient *client_query) {
         cJSON *journal_item = cJSON_GetObjectItemCaseSensitive(root, "journal");
         cJSON *id_item = cJSON_GetObjectItemCaseSensitive(journal_item, "id");
         strcpy(client_query->authorization.login, id_item->valuestring);
-    } else if (type_item->valueint == USERS) {
+    } else if (type_item->valueint == MEDICINE) {
         cJSON *search_item = cJSON_GetObjectItemCaseSensitive(root, "search");
         cJSON *id_item = cJSON_GetObjectItemCaseSensitive(search_item, "id");
         strcpy(client_query->authorization.login, id_item->valuestring);
+    } else if (type_item->valueint == NEW_MEDICINE) {
+        cJSON *medicine_item = cJSON_GetObjectItemCaseSensitive(root, "medicine");
+        cJSON *med_id_item = cJSON_GetObjectItemCaseSensitive(medicine_item, "med_id");
+        cJSON *name_item = cJSON_GetObjectItemCaseSensitive(medicine_item, "name");
+        cJSON *description_item = cJSON_GetObjectItemCaseSensitive(medicine_item, "description");
+        cJSON *price_item = cJSON_GetObjectItemCaseSensitive(medicine_item, "price");
+        cJSON *comp_id_item = cJSON_GetObjectItemCaseSensitive(medicine_item, "comp_id");
+        strcpy(client_query->new_medicine.med_id, med_id_item->valuestring);
+        strcpy(client_query->new_medicine.name, name_item->valuestring);
+        strcpy(client_query->new_medicine.description, description_item->valuestring);
+        client_query->new_medicine.price = price_item->valueint;
+        strcpy(client_query->new_medicine.comp_id, comp_id_item->valuestring);
     } else if (type_item->valueint == USERS) {
-        cJSON *admin_type_item = cJSON_GetObjectItemCaseSensitive(root, "user_type");
-        cJSON *user_type_item = cJSON_GetObjectItemCaseSensitive(root, "type");
+        cJSON *user_item = cJSON_GetObjectItemCaseSensitive(root, "user");
+        cJSON *admin_type_item = cJSON_GetObjectItemCaseSensitive(user_item, "user_type");
+        cJSON *user_type_item = cJSON_GetObjectItemCaseSensitive(user_item, "type");
         client_query->authorization.type = (uid_t) admin_type_item->valueint;
                 client_query->type = (uid_t) user_type_item->valueint;
+    } else if (type_item->valueint == ADD_USER) {
+        cJSON *user_item = cJSON_GetObjectItemCaseSensitive(root, "user");
+        cJSON *id_item = cJSON_GetObjectItemCaseSensitive(user_item, "id");
+        cJSON *name_item = cJSON_GetObjectItemCaseSensitive(user_item, "name");
+        cJSON *address_item = cJSON_GetObjectItemCaseSensitive(user_item, "address");
+        cJSON *contact_item = cJSON_GetObjectItemCaseSensitive(user_item, "contact");
+        cJSON *password_item = cJSON_GetObjectItemCaseSensitive(user_item, "password");
+        cJSON *user_type_item = cJSON_GetObjectItemCaseSensitive(user_item, "user_type");
+        strcpy(client_query->admin.add_user.signin.id, id_item->valuestring);
+        strcpy(client_query->admin.add_user.signin.name, name_item->valuestring);
+        strcpy(client_query->admin.add_user.signin.address, address_item->valuestring);
+        strcpy(client_query->admin.add_user.signin.contact, contact_item->valuestring);
+        strcpy(client_query->admin.add_user.password, password_item->valuestring);
+        client_query->admin.user_type = (uid_t) user_type_item->valueint;
+    } else if (type_item->valueint == DELETE_USER) {
+        cJSON *user_item = cJSON_GetObjectItemCaseSensitive(root, "user");
+        cJSON *id_item = cJSON_GetObjectItemCaseSensitive(user_item, "id");
+        strcpy(client_query->admin.delete_user.id, id_item->valuestring);
     }
     client_query->type = (uid_t) type_item->valueint;
     cJSON_Delete(root);
