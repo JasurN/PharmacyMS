@@ -1,4 +1,5 @@
 #include "client.h"
+#include "../parser/request_parser.h"
 
 char* clientStart(char * clientStr) {
     // Structure to connect to the server
@@ -92,7 +93,7 @@ fromServer* searchCompanyInventory(const char* id) {
 fromServer* viewCompanyMedicine(const char* id) {
     toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
     toServerObj->type = MEDICINE;
-    strcpy(toServerObj->authorization.login, id);
+    strcpy(toServerObj->search.name, id);
 
     char *strToServer = clientStructToStr(toServerObj);
     char *strFromServer = clientStart(strToServer);
@@ -123,9 +124,26 @@ fromServer* searchStoreInventory(const char* id) {
     return fromServerObj;
 }
 
-fromServer* produceMedicineByCompany(const char *drugName, const char *ID,
-                                     const char *description, const char *price) {
+fromServer* addNewMed(const char *med_id, const char *drugName, const char *description,
+                      const char *price, const char* comp_id) {
+    toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
+    toServerObj->type = NEW_MEDICINE;
+    strcpy(toServerObj->new_medicine.med_id, med_id);
+    strcpy(toServerObj->new_medicine.name, drugName);
+    strcpy(toServerObj->new_medicine.description, description);
+    toServerObj->new_medicine.price = atof(price);
+    strcpy(toServerObj->new_medicine.comp_id, comp_id);
 
+    char *strToServer = clientStructToStr(toServerObj);
+    char *strFromServer = clientStart(strToServer);
+
+    fromServer *fromServerObj = (fromServer *) malloc(sizeof(fromServer));
+    printf("Message from server: %s\n", strFromServer);
+    serverStrToStruct(strFromServer, fromServerObj);
+
+    free(toServerObj);
+    free(strFromServer);
+    return fromServerObj;
 }
 
 fromServer* orderNewMedicine(char* name, int quantity, char* storeId) {
@@ -224,3 +242,22 @@ fromServer* viewOrder(char* companyID) {
     free(strFromServer);
     return fromServerObj;
 }
+
+
+fromServer* viewCompanyInventoryClient(char* compID) {
+    toServer *toServerObj = (toServer *) malloc(sizeof(toServer));
+    toServerObj->type = MEDICINE;
+
+    strcpy(toServerObj->authorization.login, compID);
+    char *strToServer = clientStructToStr(toServerObj);
+    char *strFromServer = clientStart(strToServer);
+
+    fromServer *fromServerObj = (fromServer *) malloc(sizeof(fromServer));
+    printf("Message from server: %s\n", strFromServer);
+    serverStrToStruct(strFromServer, fromServerObj);
+
+    free(toServerObj);
+    free(strFromServer);
+    return fromServerObj;
+}
+

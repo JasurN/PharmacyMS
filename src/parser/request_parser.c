@@ -11,7 +11,7 @@
  */
 #include "request_parser.h"
 
-char* clientStructToStr(const toServer *client_struct) {
+char *clientStructToStr(const toServer *client_struct) {
     cJSON *root = cJSON_CreateObject();
     cJSON *subRoot;
     char *out;
@@ -113,7 +113,7 @@ char* clientStructToStr(const toServer *client_struct) {
     return out;
 }
 
-char* serverStructToStr(const toClient* server_message) {
+char *serverStructToStr(const toClient *server_message) {
     cJSON *root = cJSON_CreateObject();
     cJSON *authorization;
     cJSON *searching;
@@ -229,7 +229,7 @@ char* serverStructToStr(const toClient* server_message) {
         case MEDICINE:
             i = 0;
             cJSON_AddItemToObject(root, "medicine", medicine = cJSON_CreateArray());
-            while(i < struct_length) {
+            while (i < struct_length) {
                 cJSON_AddItemToArray(medicine, medical = cJSON_CreateObject());
                 cJSON_AddItemToObject(medical, "isExist",
                                       cJSON_CreateNumber(server_message->medicine[i].isExist));
@@ -277,7 +277,7 @@ char* serverStructToStr(const toClient* server_message) {
             break;
 
         case DELETE_USER:
-             cJSON_AddItemToObject(root, "user", user = cJSON_CreateObject());
+            cJSON_AddItemToObject(root, "user", user = cJSON_CreateObject());
             cJSON_AddItemToObject(user, "success",
                                   cJSON_CreateNumber(server_message->admin.success));
             break;
@@ -336,7 +336,7 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
         cJSON *quantity_item;
         setLength(cJSON_GetArraySize(inventory_item));
         server_answer->search_inventory = NULL;
-        server_answer->search_inventory = (struct search_back_inventory*)malloc(
+        server_answer->search_inventory = (struct search_back_inventory *) malloc(
                 sizeof(struct search_back_inventory) * struct_length);
         for (int i = 0; i < struct_length; ++i) {
             medical = cJSON_GetArrayItem(inventory_item, i);
@@ -378,7 +378,7 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
         cJSON *quantity_item;
         setLength(cJSON_GetArraySize(journal_item));
         server_answer->journal = NULL;
-        server_answer->journal = (struct journal_back*)malloc(
+        server_answer->journal = (struct journal_back *) malloc(
                 sizeof(struct journal_back) * struct_length);
         for (int i = 0; i < struct_length; ++i) {
             purchase_item = cJSON_GetArrayItem(journal_item, i);
@@ -388,7 +388,7 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
             store_id_item = cJSON_GetObjectItemCaseSensitive(purchase_item, "store_id");
             med_id_item = cJSON_GetObjectItemCaseSensitive(purchase_item, "med_id");
             quantity_item = cJSON_GetObjectItemCaseSensitive(purchase_item, "quantity");
-            strcpy(server_answer->journal[i].trans_id,trans_id_item->valuestring);
+            strcpy(server_answer->journal[i].trans_id, trans_id_item->valuestring);
             strcpy(server_answer->journal[i].trans_date, trans_date_item->valuestring);
             strcpy(server_answer->journal[i].comp_id, comp_id_item->valuestring);
             strcpy(server_answer->journal[i].store_id, store_id_item->valuestring);
@@ -407,7 +407,7 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
         cJSON *comp_id_item;
         setLength(cJSON_GetArraySize(search_item));
         server_answer->medicine = NULL;
-        server_answer->medicine = (struct search_back*)malloc(
+        server_answer->medicine = (struct search_back *) malloc(
                 sizeof(struct search_back) * struct_length);
         for (int i = 0; i < struct_length; ++i) {
             medical = cJSON_GetArrayItem(search_item, i);
@@ -427,7 +427,8 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
             server_answer->medicine[i].isExist = (uid_t) isExist_item->valueint;
         }
     } else if (type_item->valueint == NEW_MEDICINE) {
-        cJSON *success_item = cJSON_GetObjectItemCaseSensitive(root, "success");
+        cJSON *medicine_item = cJSON_GetObjectItemCaseSensitive(root, "medicine");
+        cJSON *success_item = cJSON_GetObjectItemCaseSensitive(medicine_item, "success");
         server_answer->new_medicine.isExist = success_item->valueint;
     } else if (type_item->valueint == USERS) {
         cJSON *user_type_item = cJSON_GetObjectItemCaseSensitive(root, "type");
@@ -439,7 +440,7 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
         cJSON *contact_item;
         setLength(cJSON_GetArraySize(user_item));
         server_answer->admin.users = NULL;
-        server_answer->admin.users = (struct usersToAdmin*)malloc(
+        server_answer->admin.users = (struct usersToAdmin *) malloc(
                 sizeof(struct usersToAdmin) * struct_length);
         for (int i = 0; i < struct_length; ++i) {
             user_item = cJSON_GetArrayItem(users_item, i);
@@ -456,7 +457,7 @@ void serverStrToStruct(const char *message, fromServer *server_answer) {
     } else if (type_item->valueint == ADD_USER || type_item->valueint == DELETE_USER) {
         cJSON *user_item = cJSON_GetObjectItemCaseSensitive(root, "user");
         cJSON *success_item = cJSON_GetObjectItemCaseSensitive(user_item, "success");
-        server_answer->admin.success =  success_item->valueint;
+        server_answer->admin.success = success_item->valueint;
     }
 
     server_answer->type = (uid_t) type_item->valueint;
@@ -467,7 +468,7 @@ void clientStrToStruct(const char *message, fromClient *client_query) {
     cJSON *root = cJSON_Parse(message);
     cJSON *type_item = cJSON_GetObjectItemCaseSensitive(root, "type");
 
-    if(type_item->valueint == AUTHORIZATION) {
+    if (type_item->valueint == AUTHORIZATION) {
         cJSON *authorization_item = cJSON_GetObjectItemCaseSensitive(root, "authorization");
         cJSON *login_item = cJSON_GetObjectItemCaseSensitive(authorization_item, "login");
         cJSON *password_item = cJSON_GetObjectItemCaseSensitive(authorization_item, "password");
@@ -515,7 +516,7 @@ void clientStrToStruct(const char *message, fromClient *client_query) {
         cJSON *admin_type_item = cJSON_GetObjectItemCaseSensitive(user_item, "user_type");
         cJSON *user_type_item = cJSON_GetObjectItemCaseSensitive(user_item, "type");
         client_query->authorization.type = (uid_t) admin_type_item->valueint;
-                client_query->type = (uid_t) user_type_item->valueint;
+        client_query->type = (uid_t) user_type_item->valueint;
     } else if (type_item->valueint == ADD_USER) {
         cJSON *user_item = cJSON_GetObjectItemCaseSensitive(root, "user");
         cJSON *id_item = cJSON_GetObjectItemCaseSensitive(user_item, "id");

@@ -153,10 +153,12 @@ toClient *requestHandler(fromClient *fromClientObj) {
 
     } else if (fromClientObj->type == MEDICINE) {
 
-        toClientObj = showCompanyInventory(fromClientObj);
+        toClientObj = viewCompanyInventory(fromClientObj);
 
     } else if (fromClientObj->type == ADD_USER) {
         toClientObj = addNewUser(fromClientObj);
+    } else if (fromClientObj->type == NEW_MEDICINE) {
+        toClientObj = addNewMedicineComp(fromClientObj);
     }
 
 
@@ -230,5 +232,26 @@ toClient *deleteUser(fromClient *fromClientObj) {
     }
 }
 
+toClient* addNewMedicineComp(fromClient * fromClientObj) {
+    toClient *toClientObj = (toClient *) malloc(sizeof(toClient));
+    if(addNewMedicine(fromClientObj->new_medicine.med_id,
+                    fromClientObj->new_medicine.name,
+                   fromClientObj->new_medicine.description,
+                   fromClientObj->new_medicine.price,
+                   fromClientObj->new_medicine.comp_id)){
+        toClientObj->new_medicine.isExist = TRUE;
+    } else {
+        toClientObj->new_medicine.isExist = FALSE;
+    }
 
+    toClientObj->type = NEW_MEDICINE;
+    return toClientObj;
+}
+toClient* viewCompanyInventory(fromClient* fromClientObj) {
+    toClient* toClientObj = viewInventory(fromClientObj->search.name);
+
+    toClientObj->type = MEDICINE;
+
+    return toClientObj;
+}
 

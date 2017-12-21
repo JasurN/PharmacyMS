@@ -2,8 +2,8 @@
 
 int main() {
     //fromServer *fromServerObj = authorizationClient("1124", "12345");
-    fromServer *fromServerObj = viewOrder("1124");
-
-    free(fromServerObj);
+    //fromServer *fromServerObj = viewOrder("1124");
+    fromServer *fromServerObj = viewCompanyMedicine("1124");
+            free(fromServerObj);
     return 0;
 }

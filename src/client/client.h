@@ -25,5 +25,8 @@ fromServer* orderNewMedicine(char* name, int quantity, char* id);
 fromServer* produceMedicineByCompany(const char *drugName, const char *ID, const char *description, const char *price);
 fromServer* addNewUser(char *user_id,char *user_password, char *user_name, char *user_adress, char *user_contact, int type);
 fromServer* deleteUser(char *id, int userType);
+fromServer* addNewMed(const char *med_id, const char *drugName, const char *description,
+                      const char *price, const char* comp_id);
 fromServer* viewOrder(char* companyID);
+//fromServer* viewCompanyInventoryClient(char* compID);
 #endif //PHARMACYMS_CLIENT_H

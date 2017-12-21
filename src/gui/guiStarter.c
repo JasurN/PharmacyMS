@@ -158,24 +158,29 @@ void on_enter_but_clicked() {
 
                 char temp[1000] = "";
                 strcat(temp, viewOrderObj->journal[i].trans_id);
-                strcat(temp, "                          ");
 
+                    if(atoi(viewOrderObj->journal[i].trans_id) > 9) {
+
+                        strcat(temp, "                                  ");
+                    } else {
+                        strcat(temp, "                                ");
+                    }
 
                 strcat(temp, viewOrderObj->journal[i].med_id);
                 strcat(temp, "                                  ");
 
 
                 strcat(temp, viewOrderObj->journal[i].store_id);
-                strcat(temp, "                                      ");
+                strcat(temp, "                                  ");
 
                 char quantity[8];
                 sprintf(quantity, "%d", viewOrderObj->journal[i].quantity);
                 strcat(temp, viewOrderObj->journal[i].store_id);
-                strcat(temp, "                                      ");
+                strcat(temp, "                                  ");
 
 
                 strcat(temp, viewOrderObj->journal[i].trans_date);
-                strcat(temp, "                  ");
+                strcat(temp, "                                  ");
 
                 strcat(temp, "\n");
                 strcat(tableChar, temp);
@@ -292,7 +297,7 @@ void regButClicked()
     addNewUser(ID, password, name, address, contact, atoi(type));
 }
 
-void addButClicked() {//todo: Implement. produce new medicine button.
+void addButClicked() {
     const char *drugName, *id, *descript, *price;
     GtkTextView *inventlist = (GtkTextView *) gtk_builder_get_object(builder, "comInventList");
     GtkEntry *namefield = (GtkEntry *) gtk_builder_get_object(builder, "comNameEntry");
@@ -304,8 +309,15 @@ void addButClicked() {//todo: Implement. produce new medicine button.
     descript = gtk_entry_get_text(descriptfield);
     price = gtk_entry_get_text(pricefield);
 
-    produceMedicineByCompany(drugName, id, descript, price);
 
+    fromServer *fromServerObj = addNewMed(id, drugName, descript, price, userID);
+
+    if(fromServerObj->medicine->isExist == TRUE) {
+
+    }
+    else {
+
+    }
     char order[500] = "   ";
     strcat(order, drugName);
     strcat(order, "           ");
@@ -316,6 +328,7 @@ void addButClicked() {//todo: Implement. produce new medicine button.
     strcat(order, price);
     buffer3 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(inventlist));
     gtk_text_buffer_set_text(buffer3, order, -1);
+    free(fromServerObj);
 }
 
 void comDelButClicked() {

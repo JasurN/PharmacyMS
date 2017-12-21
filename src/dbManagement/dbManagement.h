@@ -26,6 +26,8 @@ void *viewOrders(char*);
 void *viewInventory(char*);
 void *orderRegister(char*, char*, int);
 void medDelivered(char *trans_id, char*);
+bool addNewMedicine(char *med_id, char *med_name, char *description,
+                    double price, char *comp_id);
 void delete(char *id, char *tname, char *cname);
 void deleteMedicine(char *id);
 void deleteStore(char *id);
