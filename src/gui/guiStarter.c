@@ -43,8 +43,6 @@ int main(int argc, char **argv) {
     gtk_builder_connect_signals(builder, NULL);
     gtk_widget_show_all(window);
     gtk_main();
-
-
     return (0);
 }
 
@@ -153,7 +151,6 @@ void search_but_clicked() {//todo: make double price. Important
             strcpy(newMedicineObject->ID, fromServerObj->search.med_id);
             strcpy(newMedicineObject->NAME, fromServerObj->search.name);
             newMedicineObject->PRICE=fromServerObj->search.price;
-
         }
         free(fromServerObj);
     }
@@ -257,7 +254,8 @@ void addButClicked()
     gtk_text_buffer_set_text(buffer3, order, -1);
 }
 
-void comDelButClicked() {
+void comDelButClicked()
+{
     const char *comId;
     GtkTextView *inventlist = (GtkTextView *) gtk_builder_get_object(builder, "comInventList");
     GtkEntry *comidfield = (GtkEntry *) gtk_builder_get_object(builder, "comIDEntry");
@@ -270,7 +268,8 @@ void comDelButClicked() {
     gtk_text_buffer_set_text(buffer4, order, -1);
 }
 
-void comRefButClicked() {
+void comRefButClicked()
+{
 }
 
 void adDelBut1Clicked()
@@ -280,8 +279,8 @@ void adDelBut1Clicked()
     GtkEntry *pharmidfield = (GtkEntry *) gtk_builder_get_object(builder, "adPharmIDEntry");
     pharmId = gtk_entry_get_text(pharmidfield);
 }
-
-void adDelBut2Clicked() {
+void adDelBut2Clicked()
+{
     const char *comId2;
     GtkTextView *adcomlist = (GtkTextView *) gtk_builder_get_object(builder, "adComList");
     GtkEntry *adcomidfield = (GtkEntry *) gtk_builder_get_object(builder, "adComIDEntry");
@@ -293,8 +292,8 @@ void adDelBut2Clicked() {
     buffer5 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(adcomlist));
     gtk_text_buffer_set_text(buffer5, order, -1);
 }
-
-void back3_but_clicked(){
+void back3_but_clicked()
+{
 
     gtk_widget_destroy(window2);
 }
