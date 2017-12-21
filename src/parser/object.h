@@ -7,6 +7,7 @@
 #include "../dbManagement/dbManagement.h"
 #include <string.h>
 #include "../parser/request_parser.h"
+#include "../define/define.h"
 
 void *object_parser(char *tablename, MYSQL_RES *result);
 void *medicine_parser(MYSQL_RES *result);

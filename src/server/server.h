@@ -7,8 +7,6 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <pthread.h>
-#include "../parser/request_parser.h"
-#include "../define/define.h"
 #include "../dbManagement/dbManagement.h"
 
 #define PORT 5000

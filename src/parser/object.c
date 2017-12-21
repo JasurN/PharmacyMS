@@ -50,6 +50,7 @@ void *company_parser(MYSQL_RES *result) {
     MYSQL_ROW row;
     toClient **stores;
     my_ulonglong num_rows = mysql_num_rows(result);
+    setLength(num_rows);
     stores = (toClient **) malloc(sizeof(toClient *) * num_rows);
     toClient *store = malloc(sizeof(toClient *));
     store->authorization.isExist = FALSE;
@@ -71,6 +72,7 @@ void *company_parser(MYSQL_RES *result) {
 void *drugstore_parser(MYSQL_RES *result) {
     MYSQL_ROW row;
     my_ulonglong num_rows = mysql_num_rows(result);
+    setLength(num_rows);
     toClient **stores;
     stores = (toClient **) malloc(sizeof(toClient *) * num_rows);
     toClient *store = malloc(sizeof(toClient *));
@@ -115,6 +117,7 @@ void *inventory_parser(MYSQL_RES *result)
 {
     MYSQL_ROW row;
     my_ulonglong num_rows = mysql_num_rows(result);
+    setLength(num_rows);
     toClient *medicine;
     medicine = (toClient *) malloc(sizeof(toClient));
     medicine->search_inventory = (struct search_back_inventory *)malloc(sizeof(struct search_back_inventory) * num_rows);
@@ -133,6 +136,7 @@ void *journal_parser(MYSQL_RES *result)
 {
     MYSQL_ROW row;
     my_ulonglong num_rows = mysql_num_rows(result);
+    setLength(num_rows);
     toClient *medicine;
     medicine = (toClient *) malloc(sizeof(toClient));
     medicine->journal = (struct journal_back*) malloc(sizeof(struct journal_back) * num_rows);

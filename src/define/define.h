@@ -2,6 +2,8 @@
 #define PHARMACYMS_DEFINE_H
 
 //Boolean operators
+#include <my_global.h>
+
 #define  FALSE 0
 #define  TRUE 1
 
