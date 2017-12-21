@@ -8,7 +8,7 @@
 
 #define MAX_SIZE 30
 #define MAX_TEXT 50
-
+int struct_length;
 /* These structs are used by clientOn (Company) */
 struct auth_back {
     int isExist;
@@ -150,4 +150,5 @@ char* clientStructToStr(const toServer *);
 char* serverStructToStr(const toClient*);
 void serverStrToStruct(const char *, fromServer *);
 void clientStrToStruct(const char *, fromClient *);
+void setLength(int);
 #endif //PHARMACYMS_REQUEST_PARSER_H

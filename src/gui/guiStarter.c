@@ -220,7 +220,7 @@ void order_clicked() {
     strcat(temp, "       ");
     strcat(temp, newMedicineObject->NAME);
     strcat(temp, "       ");
-    strcat(temp, quantity);
+    strcat(temp, amount);
     strcat(order, temp);
     strcat(order, "\n");
     buffer2 = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tab2));
