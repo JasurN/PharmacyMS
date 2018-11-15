@@ -1,5 +1,5 @@
 ## Introduction
-Pharmacy Management System provides effective connection between producer, seller and customer.
+This is open source project Pharmacy Management System provides effective connection between producer, seller and customer.
 
 ## Required libraries
 1. **GTK (GUI)** - `sudo apt-get install libgtk-3-dev`
